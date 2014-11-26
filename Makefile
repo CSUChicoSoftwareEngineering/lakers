@@ -18,7 +18,7 @@ SRCS := src\data\grade.cc \
 
 TEST_SRCS := 	tests\gbsqltest.cc \
 		tests\gbtest.cc \
-        tests\bbimportertest.cc
+#        tests\bbimportertest.cc
 OBJS := $(SRCS:%.cc=$(BUILD_DIR)/%.o)
 
 TEST_OBJS := $(TEST_SRCS:%.cc=$(BUILD_DIR)/%.o)

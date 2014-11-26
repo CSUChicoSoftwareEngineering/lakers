@@ -164,6 +164,13 @@ int GBSql::InsertCourse(const Course &c) {
   return r;
 }
 
+int GBSql::UpdateCourse(const Course &c) {
+  wxString sql = wxString::Format("UPDATE courses SET \
+    title='%s' WHERE id=%s", c.Title(), c.Id());
+
+  return Update(sql);
+}
+
 int GBSql::DeleteCourse(const Course &c) {
   wxString sql = wxString::Format("DELETE FROM courses \
       WHERE title='%s'", c.Title());
@@ -213,6 +220,13 @@ int GBSql::InsertStudentIntoCourse(const Student &s, const Course &c) {
   return r;
 }
 
+int GBSql::UpdateStudent(const Student &s) {
+  wxString sql = wxString::Format("UPDATE students SET \
+    sid='%s', first='%s', last='%s' WHERE id='%s'", s.StudentId(), s.First(), s.Last(), s.Id());
+
+  return Update(sql);
+}
+
 int GBSql::DeleteStudent(const Student &s) {
   wxString sql = wxString::Format("DELETE FROM students \
       WHERE sid='%s'", s.Id());
@@ -248,6 +262,13 @@ int GBSql::InsertAssessmentIntoCourse(const Assessment &a, const Course &c) {
   NotifyAssessmentUpdate();
 
   return r;
+}
+
+int GBSql::UpdateAssessment(const Assessment &a) {
+  wxString sql = wxString::Format("UPDATE assessments SET \
+    title='%s' WHERE id='%s'", a.Title(), a.Id());
+
+  return Update(sql);
 }
 
 int GBSql::DeleteAssessment(const Assessment &a) {
@@ -290,6 +311,13 @@ int GBSql::InsertGradeForStudent(const Grade &g, const Student &s, const Course 
 
 }
 
+int GBSql::UpdateGrade(const Grade &g) {
+  wxString sql = wxString::Format("UPDATE grades SET \
+    value='%s' WHERE id='%s'", g.Value(), g.Id());
+
+  return Update(sql);
+}
+ 
 int GBSql::DeleteGrade(const Grade &g) {
   wxString sql = wxString::Format("DELETE FROM grades \
      WHERE id='%s'", g.Id());

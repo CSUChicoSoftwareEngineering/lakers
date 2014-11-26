@@ -32,6 +32,8 @@ class GBSql : public Observer {
     int SelectCourses(vector<Course*> *result);  
     // Inserts course into database
     int InsertCourse(const Course &c);
+    // Updates course in database
+    int UpdateCourse(const Course &c);
     // Deletes a course from the database
     int DeleteCourse(const Course &c);
     // Populates course with all students
@@ -40,16 +42,22 @@ class GBSql : public Observer {
     int InsertStudent(const Student &s);
     // Inserts student into database and adds student to course
     int InsertStudentIntoCourse(const Student &s, const Course &c);
+    // Updates student in database
+    int UpdateStudent(const Student &s);
     // Deletes student from database
     int DeleteStudent(const Student &s);
     // Populates course with all assessments
     int SelectAssessmentsByCourse(Course &c);
     // Inserts assessment for course
     int InsertAssessmentIntoCourse(const Assessment &a, const Course &c);
+    // Updates assessment in database
+    int UpdateAssessment(const Assessment &a);
     // Deletes assessment from database
     int DeleteAssessment(const Assessment &a);
     // Populates student with all grades
     int SelectGradesForStudentInCourse(Student &s, const Course &c);
+    // Updates grade in database 
+    int UpdateGrade(const Grade &g);
     // Inserts grade for student into database
     int InsertGradeForStudent(const Grade &g, const Student &s, const Course &c, const Assessment &a);
     // Deletes grade from database
