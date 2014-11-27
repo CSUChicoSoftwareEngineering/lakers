@@ -279,6 +279,7 @@ int GBSql::UpdateAssessmentIntoCourse(wxString newTitle, wxString currentTitle, 
   NotifyAssessmentUpdate();
 
   return r;
+}
 
 int GBSql::UpdateAssessment(const Assessment &a) {
   wxString sql = wxString::Format("UPDATE assessments SET \

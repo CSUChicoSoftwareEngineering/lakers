@@ -4,7 +4,6 @@
 #include <iostream>
 using namespace std;
 
-
 // Constructor 1
 GBDialogAssessmentController::GBDialogAssessmentController(){}
 
@@ -69,7 +68,6 @@ void GBDialogAssessmentController::EndAssessmentLabelEdit(wxListEvent& event){
   if(!m_currentAssessmentSelected.IsEmpty()){
 
     if( !textIsTheSame && !newAssessmentExistsInDB  && !existsInRuntime){
-       cout << "Rename 1" << endl;
       // Rename Assessment If (newly inserted Assessment does not exists in the Runtime list
       // AND in the Database)
       m_AssessmentsNeedsToBeRenamedOldName.Add(m_currentAssessmentSelected);

@@ -209,7 +209,6 @@ void GBFrameController::PopulateCourseDropDownList(){
 void GBFrameController::ModifyAssignments(wxCommandEvent& event){
 	// Handle Event
 
-	std::cout << "Test: " << (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection() << endl;
 	GBDialogAssessmentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection());
 
 	dlg.ShowModal();
@@ -230,7 +229,7 @@ void GBFrameController::OnExit(wxCommandEvent& event) {
 
 void GBFrameController::OnAbout(wxCommandEvent& event) {
 	// Handle Event
-    wxMessageBox( "Grade Book Application version 1.0.0",
+    wxMessageBox( "GradeBook Application version 1.0.0",
                   "About", wxOK | wxICON_INFORMATION );
 }
 

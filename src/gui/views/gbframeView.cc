@@ -6,16 +6,24 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 
 	// Create File Menu
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_AddCourseMenuSelect, "&Add Course...\tCtrl-G", "Add a course to your GradeBook");
-    menuFile->AppendSeparator();
-    menuFile->Append(ID_AddAssignmentMenuSelect, "&Add Assignment...\tCtrl-J", "Add an assignment");
-	menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
+    // Create Course Menu
+    wxMenu *menuCourse = new wxMenu;
+    menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course \tCtrl-C", "Add a course to your GradeBook");
+    // Create Assessment Menu
+    wxMenu *menuAssessment = new wxMenu;
+    menuAssessment->Append(ID_AddAssignmentMenuSelect, "&Modify Assessments \tCtrl-A", "Add assessment(s) to your GradBook");
+   // Create Help Menu
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
+    // Adds Menus to MenuBar
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, "&File" );
+    menuBar->Append( menuCourse, "&Course" );
+    menuBar->Append( menuAssessment, "&Assessments" );
     menuBar->Append( menuHelp, "&Help" );
+
+
     SetMenuBar( menuBar );
     CreateStatusBar();
     SetStatusText( "Welcome to GradeBook!" );
