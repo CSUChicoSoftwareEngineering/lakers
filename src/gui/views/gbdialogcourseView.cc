@@ -18,7 +18,7 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
 	ImportStudentCSVStaticBox =  new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Import Students (File: *.csv)", wxPoint(10,140), wxSize(325,50), 0,"Import Students");
 	// Create TextCtrl and FileCtrl
 	m_pCourseNameTextCtrl	= new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxPoint(20,30), wxSize(300,25), wxTE_CAPITALIZE, wxDefaultValidator, "CourseNameTextCtrl");
-	m_pSelectFileLocationCtrl = new wxFilePickerCtrl(m_pGBDialogPanel, ID_FileSelect, wxEmptyString, "Select .csv file", "*.csv", wxPoint(20,160),  wxDefaultSize, wxFLP_DEFAULT_STYLE, wxDefaultValidator, "ImportStudentCSVFilePickerCtrl");
+	m_pSelectFileLocationCtrl = new wxFilePickerCtrl(m_pGBDialogPanel, ID_FileSelect, wxEmptyString, "Select .csv file", "*.csv", wxPoint(20,160),  wxDefaultSize, wxFLP_DEFAULT_STYLE | wxFLP_FILE_MUST_EXIST, wxDefaultValidator, "ImportStudentCSVFilePickerCtrl");
 	// Create Button
 	m_pImportButton = new wxButton(m_pGBDialogPanel, ID_AddButton, "Add", wxPoint(20, 430),wxDefaultSize, 0,wxDefaultValidator, "ImportButton");
 	// Connect Controller

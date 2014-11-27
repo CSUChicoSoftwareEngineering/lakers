@@ -12,9 +12,9 @@ GBFrameController::GBFrameController(GBFrameView *view)
 
   m_pSql->AddSubscriber(this);
 
-	PopulateCourseDropDownList();
-  
-	CreateGridView();
+  PopulateCourseDropDownList();
+
+  CreateGridView();
 }
 
 GBFrameController::~GBFrameController() {
@@ -46,7 +46,7 @@ void GBFrameController::UpdateGridView() {
   wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
   wxString strSelection = combo->GetValue();
 
-  // Determine selected course 
+  // Determine selected course
   for (int i = 0; i < m_courses.size(); ++i) {
     if (m_courses[i]->Title().IsSameAs(strSelection)) {
       course = m_courses[i];
@@ -70,8 +70,8 @@ void GBFrameController::UpdateGridView() {
 
     return;
   }
-  
-  // Adjust columns 
+
+  // Adjust columns
   if (course->AssessmentCount() > grid->GetNumberCols()) {
     grid->AppendCols(course->AssessmentCount() - grid->GetNumberCols());
   } else if (course->AssessmentCount() < grid->GetNumberCols()) {
@@ -82,8 +82,8 @@ void GBFrameController::UpdateGridView() {
   for (int i = 0; i < course->AssessmentCount(); ++i) {
     grid->SetColLabelValue(i, course->GetAssessment(i).Title());
   }
- 
-  // Populate course with students 
+
+  // Populate course with students
   if (m_pSql->SelectStudentsByCourse(*course) == -1) {
     cerr << "Failed to select students in course" << endl;
 
@@ -111,15 +111,15 @@ void GBFrameController::UpdateGridView() {
       // Determin assessment by title of column
       Assessment a = course->GetAssessmentByTitle(grid->GetColLabelValue(x));
       // Get grade by assessment
-      Grade g = s.GetGradeByAssessmentId(a.Id()); 
-      // Load cell with grade value 
+      Grade g = s.GetGradeByAssessmentId(a.Id());
+      // Load cell with grade value
       grid->SetCellValue(i, x, g.Value());
     }
-    
+
     // Populate row labels
     grid->SetRowLabelValue(i, wxString::Format("%s, %s", s.Last(), s.First()));
   }
-  
+
   // Refresh grid
   grid->Refresh();
 }
@@ -132,13 +132,63 @@ void GBFrameController::OnCourseUpdate() {
   PopulateCourseDropDownList();
 }
 
+// ***
+void GBFrameController::OnAssessmentUpdate(){
+
+  Course *course(NULL);
+  wxGrid *grid = m_pMainFrameView->m_pGridView;
+  wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
+  wxString strSelection = combo->GetValue();
+
+  // Determine selected course
+  for (int i = 0; i < m_courses.size(); ++i) {
+    if (m_courses[i]->Title().IsSameAs(strSelection)) {
+      course = m_courses[i];
+
+      break;
+    }
+  }
+
+  if (course == NULL) {
+    cerr << "Failed to find selected course" << endl;
+
+    return;
+  }
+
+  // Ensure course is empty
+  course->Clear();
+
+  // Populate course with assessments
+  if (m_pSql->SelectAssessmentsByCourse(*course) == -1) {
+    cerr << "Failed to select assessments in course" << endl;
+
+    return;
+  }
+
+  // Adjust columns
+  if (course->AssessmentCount() > grid->GetNumberCols()) {
+    grid->AppendCols(course->AssessmentCount() - grid->GetNumberCols());
+  } else if (course->AssessmentCount() < grid->GetNumberCols()) {
+    grid->DeleteCols(0, grid->GetNumberCols() - course->AssessmentCount());
+  }
+
+  // Populate column labels
+  for (int i = 0; i < course->AssessmentCount(); ++i) {
+    grid->SetColLabelValue(i, course->GetAssessment(i).Title());
+  }
+
+  // Refresh grid
+  grid->Refresh();
+
+}
+
 // *** Need to pull data from DB to populate Dropdown list ***
 void GBFrameController::PopulateCourseDropDownList(){
   wxComboBox *course = m_pMainFrameView->m_pCourseComboBox;
 
   m_courses.clear();
 
-  course->Clear();  
+  course->Clear();
 
   if (m_pSql->SelectCourses(&m_courses) == -1) {
     return;
@@ -151,13 +201,17 @@ void GBFrameController::PopulateCourseDropDownList(){
   if (course->GetCount() > 0) {
     course->SetValue(m_courses[0]->Title());
   }
+
+  course->SetSelection(0);
 }
 
 
 void GBFrameController::ModifyAssignments(wxCommandEvent& event){
 	// Handle Event
-	GBDialogAssessmentView dlg(m_pMainFrameView);
-  
+
+	std::cout << "Test: " << (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection() << endl;
+	GBDialogAssessmentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection());
+
 	dlg.ShowModal();
 }
 
@@ -165,7 +219,7 @@ void GBFrameController::ModifyAssignments(wxCommandEvent& event){
 void GBFrameController::AddCourse(wxCommandEvent& event){
 	// Handle Event
   GBDialogCourseView dlg(m_pMainFrameView);
-  
+
 	dlg.ShowModal();
 }
 

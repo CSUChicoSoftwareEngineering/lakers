@@ -1,5 +1,8 @@
 #include "data/course.h"
 
+#include <iostream>
+using namespace std;
+
 Course::Course()
   : m_id(),
     m_title(),
@@ -50,4 +53,17 @@ Assessment Course::GetAssessmentByTitle(const wxString &title) const {
 
 int Course::AssessmentCount() {
   return m_assessments.size();
+}
+
+bool Course::AssessmentExist(const wxString &title){
+
+  if(!title.IsEmpty()){
+	  for (int i = 0; i < m_assessments.size(); ++i) {
+		if (title.IsSameAs(m_assessments[i]->Title())) {
+		  return true;
+		}
+	  }
+  }
+
+  return false;
 }

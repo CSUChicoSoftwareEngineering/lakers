@@ -7,7 +7,7 @@
 using namespace std;
 
 GBDialogCourseController::GBDialogCourseController(GBDialogCourseView *view)
-  : m_pSql(GBSql::Instance()), 
+  : m_pSql(GBSql::Instance()),
     m_pDialogView(view) {
 
 }

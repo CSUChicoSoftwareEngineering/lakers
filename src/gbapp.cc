@@ -18,6 +18,6 @@ bool GBApp::OnInit() {
 
 int GBApp::OnExit() {
   GBSql::Instance()->Close();
-  
+
   return 0;
 }

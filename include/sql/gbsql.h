@@ -12,13 +12,13 @@ using std::vector;
 #include "data/assessment.h"
 #include "data/observer.h"
 
-// Stores model in a sql database. The class utilizes the singleton and 
-// observer patterns. Initialize or Open are required before making any 
+// Stores model in a sql database. The class utilizes the singleton and
+// observer patterns. Initialize or Open are required before making any
 // other calls
 // Class is not thread safe
 class GBSql : public Observer {
   public:
-    // Returns singleton instances of GBSql 
+    // Returns singleton instances of GBSql
     static GBSql *Instance();
     // Initializes database by calling Open and creating tables
     int Initialize(const wxString &file);
@@ -26,10 +26,10 @@ class GBSql : public Observer {
     int Open(const wxString &file);
     // Closes connection to database
     int Close();
-    // Opens database and restores image file 
-    int Import(const wxString &file, const wxString &backup); 
+    // Opens database and restores image file
+    int Import(const wxString &file, const wxString &backup);
     // Populates result with all courses
-    int SelectCourses(vector<Course*> *result);  
+    int SelectCourses(vector<Course*> *result);
     // Inserts course into database
     int InsertCourse(const Course &c);
     // Deletes a course from the database
@@ -46,6 +46,8 @@ class GBSql : public Observer {
     int SelectAssessmentsByCourse(Course &c);
     // Inserts assessment for course
     int InsertAssessmentIntoCourse(const Assessment &a, const Course &c);
+    // Updates assessment for course
+    int UpdateAssessmentIntoCourse(wxString newTitle, wxString currentTitle, const Course &c);
     // Deletes assessment from database
     int DeleteAssessment(const Assessment &a);
     // Populates student with all grades

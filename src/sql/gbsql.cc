@@ -37,9 +37,10 @@ int GBSql::Update(const wxString &sql) {
 wxSQLite3ResultSet *GBSql::Query(const wxString &sql) {
   try {
     return new wxSQLite3ResultSet(m_db.ExecuteQuery(sql));
+    cout << "here 1 " << endl;
   } catch (wxSQLite3Exception &e) {
     cerr << e.GetMessage() << endl;
-
+	cout << "here 2 " << endl;
     return NULL;
   }
 }
@@ -139,6 +140,7 @@ int GBSql::SelectCourses(vector<Course*> *result) {
   wxString sql = wxString::Format("SELECT * FROM courses");
 
   Course *c;
+
   wxSQLite3ResultSet *r = Query(sql);
 
   while (r->NextRow()) {
@@ -148,6 +150,7 @@ int GBSql::SelectCourses(vector<Course*> *result) {
 
     result->push_back(c);
   }
+
 
   return result->size();
 }
@@ -227,6 +230,8 @@ int GBSql::SelectAssessmentsByCourse(Course &c) {
   Assessment *a;
   wxSQLite3ResultSet *r = Query(sql);
 
+  c.ClearAssessments();
+
   while (r->NextRow()) {
     a = new Assessment(r->GetAsString("id"));
 
@@ -250,11 +255,28 @@ int GBSql::InsertAssessmentIntoCourse(const Assessment &a, const Course &c) {
   return r;
 }
 
+int GBSql::UpdateAssessmentIntoCourse(wxString newTitle, wxString currentTitle, const Course &c) {
+  wxString sql = wxString::Format("UPDATE assessments   \
+      SET title='%s' WHERE title='%s' AND cid='%s' ", newTitle, currentTitle, c.Id());
+
+  int r = Update(sql);
+
+  // Notify subscribers
+  NotifyAssessmentUpdate();
+
+  return r;
+}
+
 int GBSql::DeleteAssessment(const Assessment &a) {
   wxString sql = wxString::Format("DELETE FROM assessments \
      WHERE id='%s'", a.Id());
 
-  return Update(sql);
+  int r = Update(sql);
+
+  // Notify subscribers
+  NotifyAssessmentUpdate();
+
+  return r;
 }
 
 int GBSql::SelectGradesForStudentInCourse(Student &s, const Course &c) {

@@ -45,7 +45,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Connect Controller
 	m_pCon = new GBFrameController(this);
 
-	// Conencts Event Handle(s) to Controller
+	// Connects Event Handler(s) to Controller
 	Bind(wxEVT_MENU, &GBFrameController::OnExit, m_pCon, wxID_EXIT);
 	Bind(wxEVT_MENU, &GBFrameController::OnAbout, m_pCon, wxID_ABOUT);
 	Bind(wxEVT_MENU, &GBFrameController::AddCourse, m_pCon, ID_AddCourseMenuSelect);

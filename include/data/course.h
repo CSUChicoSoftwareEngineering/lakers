@@ -30,6 +30,8 @@ class Course {
     Assessment GetAssessmentByTitle(const wxString &title) const;
     int AssessmentCount();
     void Clear() { m_assessments.clear(); m_students.clear(); }
+    void ClearAssessments() {m_assessments.clear();}
+    bool AssessmentExist(const wxString &title);
 
   private:
     wxString m_id;

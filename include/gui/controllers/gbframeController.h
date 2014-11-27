@@ -29,8 +29,9 @@ class GBFrameController : public Subscriber {
     void OnExit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void NewCourseSelected(wxCommandEvent& event);
-  
-    virtual void OnCourseUpdate(); 
+
+    virtual void OnCourseUpdate();
+    virtual void OnAssessmentUpdate();
 
   private:
     void PopulateCourseDropDownList();
