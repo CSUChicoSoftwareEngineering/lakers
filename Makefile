@@ -6,6 +6,7 @@ SRCS := src\data\grade.cc \
 				src\data\course.cc \
 				src\data\subscriber.cc \
 				src\data\observer.cc \
+				src\data\bbimporter.cc \
 				src\sql\gbsql.cc \
 				src\gbapp.cc \
 				src\gui\views\gbframeView.cc \
@@ -17,7 +18,7 @@ SRCS := src\data\grade.cc \
 
 TEST_SRCS := 	tests\gbsqltest.cc \
 		tests\gbtest.cc \
-
+#        tests\bbimportertest.cc
 OBJS := $(SRCS:%.cc=$(BUILD_DIR)/%.o)
 
 TEST_OBJS := $(TEST_SRCS:%.cc=$(BUILD_DIR)/%.o)

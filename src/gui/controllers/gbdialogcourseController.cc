@@ -1,7 +1,7 @@
 #include "gui\controllers\gbdialogcourseController.h"
 #include "sql\gbsql.h"
 #include "gui\views\gbdialogcourseView.h"
-
+#include "data\bbimporter.h"
 #include <iostream>
 
 using namespace std;
@@ -36,7 +36,9 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 
 void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
 	// Handle Event
-
+	    BBImporter cur_Importer;
+    	wxString Path = event.GetPath ();
+		std::vector<Student*> *csv_Ptr = cur_Importer.GetCourse(Path.mb_str());
 }
 
 void GBDialogCourseController::ImportStudents(){

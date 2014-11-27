@@ -45,6 +45,21 @@ TEST_F(GBSqlTest, InsertCourse) {
   ASSERT_EQ(1, r);
 }
 
+TEST_F(GBSqlTest, UpdateCourse) {
+  Course c1("1");
+  vector<Course*> result;
+
+  c1.SetTitle("CSCI-590");
+
+  int r = sql->UpdateCourse(c1);
+
+  ASSERT_EQ(1, r);
+
+  r = sql->SelectCourses(&result);
+
+  ASSERT_STREQ("CSCI-590", result[0]->Title().c_str());
+}
+
 TEST_F(GBSqlTest, DeleteCourse) {
   Course c("1");
 
@@ -78,6 +93,18 @@ TEST_F(GBSqlTest, InsertStudentIntoCourse) {
   ASSERT_EQ(1, r);
 }
 
+TEST_F(GBSqlTest, UpdateStudent) {
+  Student s("1");
+
+  s.SetStudentId("916683");
+  s.SetFirst("Jane");
+  s.SetLast("Lewis");
+
+  int r = sql->UpdateStudent(s);
+
+  ASSERT_EQ(1, r);
+}
+
 TEST_F(GBSqlTest, DeleteStudent) {
   Student s("0");
 
@@ -102,6 +129,16 @@ TEST_F(GBSqlTest, InsertAssessmentIntoCourse) {
   Course c("1");
 
   int r = sql->InsertAssessmentIntoCourse(a, c);
+
+  ASSERT_EQ(1, r);
+}
+
+TEST_F(GBSqlTest, UpdateAssessment) {
+  Assessment a("1");
+
+  a.SetTitle("Test2");
+
+  int r = sql->UpdateAssessment(a);
 
   ASSERT_EQ(1, r);
 }
@@ -136,6 +173,16 @@ TEST_F(GBSqlTest, InsertGradeForStudent) {
   Assessment a("100");
 
   int r = sql->InsertGradeForStudent(g, s, c, a);
+
+  ASSERT_EQ(1, r);
+}
+
+TEST_F(GBSqlTest, UpdateGrade) {
+  Grade g("2");
+  
+  g.SetValue("0");
+
+  int r = sql->UpdateGrade(g);
 
   ASSERT_EQ(1, r);
 }
