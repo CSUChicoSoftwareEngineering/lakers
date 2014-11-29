@@ -1,6 +1,6 @@
 #include "data/subscriber.h"
 
-void Subscriber::OnStudentUpdate() { }
-void Subscriber::OnCourseUpdate() { }
-void Subscriber::OnAssessmentUpdate() { }
-void Subscriber::OnGradeUpdate() { }
+void Subscriber::OnStudentUpdate(SubscriberUpdateType type) { }
+void Subscriber::OnCourseUpdate(SubscriberUpdateType type) { }
+void Subscriber::OnAssessmentUpdate(SubscriberUpdateType type) { }
+void Subscriber::OnGradeUpdate(SubscriberUpdateType type) { }

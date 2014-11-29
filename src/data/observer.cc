@@ -19,29 +19,29 @@ void Observer::RemoveSubscriber(Subscriber *sub) {
 }
 
 // Notifies on student update
-void Observer::NotifyStudentUpdate() {
+void Observer::NotifyStudentUpdate(SubscriberUpdateType type) {
   for (int i = 0; i < m_subscribers.size(); ++i) {
-    m_subscribers[i]->OnStudentUpdate();
+    m_subscribers[i]->OnStudentUpdate(type);
   }
 }
 
 // Notifies on course update
-void Observer::NotifyCourseUpdate() {
+void Observer::NotifyCourseUpdate(SubscriberUpdateType type) {
   for (int i = 0; i < m_subscribers.size(); ++i) {
-    m_subscribers[i]->OnCourseUpdate();
+    m_subscribers[i]->OnCourseUpdate(type);
   }
 }
 
 // Notifies on assessment update
-void Observer::NotifyAssessmentUpdate() {
+void Observer::NotifyAssessmentUpdate(SubscriberUpdateType type) {
   for (int i = 0; i < m_subscribers.size(); ++i) {
-    m_subscribers[i]->OnAssessmentUpdate();
+    m_subscribers[i]->OnAssessmentUpdate(type);
   }
 }
 
 // Notifies on grade update
-void Observer::NotifyGradeUpdate() {
+void Observer::NotifyGradeUpdate(SubscriberUpdateType type) {
   for (int i = 0; i < m_subscribers.size(); ++i) {
-    m_subscribers[i]->OnGradeUpdate();
+    m_subscribers[i]->OnGradeUpdate(type);
   }
 }

@@ -17,13 +17,13 @@ class Observer {
 
   protected:
     // Notify all subscribers on student table update
-    void NotifyStudentUpdate();
+    void NotifyStudentUpdate(SubscriberUpdateType type);
     // Notify all subscribers on course table update
-    void NotifyCourseUpdate();
+    void NotifyCourseUpdate(SubscriberUpdateType type);
     // Notify all subscribers on assessment table update
-    void NotifyAssessmentUpdate();
+    void NotifyAssessmentUpdate(SubscriberUpdateType type);
     // Notify all subscribers on grade table update
-    void NotifyGradeUpdate();
+    void NotifyGradeUpdate(SubscriberUpdateType type);
 
   private:
     // Vector for storing subscribers

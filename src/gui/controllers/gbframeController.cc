@@ -128,12 +128,12 @@ void  GBFrameController::NewCourseSelected(wxCommandEvent& event){
   UpdateGridView();
 }
 
-void GBFrameController::OnCourseUpdate() {
+void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
   PopulateCourseDropDownList();
 }
 
 // ***
-void GBFrameController::OnAssessmentUpdate(){
+void GBFrameController::OnAssessmentUpdate(SubscriberUpdateType type){
 
   Course *course(NULL);
   wxGrid *grid = m_pMainFrameView->m_pGridView;
