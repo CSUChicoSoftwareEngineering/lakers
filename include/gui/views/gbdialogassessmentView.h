@@ -8,7 +8,7 @@
 #include <wx/event.h>
 #include <wx/statbox.h>
 #include <wx/listctrl.h>
-#include "gui\controllers\gbdialogassessmentController.h"
+#include "gui/controllers/gbdialogassessmentController.h"
 
 
 #define GB_ASSIGNMENT_DIALOGSIZE wxSize(350,500)

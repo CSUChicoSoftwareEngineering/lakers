@@ -8,7 +8,7 @@
 #include <wx/panel.h>
 #include <wx/listctrl.h>
 #include <wx/checklst.h>
-#include "gui\controllers\gbdialogcourseController.h"
+#include "gui/controllers/gbdialogcourseController.h"
 
 #define GB_COURSE_DIALOGSIZE wxSize(350,500)
 

@@ -9,7 +9,7 @@
 #include <wx/statbox.h>
 #include <wx/listctrl.h>
 #include <wx/msgdlg.h>
-#include "data\assessment.h"
+#include "data/assessment.h"
 #include "sql/gbsql.h"
 
 class GBDialogAssessmentView;

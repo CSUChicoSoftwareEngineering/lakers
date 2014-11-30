@@ -1,7 +1,7 @@
-#include "gui\controllers\gbdialogcourseController.h"
-#include "sql\gbsql.h"
-#include "gui\views\gbdialogcourseView.h"
-#include "data\bbimporter.h"
+#include "gui/controllers/gbdialogcourseController.h"
+#include "sql/gbsql.h"
+#include "gui/views/gbdialogcourseView.h"
+#include "data/bbimporter.h"
 #include <iostream>
 
 using namespace std;

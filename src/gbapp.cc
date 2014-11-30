@@ -1,6 +1,6 @@
 #include "gbapp.h"
-#include "gui\views\gbframeview.h"
-#include "sql\gbsql.h"
+#include "gui/views/gbframeView.h"
+#include "sql/gbsql.h"
 
 IMPLEMENT_APP(GBApp)
 

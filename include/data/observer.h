@@ -1,7 +1,7 @@
 #ifndef _OBSERVER_H_
 #define _OBSERVER_H_
 
-#include "data\subscriber.h"
+#include "data/subscriber.h"
 
 #include <vector>
 

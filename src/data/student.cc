@@ -1,4 +1,4 @@
-#include "data\student.h"
+#include "data/student.h"
 
 Student::Student() 
   : m_id(),

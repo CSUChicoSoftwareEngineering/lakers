@@ -1,5 +1,5 @@
-#include "gui\views\gbframeView.h"
-#include "sql\gbsql.h"
+#include "gui/views/gbframeView.h"
+#include "sql/gbsql.h"
 
 GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame(NULL, wxID_ANY, title, pos, size)
 {
@@ -9,10 +9,10 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
     menuFile->Append(wxID_EXIT);
     // Create Course Menu
     wxMenu *menuCourse = new wxMenu;
-    menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course \tCtrl-C", "Add a course to your GradeBook");
+    menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course /tCtrl-C", "Add a course to your GradeBook");
     // Create Assessment Menu
     wxMenu *menuAssessment = new wxMenu;
-    menuAssessment->Append(ID_AddAssignmentMenuSelect, "&Modify Assessments \tCtrl-A", "Add assessment(s) to your GradBook");
+    menuAssessment->Append(ID_AddAssignmentMenuSelect, "&Modify Assessments /tCtrl-A", "Add assessment(s) to your GradBook");
    // Create Help Menu
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);

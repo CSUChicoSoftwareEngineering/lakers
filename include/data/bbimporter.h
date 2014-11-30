@@ -1,8 +1,8 @@
 #ifndef _BBIMPORTER_H
 #define _BBIMPORTER_H
 
-#include <wx\string.h>
-#include <student.h>
+#include <wx/string.h>
+#include "data/student.h"
 #include <vector>
 #include <string>
 

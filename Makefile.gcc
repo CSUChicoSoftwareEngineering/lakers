@@ -1,0 +1,44 @@
+SHELL := /bin/bash
+
+BUILD_DIR = build
+
+SRCS :=	src/data/assessment.cc \
+				src/data/bbimporter.cc \
+				src/data/course.cc \
+				src/data/grade.cc \
+				src/data/observer.cc \
+				src/data/student.cc \
+				src/data/subscriber.cc \
+				src/gui/controllers/gbdialogassessmentController.cc \
+				src/gui/controllers/gbdialogcourseController.cc \
+				src/gui/controllers/gbframeController.cc \
+				src/gui/views/gbdialogassessmentView.cc \
+				src/gui/views/gbdialogcourseView.cc \
+				src/gui/views/gbframeView.cc \
+				src/sql/gbsql.cc \
+				src/gbapp.cc \
+
+OBJS := $(SRCS:%.cc=$(BUILD_DIR)/%.o)
+
+CPPFLAGS := -Iinclude \
+						-Ilib/wxwidgets-3.0.1/include \
+						-Ilib/wxwidgets-3.0.1/lib/wx/include/gtk2-unicode-static-3.0 \
+						-Ilib/wxsqlite3-3.1.1/include
+
+LDFLAGS := -Llib/wxsqlite3-3.1.1/lib
+
+LDLIBS := -lwxcode_gtk2ud_wxsqlite3-3.0 -lsqlite3 \
+					$(shell lib/wxwidgets-3.0.1/wx-config --static --libs) \
+
+run: gbapp
+	$(BUILD_DIR)/gbapp	
+
+clean:
+	rm -rf $(BUILD_DIR)
+
+gbapp: $(OBJS)
+	$(CXX) -o $(BUILD_DIR)/$@ $^ $(LDFLAGS) $(LDLIBS)
+
+$(BUILD_DIR)/%.o: %.cc
+	if [ ! -a $(patsubst %/,%,$(dir $@)) ]; then mkdir -p $(patsubst %/,%,$(dir $@)); fi;
+	$(CXX) -D__WXGTK__ -c $(CPPFLAGS) -o $@ $<

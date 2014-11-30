@@ -1,4 +1,4 @@
-#include "data\bbimporter.h"
+#include "data/bbimporter.h"
 #include <iostream>
 #include <iostream>
 #include <fstream>
@@ -28,7 +28,7 @@ BBImporter::~BBImporter() {
 // might rename this Get Course     add integer for failure code
 std::vector<Student*> *BBImporter::GetCourse(const char *Path) {
     
-	std::cout << "GetCourse Called\n";
+	std::cout << "GetCourse Called/n";
 	
     // needs to get deleted somewhere
 	std::vector<Student*> *Course = new vector<Student*>;
@@ -55,7 +55,7 @@ std::vector<Student*> *BBImporter::GetCourse(const char *Path) {
     
 	InFile.close();
 	courseEmpty = Course->size();
-	std::cout << "There are " << courseEmpty << " Student classes in the vector\n";
+	std::cout << "There are " << courseEmpty << " Student classes in the vector/n";
     return Course;
 }
 
@@ -78,7 +78,7 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 			// Start checking characters
 			// end of field; if line is incomplete,
 			// student object will still be pushed
-			if (Character == Delimiter || Character == '\0')
+			if (Character == Delimiter || Character == '/0')
 			{
 				// convert field to wxString
 			    wxString wxCurField(CurString);
@@ -115,7 +115,7 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 				}	
 				
 				// end of line
-				if (Character == '\0')
+				if (Character == '/0')
 				{
 					
 					Course->push_back(CurStudent);
@@ -131,7 +131,7 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 			else
 			{			    
 				CurString.push_back(Character);
-			    //cout << CurString << "\n";
+			    //cout << CurString << "/n";
 				BBImporter::setFirstCounter++;
 			}
 			LinePos++;

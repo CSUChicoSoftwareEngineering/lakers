@@ -1,6 +1,6 @@
-#include "gui\controllers\gbdialogassessmentController.h"
-#include "sql\gbsql.h"
-#include "gui\views\gbdialogassessmentView.h"
+#include "gui/controllers/gbdialogassessmentController.h"
+#include "sql/gbsql.h"
+#include "gui/views/gbdialogassessmentView.h"
 #include <iostream>
 using namespace std;
 

@@ -2,7 +2,7 @@
     #include <wx/wx.h>
 #endif
 
-#include "gui\controllers\gbframeController.h"
+#include "gui/controllers/gbframeController.h"
 #define GBAPPSIZE wxSize(800,600)
 #define GBDIALOGSIZE wxSize(350,450)
 

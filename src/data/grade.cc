@@ -1,4 +1,4 @@
-#include "data\grade.h"
+#include "data/grade.h"
 
 Grade::Grade()
   : m_id(),

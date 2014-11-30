@@ -1,5 +1,5 @@
-#include "gui\views\gbdialogcourseView.h"
-#include "sql\gbsql.h"
+#include "gui/views/gbdialogcourseView.h"
+#include "sql/gbsql.h"
 
 GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
   : wxDialog(parent, wxID_ANY, wxT("Add Course"), wxDefaultPosition, GB_COURSE_DIALOGSIZE) {

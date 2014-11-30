@@ -1,5 +1,5 @@
-#include "gui\views\gbdialogassessmentView.h"
-#include "sql\gbsql.h"
+#include "gui/views/gbdialogassessmentView.h"
+#include "sql/gbsql.h"
 
 
 GBDialogAssessmentView::GBDialogAssessmentView() { }

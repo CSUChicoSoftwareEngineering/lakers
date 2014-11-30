@@ -1,6 +1,6 @@
-#include "gui\controllers\gbframeController.h"
-#include "sql\gbsql.h"
-#include "gui\views\gbframeView.h"
+#include "gui/controllers/gbframeController.h"
+#include "sql/gbsql.h"
+#include "gui/views/gbframeView.h"
 
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include "gbsql.h"
+#include "sql/gbsql.h"
 
 #include <iostream>
 #include <wx/string.h>
