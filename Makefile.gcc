@@ -18,27 +18,41 @@ SRCS :=	src/data/assessment.cc \
 				src/sql/gbsql.cc \
 				src/gbapp.cc \
 
+TEST_SRCS :=	tests/gbsqltest.cc \
+							tests/gbtest.cc	
+							#tests/bbimportertest.cc \
+
 OBJS := $(SRCS:%.cc=$(BUILD_DIR)/%.o)
+
+TEST_OBJS := $(TEST_SRCS:%.cc=$(BUILD_DIR)/%.o)
 
 CPPFLAGS := -Iinclude \
 						-Ilib/wxwidgets-3.0.1/include \
 						-Ilib/wxwidgets-3.0.1/lib/wx/include/gtk2-unicode-static-3.0 \
-						-Ilib/wxsqlite3-3.1.1/include
+						-Ilib/wxsqlite3-3.1.1/include \
+						-Ilib/gtest-1.7.0/include
 
 LDFLAGS := -Llib/wxsqlite3-3.1.1/lib
 
 LDLIBS := -lwxcode_gtk2ud_wxsqlite3-3.0 -lsqlite3 \
 					$(shell lib/wxwidgets-3.0.1/wx-config --static --libs) \
 
+TEST_DEFINES :=
+
 run: gbapp
 	$(BUILD_DIR)/gbapp	
 
+test: $(OBJS) $(TEST_OBJS)
+	$(CXX) -o $(BUILD_DIR)/$@ $^ $(LDFLAGS) $(LDLIBS) -Llib/gtest-1.7.0/lib -lgtest
+	$(BUILD_DIR)/$@
+	
 clean:
 	rm -rf $(BUILD_DIR)
 
+gbapp: override TEST_DEFINES := -D__GUI__
 gbapp: $(OBJS)
 	$(CXX) -o $(BUILD_DIR)/$@ $^ $(LDFLAGS) $(LDLIBS)
 
 $(BUILD_DIR)/%.o: %.cc
 	if [ ! -a $(patsubst %/,%,$(dir $@)) ]; then mkdir -p $(patsubst %/,%,$(dir $@)); fi;
-	$(CXX) -D__WXGTK__ -c $(CPPFLAGS) -o $@ $<
+	$(CXX) $(TEST_DEFINES) -D__WXGTK__ -c $(CPPFLAGS) -o $@ $<

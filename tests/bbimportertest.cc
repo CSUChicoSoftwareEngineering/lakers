@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "data\bbimporter.h"
+#include "data/bbimporter.h"
 #include <wx/filefn.h>
 #include <iostream>
 #include <vector>

@@ -2,7 +2,9 @@
 #include "gui/views/gbframeView.h"
 #include "sql/gbsql.h"
 
+#ifdef __GUI__
 IMPLEMENT_APP(GBApp)
+#endif
 
 bool GBApp::OnInit() {
   GBSql::Instance()->Initialize("gb.db");

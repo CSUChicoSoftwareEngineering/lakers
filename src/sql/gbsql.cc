@@ -213,14 +213,14 @@ int GBSql::SelectStudentsByCourse(Course &c) {
 
 int GBSql::InsertStudentIntoCourse(const Student &s, const Course &c) {
   wxString sql = wxString::Format("INSERT INTO students \
-      VALUES (NULL, '%s', '%s', '%s')", s.StudentId(), s.First(), s.Last());
+      VALUES (NULL, '%s', '%s', '%s')", s.Id(), s.First(), s.Last());
 
   if (Update(sql) == -1) {
     return -1;
   }
 
   sql = wxString::Format("INSERT INTO course_student \
-      VALUES (NULL, '%s', '%s')", s.StudentId(), c.Id());
+      VALUES (NULL, '%s', '%s')", s.Id(), c.Id());
 
   int r = Update(sql);
 
@@ -243,7 +243,7 @@ int GBSql::UpdateStudent(const Student &s) {
 
 int GBSql::DeleteStudent(const Student &s) {
   wxString sql = wxString::Format("DELETE FROM students \
-      WHERE sid='%s'", s.Id());
+      WHERE id='%s'", s.Id());
 
   int r = Update(sql);
 
