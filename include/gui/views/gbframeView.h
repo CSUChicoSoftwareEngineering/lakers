@@ -26,6 +26,9 @@ class GradeTable : public wxGridTableBase {
 		void AddAssessment(int index, const Assessment &s);
 		void AddGrade(int row, int col, const Grade &g);
 
+		Student &GetStudent(int index);
+		Assessment &GetAssessment(int index);
+
 	private:
 		vector<Student> m_rows;	
 		vector<Assessment> m_cols;
@@ -43,9 +46,13 @@ class GBFrameView : public wxFrame {
     wxDialog					*m_pGBDialog;
     wxPanel						*m_pGBDialogPanel;
 		GradeTable				*m_pGradeTable;
+		wxMenu *m_pLabelMenu;
 
 	protected:
     GBFrameController			*m_pCon;
+
+	private:
+		void OnLabelRightClick(wxGridEvent &event);
 };
 
 
@@ -60,4 +67,5 @@ enum
 	ID_GBDialogPanel = 7,
 	ID_AddStudentMenuSelect = 8,
 	ID_ModifyStudentMenuSelect = 9,
+	ID_LabelDelete,
 };

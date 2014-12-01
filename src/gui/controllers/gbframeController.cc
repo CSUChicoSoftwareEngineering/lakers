@@ -119,6 +119,29 @@ void  GBFrameController::NewCourseSelected(wxCommandEvent& event){
   UpdateGridView();
 }
 
+void GBFrameController::OnLabelDelete(wxCommandEvent &event) {
+	wxGrid *grid = m_pMainFrameView->m_pGridView;
+	GradeTable *table = m_pMainFrameView->m_pGradeTable;
+
+	wxArrayInt selectedRows = grid->GetSelectedRows();
+	wxArrayInt selectedCols = grid->GetSelectedCols();	
+
+	// Delete selected rows or cols
+	if (selectedRows.GetCount() > 0) {
+		for (int x = 0; x < selectedRows.GetCount(); ++x) {
+			Student s = table->GetStudent(selectedRows.Item(x));
+
+			m_pSql->DeleteStudent(s);
+		}	
+	} else if (selectedCols.GetCount() > 0) {
+		for (int x = 0; x < selectedCols.GetCount(); ++x) {
+			Assessment a = table->GetAssessment(selectedCols.Item(x));
+
+			m_pSql->DeleteAssessment(a);
+		}
+	}
+}
+
 void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
   PopulateCourseDropDownList();
 }

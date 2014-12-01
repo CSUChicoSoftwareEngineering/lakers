@@ -32,6 +32,7 @@ class GBFrameController : public Subscriber {
     void OnExit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void NewCourseSelected(wxCommandEvent& event);
+		void OnLabelDelete(wxCommandEvent &event);
 
     virtual void OnCourseUpdate(SubscriberUpdateType type);
     virtual void OnAssessmentUpdate(SubscriberUpdateType type);

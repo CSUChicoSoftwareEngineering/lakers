@@ -57,10 +57,15 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Set GBFrameSizer as primary sizer
 	m_pGBFramePanel->SetSizer(m_pGBFrameSizer);
 
+	m_pLabelMenu = new wxMenu();
+	m_pLabelMenu->Append(ID_LabelDelete, "Delete");
+
 	// Connect Controller
 	m_pCon = new GBFrameController(this);
 
 	// Connects Event Handler(s) to Controller
+	Bind(wxEVT_GRID_LABEL_RIGHT_CLICK, &GBFrameView::OnLabelRightClick, this, ID_GridView);
+	Bind(wxEVT_MENU, &GBFrameController::OnLabelDelete, m_pCon, ID_LabelDelete);
 	Bind(wxEVT_MENU, &GBFrameController::OnExit, m_pCon, wxID_EXIT);
 	Bind(wxEVT_MENU, &GBFrameController::OnAbout, m_pCon, wxID_ABOUT);
 	Bind(wxEVT_MENU, &GBFrameController::AddStudent, m_pCon, ID_AddStudentMenuSelect);
@@ -69,6 +74,21 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::ModifyAssignments, m_pCon, ID_AddAssignmentMenuSelect);
 	Bind(wxEVT_COMBOBOX, &GBFrameController::NewCourseSelected, m_pCon, ID_CourseDropDownList);
 }
+
+void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
+	if (event.GetCol() == -1 && event.GetRow() == -1) {
+		return;
+	}
+
+	if (event.GetCol() >= 0 && event.GetRow() == -1) {
+		m_pGridView->SelectCol(event.GetCol());
+	} else if (event.GetCol() == -1 && event.GetRow() >= 0) {
+		m_pGridView->SelectRow(event.GetRow());
+	}
+
+	m_pGridView->PopupMenu(m_pLabelMenu, event.GetPosition().x, event.GetPosition().y);	
+}
+
 #include <iostream>
 using namespace std;
 #warning "Remove"
@@ -155,4 +175,12 @@ void GradeTable::AddAssessment(int index, const Assessment &a) {
 
 void GradeTable::AddGrade(int row, int col, const Grade &g) {
 	m_grades[row][col] = g;
+}
+
+Student &GradeTable::GetStudent(int index) {
+	return m_rows[index];
+}
+
+Assessment &GradeTable::GetAssessment(int index) {
+	return m_cols[index];
 }
