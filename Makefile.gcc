@@ -11,9 +11,11 @@ SRCS :=	src/data/assessment.cc \
 				src/data/subscriber.cc \
 				src/gui/controllers/gbdialogassessmentController.cc \
 				src/gui/controllers/gbdialogcourseController.cc \
+				src/gui/controllers/gbdialogstudentController.cc \
 				src/gui/controllers/gbframeController.cc \
 				src/gui/views/gbdialogassessmentView.cc \
 				src/gui/views/gbdialogcourseView.cc \
+				src/gui/views/gbdialogstudentView.cc \
 				src/gui/views/gbframeView.cc \
 				src/sql/gbsql.cc \
 				src/gbapp.cc \

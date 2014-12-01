@@ -7,7 +7,7 @@
 #include <wx/sizer.h>
 #include <wx/grid.h>
 
-#include "gui\controllers\gbdialogstudentController.h"
+#include "gui/controllers/gbdialogstudentController.h"
 
 #define GB_ADD_STUDENT_DIALOGSIZE wxSize(350,220)
 #define GB_MODIFY_STUDENT_DIALOGSIZE wxSize(550,550)

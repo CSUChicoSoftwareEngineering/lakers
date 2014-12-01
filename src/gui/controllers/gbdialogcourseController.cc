@@ -1,8 +1,8 @@
-#include "gui\controllers\gbdialogcourseController.h"
-#include "sql\gbsql.h"
-#include "gui\views\gbdialogcourseView.h"
-#include "data\bbimporter.h"
-#include "data\student.h"
+#include "gui/controllers/gbdialogcourseController.h"
+#include "sql/gbsql.h"
+#include "gui/views/gbdialogcourseView.h"
+#include "data/bbimporter.h"
+#include "data/student.h"
 #include <iostream>
 #include <wx/msgdlg.h>
 
@@ -29,7 +29,6 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
     return;
   }
 
-
   Course c;
 
   c.SetTitle(name->GetValue());
@@ -38,8 +37,6 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 
     return;
   }
-
-
 
   for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
 

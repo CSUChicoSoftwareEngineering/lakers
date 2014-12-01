@@ -1,5 +1,4 @@
-#include "gui\views\gbdialogstudentView.h"
-
+#include "gui/views/gbdialogstudentView.h"
 
 GBDialogStudentView::GBDialogStudentView(){}
 

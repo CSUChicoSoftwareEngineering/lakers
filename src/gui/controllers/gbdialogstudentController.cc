@@ -1,6 +1,6 @@
-#include "gui\controllers\gbdialogstudentController.h"
-#include "gui\views\gbdialogstudentView.h"
-#include "sql\gbsql.h"
+#include "gui/controllers/gbdialogstudentController.h"
+#include "gui/views/gbdialogstudentView.h"
+#include "sql/gbsql.h"
 #include <iostream>
 #include <wx/msgdlg.h>
 

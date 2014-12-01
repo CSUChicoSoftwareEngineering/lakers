@@ -3,11 +3,36 @@
 #endif
 
 #include "gui/controllers/gbframeController.h"
+
 #define GBAPPSIZE wxSize(800,600)
 #define GBDIALOGSIZE wxSize(350,450)
 
+class GradeTable : public wxGridTableBase {
+	public:
+		GradeTable();
 
-class GBFrameView: public wxFrame {
+		virtual int GetNumberRows();
+		virtual int GetNumberCols();
+
+		virtual wxString GetValue(int row, int col);
+		virtual void SetValue(int row, int col, const wxString &value);
+
+		virtual void Clear();
+
+		virtual wxString GetRowLabelValue(int row);
+		virtual wxString GetColLabelValue(int col);
+
+		void AddStudent(int index, const Student &s);
+		void AddAssessment(int index, const Assessment &s);
+		void AddGrade(int row, int col, const Grade &g);
+
+	private:
+		vector<Student> m_rows;	
+		vector<Assessment> m_cols;
+		vector<vector<Grade> > m_grades;
+};
+
+class GBFrameView : public wxFrame {
   public:
     GBFrameView(const wxString& title, const wxPoint& pos, const wxSize& size);
     wxBoxSizer 					*m_pCourseDropDownListSizer;
@@ -17,6 +42,7 @@ class GBFrameView: public wxFrame {
     wxGrid						*m_pGridView;
     wxDialog					*m_pGBDialog;
     wxPanel						*m_pGBDialogPanel;
+		GradeTable				*m_pGradeTable;
 
 	protected:
     GBFrameController			*m_pCon;

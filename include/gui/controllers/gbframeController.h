@@ -10,11 +10,11 @@
 #include <wx/event.h>
 #include <wx/filepicker.h>
 #include <wx/combobox.h>
-#include "sql\gbsql.h"
-#include "gui\views\gbdialogassessmentView.h"
-#include "gui\views\gbdialogcourseView.h"
-#include "gui\views\gbdialogstudentView.h"
-#include "data\subscriber.h"
+#include "sql/gbsql.h"
+#include "gui/views/gbdialogassessmentView.h"
+#include "gui/views/gbdialogcourseView.h"
+#include "gui/views/gbdialogstudentView.h"
+#include "data/subscriber.h"
 
 class GBFrameView;
 

@@ -32,16 +32,18 @@ void GBFrameController::CreateGridView(){
 	// Create Student Grid view.
 	// Number of students in course = rows
 	// Total assessments = columns
-  (m_pMainFrameView->m_pGridView)->CreateGrid(0, 0);
-  (m_pMainFrameView->m_pGridView)->SetBackgroundColour(wxColour(char(255),char(255), char(255), char(0)));
-  (m_pMainFrameView->m_pGridView)->EnableDragColMove(true);
-  (m_pMainFrameView->m_pGridView)->EnableEditing(true);
+	//  (m_pMainFrameView->m_pGridView)->CreateGrid(0, 0);
+	//  (m_pMainFrameView->m_pGridView)->SetBackgroundColour(wxColour(char(255),char(255), char(255), char(0)));
+	//	(m_pMainFrameView->m_pGridView)->EnableDragColMove(true);
+	//	(m_pMainFrameView->m_pGridView)->EnableEditing(true);
+
   UpdateGridView();
 }
 
 void GBFrameController::UpdateGridView() {
   Course *course(NULL);
   wxGrid *grid = m_pMainFrameView->m_pGridView;
+	GradeTable *table = m_pMainFrameView->m_pGradeTable;
   wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
   wxString strSelection = combo->GetValue();
 
@@ -63,6 +65,8 @@ void GBFrameController::UpdateGridView() {
   // Ensure course is empty
   course->Clear();
 
+	table->Clear();
+
   // Populate course with assessments
   if (m_pSql->SelectAssessmentsByCourse(*course) == -1) {
     cerr << "Failed to select assessments in course" << endl;
@@ -70,59 +74,38 @@ void GBFrameController::UpdateGridView() {
     return;
   }
 
-  // Adjust columns
-  if (course->AssessmentCount() > grid->GetNumberCols()) {
-    grid->AppendCols(course->AssessmentCount() - grid->GetNumberCols());
-  } else if (course->AssessmentCount() < grid->GetNumberCols()) {
-    grid->DeleteCols(0, grid->GetNumberCols() - course->AssessmentCount());
-  }
+	for (int i = 0; i < course->AssessmentCount(); ++i) {
+		table->AddAssessment(i, course->GetAssessment(i));
+	}	
 
-  // Populate column labels
-  for (int i = 0; i < course->AssessmentCount(); ++i) {
-    grid->SetColLabelValue(i, course->GetAssessment(i).Title());
-  }
-
-  // Populate course with students
+ 	// Populate course with students
   if (m_pSql->SelectStudentsByCourse(*course) == -1) {
     cerr << "Failed to select students in course" << endl;
 
     return;
   }
 
-  // Adjust rows
-  if (course->StudentCount() > grid->GetNumberRows()) {
-    grid->AppendRows(course->StudentCount() - grid->GetNumberRows());
-  } else if (course->StudentCount() < grid->GetNumberRows()) {
-    grid->DeleteRows(0, grid->GetNumberRows() - course->StudentCount());
-  }
+	for (int i = 0; i < course->StudentCount(); ++i) {
+		Student s = course->GetStudent(i);
 
-  // Populate student data
-  for (int i = 0; i < course->StudentCount(); ++i) {
-    Student s = course->GetStudent(i);
+		table->AddStudent(i, s);
 
-    // Populate student with grades
-    if (m_pSql->SelectGradesForStudentInCourse(s, *course) == -1) {
-      continue;
-    }
+		if (m_pSql->SelectGradesForStudentInCourse(s, *course) == -1) {
+			continue;
+		}
 
-    // Populate assessments for students
-    for (int x = 0; x < grid->GetNumberCols(); ++x) {
-      // Determine assessment by title of column
-      Assessment a = course->GetAssessmentByTitle(grid->GetColLabelValue(x));
-      // Get grade by assessment
-      Grade g = s.GetGradeByAssessmentId(a.Id());
-      // Load cell with grade value
-      grid->SetCellValue(i, x, g.Value());
-    }
+		for (int x = 0; x < grid->GetNumberCols(); ++x) {
+			Assessment a = course->GetAssessmentByTitle(grid->GetColLabelValue(x));
 
-    // Populate row labels
-    grid->SetRowLabelValue(i, wxString::Format("%s, %s", s.Last(), s.First()));
-  }
+			Grade g = s.GetGradeByAssessmentId(a.Id());
+
+			table->AddGrade(i, x, g);	
+		}
+	}
 
   // Refresh grid
   grid->SetRowLabelSize(wxGRID_AUTOSIZE);
   grid->Refresh();
-
 }
 
 void  GBFrameController::NewCourseSelected(wxCommandEvent& event){
@@ -199,14 +182,10 @@ void GBFrameController::OnStudentUpdate(SubscriberUpdateType type){
   grid->SetRowLabelSize(wxGRID_AUTOSIZE);
   grid->AutoSizeColumns();
   grid->Refresh();
-
-
 }
-
 
 // ***
 void GBFrameController::OnAssessmentUpdate(SubscriberUpdateType type){
-
   Course *course(NULL);
   wxGrid *grid = m_pMainFrameView->m_pGridView;
   wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
@@ -252,7 +231,6 @@ void GBFrameController::OnAssessmentUpdate(SubscriberUpdateType type){
   // Refresh grid
   grid->AutoSizeColumns();
   grid->Refresh();
-
 }
 
 // *** Need to pull data from DB to populate Dropdown list ***
@@ -278,10 +256,7 @@ void GBFrameController::PopulateCourseDropDownList(){
   course->SetSelection(0);
 }
 
-
 void GBFrameController::ModifyAssignments(wxCommandEvent& event){
-	// Handle Event
-
 	GBDialogAssessmentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection());
 
 	dlg.ShowModal();
@@ -289,18 +264,15 @@ void GBFrameController::ModifyAssignments(wxCommandEvent& event){
 
 
 void GBFrameController::AddCourse(wxCommandEvent& event){
-	// Handle Event
   GBDialogCourseView dlg(m_pMainFrameView);
 
   dlg.ShowModal();
 }
 
 void GBFrameController::AddStudent(wxCommandEvent& event){
-	// Handle Event
   GBDialogStudentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection(), AddStudentStyleView);
 
   dlg.ShowModal();
-
 }
 
 void GBFrameController::ModifyStudent(wxCommandEvent& event){
@@ -308,9 +280,7 @@ void GBFrameController::ModifyStudent(wxCommandEvent& event){
   GBDialogStudentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection(), ModifyStudentStyleView);
 
   dlg.ShowModal();
-
 }
-
 
 void GBFrameController::OnExit(wxCommandEvent& event) {
 	// Handle Event
@@ -322,4 +292,3 @@ void GBFrameController::OnAbout(wxCommandEvent& event) {
     wxMessageBox( "GradeBook Application version 1.0.0",
                   "About", wxOK | wxICON_INFORMATION );
 }
-
