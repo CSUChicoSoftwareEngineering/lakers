@@ -6,6 +6,11 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Create File Menu
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(wxID_EXIT);
+	wxMenu *menuStudent = new wxMenu();
+	menuStudent->Append(ID_AddStudentMenuSelect, "&Add Student \tCtrl-S", "Add an individual to your GradeBook");
+	menuStudent->AppendSeparator();
+	menuStudent->Append(ID_ModifyStudentMenuSelect, "&Modify Student(s)", "Modify student information in your GradeBook");	
+
 	// Create Course Menu
 	wxMenu *menuCourse = new wxMenu;
 	menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course /tCtrl-C", "Add a course to your GradeBook");
@@ -19,6 +24,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	wxMenuBar *menuBar = new wxMenuBar;
 	menuBar->Append( menuFile, "&File" );
 	menuBar->Append( menuCourse, "&Course" );
+	menuBar->Append( menuStudent, "&Student");
 	menuBar->Append( menuAssessment, "&Assessments" );
 	menuBar->Append( menuHelp, "&Help" );
 

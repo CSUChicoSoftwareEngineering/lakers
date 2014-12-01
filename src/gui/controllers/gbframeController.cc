@@ -40,6 +40,13 @@ void GBFrameController::CreateGridView(){
   UpdateGridView();
 }
 
+// Updates grid with new data
+// TODO 
+// This needs to be refactored at some point
+// UpdateGridView
+// UpdateStudents
+// UpdateAssessments
+// UpdateGrades
 void GBFrameController::UpdateGridView() {
   Course *course(NULL);
   wxGrid *grid = m_pMainFrameView->m_pGridView;
@@ -117,120 +124,11 @@ void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
 }
 
 void GBFrameController::OnStudentUpdate(SubscriberUpdateType type){
-
-  Course *course(NULL);
-  wxGrid *grid = m_pMainFrameView->m_pGridView;
-  wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
-  wxString strSelection = combo->GetValue();
-  int longestStudentName = 0;
-
-  // Determine selected course
-  for (int i = 0; i < m_courses.size(); ++i) {
-    if (m_courses[i]->Title().IsSameAs(strSelection)) {
-      course = m_courses[i];
-
-      break;
-    }
-  }
-
-  if (course == NULL) {
-    cerr << "Failed to find selected course" << endl;
-    return;
-  }
-
-  // Ensure course is empty
-  course->ClearStudents();
-
-  // Populate course with students
-  if (m_pSql->SelectStudentsByCourse(*course) == -1) {
-
-    return;
-  }
-
-  // Adjust rows
-  if (course->StudentCount() > grid->GetNumberRows()) {
-    grid->AppendRows(course->StudentCount() - grid->GetNumberRows());
-  } else if (course->StudentCount() < grid->GetNumberRows()) {
-    grid->DeleteRows(0, grid->GetNumberRows() - course->StudentCount());
-  }
-
-  // Populate student data
-  for (int i = 0; i < course->StudentCount(); ++i) {
-    Student s = course->GetStudent(i);
-
-    // Populate student with grades
-    if (m_pSql->SelectGradesForStudentInCourse(s, *course) == -1) {
-      continue;
-    }
-
-    // Populate assessments for students
-    for (int x = 0; x < grid->GetNumberCols(); ++x) {
-      // Determine assessment by title of column
-      Assessment a = course->GetAssessmentByTitle(grid->GetColLabelValue(x));
-      // Get grade by assessment
-      Grade g = s.GetGradeByAssessmentId(a.Id());
-      // Load cell with grade value
-      grid->SetCellValue(i, x, g.Value());
-
-    }
-
-    // Populate row labels
-    grid->SetRowLabelValue(i, wxString::Format("%s, %s", s.Last(), s.First()));
-  }
-
-  // Refresh grid
-  grid->SetRowLabelSize(wxGRID_AUTOSIZE);
-  grid->AutoSizeColumns();
-  grid->Refresh();
+	UpdateGridView();
 }
 
-// ***
 void GBFrameController::OnAssessmentUpdate(SubscriberUpdateType type){
-  Course *course(NULL);
-  wxGrid *grid = m_pMainFrameView->m_pGridView;
-  wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
-  wxString strSelection = combo->GetValue();
-
-  // Determine selected course
-  for (int i = 0; i < m_courses.size(); ++i) {
-    if (m_courses[i]->Title().IsSameAs(strSelection)) {
-      course = m_courses[i];
-
-      break;
-    }
-  }
-
-  if (course == NULL) {
-    cerr << "Failed to find selected course" << endl;
-
-    return;
-  }
-
-  // Ensure course is empty
-  course->Clear();
-
-  // Populate course with assessments
-  if (m_pSql->SelectAssessmentsByCourse(*course) == -1) {
-    cerr << "Failed to select assessments in course" << endl;
-
-    return;
-  }
-
-  // Adjust columns
-  if (course->AssessmentCount() > grid->GetNumberCols()) {
-    grid->AppendCols(course->AssessmentCount() - grid->GetNumberCols());
-  } else if (course->AssessmentCount() < grid->GetNumberCols()) {
-    grid->DeleteCols(0, grid->GetNumberCols() - course->AssessmentCount());
-  }
-
-  // Populate column labels
-  for (int i = 0; i < course->AssessmentCount(); ++i) {
-    grid->SetColLabelValue(i, course->GetAssessment(i).Title());
-  }
-
-  // Refresh grid
-  grid->AutoSizeColumns();
-  grid->Refresh();
+	UpdateGridView();
 }
 
 // *** Need to pull data from DB to populate Dropdown list ***
