@@ -78,7 +78,7 @@ $(BUILD_DIR)/%.o: %.cc
 	$(CXX) -c -o $@ $(CPPFLAGS) $<
 
 test: $(OBJS) $(TEST_OBJS)
-	$(CXX) -o $(BUILD_DIR)\$@ $(LDFLAGS) $? $(LDLIBS) -lgtest
+	$(CXX) -D__GUI__ -o $(BUILD_DIR)\$@ $(LDFLAGS) $? $(LDLIBS) -lgtest
 	$(BUILD_DIR)\$@
 
 gbapp: $(OBJS)
