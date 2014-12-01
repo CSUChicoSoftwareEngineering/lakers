@@ -410,5 +410,6 @@ void GBDialogAssessmentController::DialogIsBeingClosed(wxCloseEvent& event){
     }
   }
 
+  m_pDialogView->EndModal(0);
   m_pDialogView->Destroy();
 }

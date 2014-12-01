@@ -15,6 +15,8 @@ SRCS := src\data\grade.cc \
 				src\gui\controllers\gbdialogassessmentController.cc \
 				src\gui\views\gbdialogcourseView.cc \
 				src\gui\controllers\gbdialogcourseController.cc \
+				src\gui\views\gbdialogstudentView.cc \
+				src\gui\controllers\gbdialogstudentController.cc \
 
 TEST_SRCS := 	tests\gbsqltest.cc \
 		tests\gbtest.cc \

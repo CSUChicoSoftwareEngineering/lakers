@@ -13,24 +13,27 @@
 #define GB_COURSE_DIALOGSIZE wxSize(350,500)
 
 class  GBDialogCourseView : public wxDialog {
+
 	public:
     GBDialogCourseView(wxWindow *parent);
     ~GBDialogCourseView();
 
     wxTextCtrl					*m_pCourseNameTextCtrl;
+    wxFilePickerCtrl 			*m_pSelectFileLocationCtrl;
+    wxCheckListBox				*m_pcsvFileViewListBox;
+    wxButton					*m_pImportButton;
 
 	private:
     // Member Variables
     GBDialogCourseController 	*m_pController;
     wxPanel						*m_pGBDialogPanel;
-    wxFilePickerCtrl 			*m_pSelectFileLocationCtrl;
-    wxCheckListBox				*m_pcsvFileViewListBox;
-    wxButton					*m_pImportButton;
+
 };
 
 enum{
 	ID_AddButton = 1,
-	ID_FileSelect = 2
+	ID_FileSelect = 2,
+	ID_StudentSelection = 3
 };
 
 #endif

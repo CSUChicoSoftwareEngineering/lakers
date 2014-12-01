@@ -31,6 +31,7 @@ class Course {
     int AssessmentCount();
     void Clear() { m_assessments.clear(); m_students.clear(); }
     void ClearAssessments() {m_assessments.clear();}
+    void ClearStudents(){ m_students.clear(); }
     bool AssessmentExist(const wxString &title);
 
   private:

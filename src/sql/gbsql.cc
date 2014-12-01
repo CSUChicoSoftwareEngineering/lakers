@@ -37,10 +37,10 @@ int GBSql::Update(const wxString &sql) {
 wxSQLite3ResultSet *GBSql::Query(const wxString &sql) {
   try {
     return new wxSQLite3ResultSet(m_db.ExecuteQuery(sql));
-    cout << "here 1 " << endl;
+
   } catch (wxSQLite3Exception &e) {
     cerr << e.GetMessage() << endl;
-	cout << "here 2 " << endl;
+
     return NULL;
   }
 }
@@ -183,7 +183,7 @@ int GBSql::DeleteCourse(const Course &c) {
 
   int r = Update(sql);
 
-  NotifyCourseUpdate(SQL_DELETE); 
+  NotifyCourseUpdate(SQL_DELETE);
 
   return r;
 }
@@ -216,6 +216,7 @@ int GBSql::InsertStudentIntoCourse(const Student &s, const Course &c) {
       VALUES (NULL, '%s', '%s', '%s')", s.Id(), s.First(), s.Last());
 
   if (Update(sql) == -1) {
+
     return -1;
   }
 
