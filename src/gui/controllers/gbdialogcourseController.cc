@@ -34,6 +34,7 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
   c.SetTitle(name->GetValue());
 
   if (m_pSql->InsertCourse(c) == -1) {
+    cout << "Failed to insert course" << endl;
 
     return;
   }

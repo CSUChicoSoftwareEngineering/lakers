@@ -192,7 +192,7 @@ int GBSql::SelectStudentsByCourse(Course &c) {
   wxString sql = wxString::Format("SELECT students.id, students.sid, first, last \
      FROM students \
      INNER JOIN course_student \
-     ON students.id=course_student.sid \
+     ON students.sid=course_student.sid \
      WHERE course_student.cid='%s'", c.Id());
 
   Student *s;
@@ -213,7 +213,7 @@ int GBSql::SelectStudentsByCourse(Course &c) {
 
 int GBSql::InsertStudentIntoCourse(const Student &s, const Course &c) {
   wxString sql = wxString::Format("INSERT INTO students \
-      VALUES (NULL, '%s', '%s', '%s')", s.Id(), s.First(), s.Last());
+      VALUES (NULL, '%s', '%s', '%s')", s.StudentId(), s.First(), s.Last());
 
   if (Update(sql) == -1) {
 
@@ -221,7 +221,7 @@ int GBSql::InsertStudentIntoCourse(const Student &s, const Course &c) {
   }
 
   sql = wxString::Format("INSERT INTO course_student \
-      VALUES (NULL, '%s', '%s')", s.Id(), c.Id());
+      VALUES (NULL, '%s', '%s')", s.StudentId(), c.Id());
 
   int r = Update(sql);
 
