@@ -106,7 +106,7 @@ TEST_F(GBSqlTest, UpdateStudent) {
 }
 
 TEST_F(GBSqlTest, DeleteStudent) {
-  Student s("0");
+  Student s("1");
 
   int r = sql->DeleteStudent(s);
 
@@ -152,7 +152,7 @@ TEST_F(GBSqlTest, DeleteAssessment) {
 }
 
 TEST_F(GBSqlTest, SelectGradesForStudentInCourse) {
-  Student s("0");
+  Student s("1");
 
   Course c("1");
 
