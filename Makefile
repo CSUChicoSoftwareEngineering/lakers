@@ -77,10 +77,10 @@ clean:
 
 $(BUILD_DIR)/%.o: %.cc
 	if not exist $(subst /,\,$(dir $@)) mkdir $(subst /,\,$(dir $@))	
-	$(CXX) -c -o $@ $(CPPFLAGS) $<
+	$(CXX) -D__GUI__ -c -o $@ $(CPPFLAGS) $<
 
 test: $(OBJS) $(TEST_OBJS)
-	$(CXX) -D__GUI__ -o $(BUILD_DIR)\$@ $(LDFLAGS) $? $(LDLIBS) -lgtest
+	$(CXX) -o $(BUILD_DIR)\$@ $(LDFLAGS) $? $(LDLIBS) -lgtest
 	$(BUILD_DIR)\$@
 
 gbapp: $(OBJS)
