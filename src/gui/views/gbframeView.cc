@@ -13,10 +13,11 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 
 	// Create Course Menu
 	wxMenu *menuCourse = new wxMenu;
-	menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course /tCtrl-C", "Add a course to your GradeBook");
+	menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course \tCtrl-C", "Add a course to your GradeBook");
+	menuCourse->Append(ID_RemoveCourseMenuSelect, "&Remove Course", "Removes a course from your GradeBook");
 	// Create Assessment Menu
 	wxMenu *menuAssessment = new wxMenu;
-	menuAssessment->Append(ID_AddAssignmentMenuSelect, "&Modify Assessments /tCtrl-A", "Add assessment(s) to your GradBook");
+	menuAssessment->Append(ID_AddAssignmentMenuSelect, "&Modify Assessments \tCtrl-A", "Add assessment(s) to your GradBook");
  // Create Help Menu
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
@@ -73,6 +74,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::AddCourse, m_pCon, ID_AddCourseMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::ModifyAssignments, m_pCon, ID_AddAssignmentMenuSelect);
 	Bind(wxEVT_COMBOBOX, &GBFrameController::NewCourseSelected, m_pCon, ID_CourseDropDownList);
+	Bind(wxEVT_MENU, &GBFrameController::OnRemoveCourse, m_pCon, ID_RemoveCourseMenuSelect);
 }
 
 void GBFrameView::OnLabelRightClick(wxGridEvent &event) {

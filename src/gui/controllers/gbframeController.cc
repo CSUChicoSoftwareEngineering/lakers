@@ -142,6 +142,29 @@ void GBFrameController::OnLabelDelete(wxCommandEvent &event) {
 	}
 }
 
+void GBFrameController::OnRemoveCourse(wxCommandEvent &event) {
+  Course *course(NULL);
+  wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
+  wxString strSelection = combo->GetValue();
+
+  // Determine selected course
+  for (int i = 0; i < m_courses.size(); ++i) {
+    if (m_courses[i]->Title().IsSameAs(strSelection)) {
+      course = m_courses[i];
+
+      break;
+    }
+  }
+
+  if (course == NULL) {
+    cerr << "Failed to find selected course" << endl;
+
+    return;
+  }
+
+	m_pSql->DeleteCourse(*course);	
+}
+
 void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
   PopulateCourseDropDownList();
 }
