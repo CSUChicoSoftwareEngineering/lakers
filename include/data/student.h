@@ -23,6 +23,7 @@ class Student {
     void SetStudentId(const wxString &id) { m_studentId = id; }
     void SetFirst(const wxString &first) { m_first = first; }
     void SetLast(const wxString &last) { m_last = last; }
+    //void SetId(const wxString &id) { m_id = id; }
 
     void AddGrade(Grade *grade);
     Grade GetGrade(int index) const;
@@ -32,7 +33,7 @@ class Student {
     void Clear() { m_grades.clear(); }
 
   private:
-    wxString m_id; 
+    wxString m_id;
     wxString m_studentId;
     wxString m_first;
     wxString m_last;

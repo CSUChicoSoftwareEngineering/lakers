@@ -32,4 +32,6 @@ enum
 	ID_AddAssignmentMenuSelect = 5,
 	ID_ModifyAssignmentToolBarButton = 6,
 	ID_GBDialogPanel = 7,
+	ID_AddStudentMenuSelect = 8,
+	ID_ModifyStudentMenuSelect = 9,
 };
