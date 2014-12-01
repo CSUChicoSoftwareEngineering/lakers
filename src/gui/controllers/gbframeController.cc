@@ -167,6 +167,8 @@ void GBFrameController::OnRemoveCourse(wxCommandEvent &event) {
 
 void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
   PopulateCourseDropDownList();
+
+  UpdateGridView();
 }
 
 void GBFrameController::OnStudentUpdate(SubscriberUpdateType type){
