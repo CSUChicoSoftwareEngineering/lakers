@@ -9,7 +9,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	wxMenu *menuStudent = new wxMenu();
 	menuStudent->Append(ID_AddStudentMenuSelect, "&Add Student \tCtrl-S", "Add an individual to your GradeBook");
 	menuStudent->AppendSeparator();
-	menuStudent->Append(ID_ModifyStudentMenuSelect, "&Modify Student(s)", "Modify student information in your GradeBook");	
+	menuStudent->Append(ID_ModifyStudentMenuSelect, "&Modify Student(s)", "Modify student information in your GradeBook");
 
 	// Create Course Menu
 	wxMenu *menuCourse = new wxMenu;
@@ -17,7 +17,8 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	menuCourse->Append(ID_RemoveCourseMenuSelect, "&Remove Course", "Removes a course from your GradeBook");
 	// Create Assessment Menu
 	wxMenu *menuAssessment = new wxMenu;
-	menuAssessment->Append(ID_AddAssignmentMenuSelect, "&Modify Assessments \tCtrl-A", "Add assessment(s) to your GradBook");
+	menuAssessment->Append(ID_AddAssessmentMenuSelect, "&Add an Assessment \tCtrl-A", "Add an individual Assessment to your GradBook");
+	menuAssessment->Append(ID_ModifyAssessmentMenuSelect, "&Modify Assessments ", "Modify Assessment(s) to your GradBook");
  // Create Help Menu
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
@@ -46,7 +47,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	m_pCourseComboBox->SetEditable(false);
 
 	m_pGridView = new wxGrid(m_pGBFramePanel, ID_GridView, wxDefaultPosition, GBAPPSIZE, 0, "ID_GridView" );
-	
+
 	m_pGradeTable = new GradeTable();
 	m_pGridView->SetTable(m_pGradeTable);
 
@@ -72,7 +73,8 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::AddStudent, m_pCon, ID_AddStudentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::ModifyStudent, m_pCon, ID_ModifyStudentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::AddCourse, m_pCon, ID_AddCourseMenuSelect);
-	Bind(wxEVT_MENU, &GBFrameController::ModifyAssignments, m_pCon, ID_AddAssignmentMenuSelect);
+	Bind(wxEVT_MENU, &GBFrameController::ModifyAssessment, m_pCon, ID_ModifyAssessmentMenuSelect);
+	Bind(wxEVT_MENU, &GBFrameController::AddAssessment, m_pCon, ID_AddAssessmentMenuSelect);
 	Bind(wxEVT_COMBOBOX, &GBFrameController::NewCourseSelected, m_pCon, ID_CourseDropDownList);
 	Bind(wxEVT_MENU, &GBFrameController::OnRemoveCourse, m_pCon, ID_RemoveCourseMenuSelect);
 }
@@ -88,7 +90,7 @@ void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
 		m_pGridView->SelectRow(event.GetRow());
 	}
 
-	m_pGridView->PopupMenu(m_pLabelMenu, event.GetPosition().x, event.GetPosition().y);	
+	m_pGridView->PopupMenu(m_pLabelMenu, event.GetPosition().x, event.GetPosition().y);
 }
 
 #include <iostream>
@@ -132,7 +134,7 @@ void GradeTable::Clear() {
 
 			GetView()->ProcessTableMessage(msg);
 		}
-		
+
 		m_cols.clear();
 	}
 

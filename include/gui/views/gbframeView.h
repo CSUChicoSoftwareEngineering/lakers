@@ -30,7 +30,7 @@ class GradeTable : public wxGridTableBase {
 		Assessment &GetAssessment(int index);
 
 	private:
-		vector<Student> m_rows;	
+		vector<Student> m_rows;
 		vector<Assessment> m_cols;
 		vector<vector<Grade> > m_grades;
 };
@@ -62,11 +62,12 @@ enum
 	ID_CourseDropDownList = 2,
 	ID_GradeBookPanel = 3,
 	ID_GridView = 4,
-	ID_AddAssignmentMenuSelect = 5,
-	ID_ModifyAssignmentToolBarButton = 6,
-	ID_GBDialogPanel = 7,
-	ID_AddStudentMenuSelect = 8,
-	ID_ModifyStudentMenuSelect = 9,
+	ID_AddAssessmentMenuSelect = 5,
+	ID_ModifyAssessmentMenuSelect = 6,
+	ID_ModifyAssignmentToolBarButton = 7,
+	ID_GBDialogPanel = 8,
+	ID_AddStudentMenuSelect = 9,
+	ID_ModifyStudentMenuSelect = 10,
 	ID_LabelDelete,
 	ID_RemoveCourseMenuSelect,
 };

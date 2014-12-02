@@ -2,6 +2,15 @@
 
 GBDialogStudentView::GBDialogStudentView(){}
 
+/**
+  * @brief  Constructor to create a GBDialogStudentView. To display the view one must
+  *         call the virtual function ShowModal().
+  * @param  wxWindow *parent: The parent of the dialog.
+  *         wxString CourseTitle: The course selected to add or modify Assessment(s).
+  *         int style: When Style = 0 the view will create a view to Add an Assessment
+                       When Style = 1 the view will create a view to Modify Assessment(s).
+  * @retval none.
+  */
 GBDialogStudentView::GBDialogStudentView(wxWindow *parent, wxString CourseTitle, int style)
   : wxDialog(parent, wxID_ANY, wxT("Student"), wxDefaultPosition, wxDefaultSize) {
 
@@ -44,7 +53,6 @@ GBDialogStudentView::GBDialogStudentView(wxWindow *parent, wxString CourseTitle,
 
 	// Create Dialog
     SetClientSize(GB_MODIFY_STUDENT_DIALOGSIZE);
-    //SetWindowStyle(wxRESIZE_BORDER);
 
 	// Create Panel
     m_pGBDialogPanel = new wxPanel(this, wxID_ANY, wxPoint(0,0), wxDefaultSize, wxTAB_TRAVERSAL, "ID_GBDialogPanel");
@@ -60,7 +68,6 @@ GBDialogStudentView::GBDialogStudentView(wxWindow *parent, wxString CourseTitle,
 
 	// Set m_pGridSizer as primary sizer
 	m_pGBDialogPanel->SetSizer(m_pDialogSizer);
-	//m_pDialogSizer->Fit(this);
 
 	// Connect Controller
     m_pCon = new GBDialogStudentController(this, CourseTitle, style);

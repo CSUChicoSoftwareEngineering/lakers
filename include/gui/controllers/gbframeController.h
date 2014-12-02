@@ -27,13 +27,14 @@ class GBFrameController : public Subscriber {
     void AddCourse(wxCommandEvent& event);
     void AddStudent(wxCommandEvent& event);
     void ModifyStudent(wxCommandEvent& event);
-    void ModifyAssignments(wxCommandEvent& event);
+    void AddAssessment(wxCommandEvent& event);
+    void ModifyAssessment(wxCommandEvent& event);
     void AssignmentSelected(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void NewCourseSelected(wxCommandEvent& event);
-		void OnLabelDelete(wxCommandEvent &event);
-		void OnRemoveCourse(wxCommandEvent &event);
+    void OnLabelDelete(wxCommandEvent &event);
+	void OnRemoveCourse(wxCommandEvent &event);
 
     virtual void OnCourseUpdate(SubscriberUpdateType type);
     virtual void OnAssessmentUpdate(SubscriberUpdateType type);
@@ -45,6 +46,8 @@ class GBFrameController : public Subscriber {
     void UpdateGridView();
     const int AddStudentStyleView = 0;
     const int ModifyStudentStyleView = 1;
+    const int AddAssessmentStyleView = 0;
+    const int ModifyAssessmentStyleView = 1;
 
     GBSql           *m_pSql;
     GBFrameView 	*m_pMainFrameView;

@@ -5,6 +5,7 @@
 #include "data/student.h"
 #include <iostream>
 #include <wx/msgdlg.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -39,25 +40,9 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
     return;
   }
 
-  for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
 
-    if(StudentSelectionListBox->IsChecked(i)){
+  m_pDialogView->Close();
 
-        for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
-          importStudent = *it;
-          StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
-
-          if(StudentSelectionListBox->GetString(i).IsSameAs(StudentName)){
-
-            //m_pSql->InsertStudentIntoCourse(*importStudent , c);
-          }
-      }
-    }
-  }
-
-  m_pDialogView->EndModal(0);
-
-  m_pDialogView->Destroy();
 }
 
 void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
@@ -68,17 +53,19 @@ void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
   wxString  StudentName ;
   Student *importStudent;
 
+  cout << Path << endl;
+
+
   csv_Ptr = cur_Importer.GetCourse(Path.mb_str());
 
 
-  (m_pDialogView->m_pcsvFileViewListBox)->Enable();
+  StudentSelectionListBox->Enable();
   for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
     importStudent = *it;
     StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
     StudentSelection.Add(StudentName);
   }
 
-  StudentSelection.Sort();
   StudentSelectionListBox->InsertItems( StudentSelection , 0);
 
   for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
@@ -86,6 +73,51 @@ void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
     StudentSelectionListBox->Check(i);
   }
 
+
+}
+
+void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
+
+  cout << "closing . . ." << endl;
+  wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
+  Student *importStudent;
+  wxString StudentName;
+
+  if (m_pSql->SelectCourses(&m_courses) == -1) {
+    return;
+  }
+
+
+  for (int i = 0; i < m_courses.size(); ++i) {
+
+    if (m_courses[i]->Title().IsSameAs(m_pDialogView->m_pCourseNameTextCtrl->GetValue())) {
+
+        m_pCurrentCourse = m_courses[i];
+    }
+  }
+
+  cout << "Course Has Now Been Selected . . . " << m_pCurrentCourse->Title() << endl;
+
+  for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
+
+    if(StudentSelectionListBox->IsChecked(i)){
+
+        for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
+          importStudent = *it;
+          StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
+
+          if(StudentSelectionListBox->GetString(i).IsSameAs(StudentName)){
+
+            importStudent->SetStudentId(  wxString::Format("%d", rand() % 1000000) );
+            cout << "Insert Result: " << m_pSql->InsertStudentIntoCourse(*importStudent , *m_pCurrentCourse) << endl;
+            //cout << "Inserted! " << wxString::Format("%s, %s, %s  into  %s", importStudent->StudentId(), importStudent->Last() , importStudent->First(), c.Title()) << endl;
+          }
+      }
+    }
+  }
+   m_pDialogView->EndModal(0);
+
+  m_pDialogView->Destroy();
 }
 
 void GBDialogCourseController::StudentHasBeenUnchecked(wxCommandEvent& event){

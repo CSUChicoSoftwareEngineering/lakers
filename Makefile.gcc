@@ -19,6 +19,8 @@ SRCS :=	src/data/assessment.cc \
 				src/gui/views/gbframeView.cc \
 				src/sql/gbsql.cc \
 				src/gbapp.cc \
+				src/gui/views/gbdialogstudentView.cc \
+				src/gui/controllers/gbdialogstudentController.cc \
 
 TEST_SRCS :=	tests/gbsqltest.cc \
 							tests/gbtest.cc	

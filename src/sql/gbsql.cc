@@ -159,7 +159,7 @@ int GBSql::InsertCourse(const Course &c) {
       VALUES (NULL, '%s')", c.Title());
 
   int r = Update(sql);
-
+  cout << "SQL0 " << sql << endl;
   // Notifies subscribers
   NotifyCourseUpdate(SQL_INSERT);
 
@@ -216,15 +216,20 @@ int GBSql::InsertStudentIntoCourse(const Student &s, const Course &c) {
       VALUES (NULL, '%s', '%s', '%s')", s.StudentId(), s.First(), s.Last());
 
   if (Update(sql) == -1) {
-
+    cout << "Failed1 " << endl;
     return -1;
   }
+
+ // cout << "SQL1 " << sql << endl;
 
   sql = wxString::Format("INSERT INTO course_student \
       VALUES (NULL, '%s', '%s')", s.StudentId(), c.Id());
 
   int r = Update(sql);
 
+  if(r == -1) {    cout << "Failed2 " << endl;}
+
+ //cout << "SQL2 " << sql << endl;
   // Notify subscribers
   NotifyStudentUpdate(SQL_INSERT);
 
@@ -278,6 +283,8 @@ int GBSql::InsertAssessmentIntoCourse(const Assessment &a, const Course &c) {
       VALUES (NULL, '%s', '%s')", a.Title(), c.Id());
 
   int r = Update(sql);
+
+  cout << "Insert SQL:  " << sql << endl;
 
   // Notify subscribers
   NotifyAssessmentUpdate(SQL_INSERT);

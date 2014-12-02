@@ -61,9 +61,18 @@ void GBDialogStudentController::LoadStudents(){
 
   wxGrid *grid = m_pDialogView->m_pModifyStudentGrid;
 
+ m_pCurrentCourse->ClearStudents();
+
   if( m_pSql->SelectStudentsByCourse(*m_pCurrentCourse) == -1 ) return;
 
-  grid->AppendRows(m_pCurrentCourse->StudentCount());
+  if(grid->GetNumberRows() == 0){
+
+    grid->AppendRows(m_pCurrentCourse->StudentCount());
+  }
+  else{
+
+    grid->ClearGrid();
+  }
 
   // Populate student data
   for (int i = 0; i < m_pCurrentCourse->StudentCount(); ++i) {
@@ -140,7 +149,6 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
 
     m_pDialogView->EndModal(0);
     m_pDialogView->Destroy();
-
   }
 
 }
@@ -212,6 +220,7 @@ bool GBDialogStudentController::RowAlreadyNeedsToBeUpdated(int row){
 void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEvent& event){
 
   SaveChanges();
+  LoadStudents();
 }
 
 /**

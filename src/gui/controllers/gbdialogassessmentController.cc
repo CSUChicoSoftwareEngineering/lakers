@@ -7,319 +7,156 @@ using namespace std;
 // Constructor 1
 GBDialogAssessmentController::GBDialogAssessmentController(){}
 
-// Constructor 2
-GBDialogAssessmentController::GBDialogAssessmentController(GBDialogAssessmentView *view)
-  : m_pDialogView(view),
-    m_pSql(GBSql::Instance()){
-}
-
-// Constructor 3
-GBDialogAssessmentController::GBDialogAssessmentController(GBDialogAssessmentView *view, wxString CourseTitle)
+/**
+  * @brief  Constructor to connect GBDialogAssessmentController with a view.
+  * @param  GBDialogAssessmentView * view: The view to connect the Controller to.
+  *         wxString CourseTitle: The course selected to add or modify Assessment(s).
+  *         int style: When Style = 0 the controller will connect to a view to Add an Assessment
+                       When Style = 1 the controller will connect to a view to Modify Assessment(s).
+  * @retval none.
+  */
+GBDialogAssessmentController::GBDialogAssessmentController(GBDialogAssessmentView *view, wxString CourseTitle, int style)
   : m_pDialogView(view), m_pSql(GBSql::Instance()) {
 
-  if( GetCurrentCourse(CourseTitle) == -1) return;
+  wxGrid *grid = m_pDialogView->m_pModifyAssessmentGrid;
+  wxButton *button = m_pDialogView->m_pAddAssessmentButton;
 
-  PopulateAssessmentListBoxByCourse();
+  if( GetCurrentCourse(CourseTitle) == -1){
+
+     if(style == 0){
+       button->Disable();
+     }
+     else if(style == 1){
+
+       grid->CreateGrid(0, 0);
+       grid->Disable();
+
+     }
+
+    wxMessageBox( wxString::Format("Please select a course."), "Error", wxOK | wxICON_INFORMATION );
+    return;
+  }
+  else{
+
+    if(style == 0){
+
+
+    }
+    else if(style == 1){
+
+      grid->CreateGrid(0, 1);
+      grid->SetColLabelValue(0, "Assessment Name");
+      LoadAssessments();
+    }
+  }
 }
 
 // Destructor
 GBDialogAssessmentController::~GBDialogAssessmentController() {
 
-  //delete  m_pDialogView, m_pCurrentCourse;
-}
-
-
-/**
-  * @brief  Loads any assessments stores in the Database onto to ListBox Control.
-  * @param  None
-  * @retval None
-  */
-void GBDialogAssessmentController::PopulateAssessmentListBoxByCourse(){
-
-  for (int i = 0; i < m_pCurrentCourse->AssessmentCount(); ++i) {
-
-	m_RuntimeAssessments.Add(m_pCurrentCourse->GetAssessment(i).Title());
-  }
-
-  m_pDialogView->m_pModifyAssignmentListBox->SetStrings(m_RuntimeAssessments);
-}
-
-
-/**
-  * @brief  Determines if user is trying to rename, delete, or insert an assessment.
-  * @param  wxEVT_LIST_END_LABEL_EDIT
-  * @retval None
-  */
-void GBDialogAssessmentController::EndAssessmentLabelEdit(wxListEvent& event){
-
-  wxString ErrorMessage;
-  wxEditableListBox *listBox    = m_pDialogView->m_pModifyAssignmentListBox;
-  bool newAssessmentExistsInDB  = AssessmentExistsInDB(event.GetLabel());
-  bool oldAssessmentExistsInDB  = AssessmentExistsInDB(m_currentAssessmentSelected);
-  bool existsInRuntime          = AssessmentExistsInRuntime(event.GetLabel());
-  bool deletedFromDB            = AssessmentNeedsToBeDeletedFromDB(event.GetLabel());
-  bool deletedFromRuntime       = AssessmentNeedsToBeDeletedFromRuntime(event.GetLabel());
-  int  duplicateRuntime         = DuplicateAssessmentInRuntime(event.GetLabel());
-  int  duplicateRenamed         = DuplicateAssessmentInNeedToBeRenamed(event.GetLabel());
-  bool existsInRename           = AssessmentNeedsToBeRenamed(event.GetLabel());
-  bool textIsTheSame            = event.GetLabel().IsSameAs(m_currentAssessmentSelected);
-
-
-  if(!m_currentAssessmentSelected.IsEmpty()){
-
-    if( !textIsTheSame && !newAssessmentExistsInDB  && !existsInRuntime){
-      // Rename Assessment If (newly inserted Assessment does not exists in the Runtime list
-      // AND in the Database)
-      m_AssessmentsNeedsToBeRenamedOldName.Add(m_currentAssessmentSelected);
-      m_AssessmentsNeedsToBeRenamedNewName.Add(event.GetLabel());
-      m_RuntimeAssessments.Insert(event.GetLabel(), event.GetIndex());
-    }
-    else if(existsInRuntime && deletedFromRuntime && duplicateRenamed < 1){
-
-      // Rename Assessment If (newly inserted Assessment exists in the Runtime list
-      // but it has been deleted and there are not duplicates)
-      m_AssessmentsNeedsToBeRenamedOldName.Add(m_currentAssessmentSelected);
-      m_AssessmentsNeedsToBeRenamedNewName.Add(event.GetLabel());
-      m_RuntimeAssessments.Insert(event.GetLabel(), event.GetIndex());
-    }
-    else if(newAssessmentExistsInDB && deletedFromDB ){
-
-      // Rename Assessment If (newly inserted Assessment exists in the Database
-      // but it has been deleted)
-      m_AssessmentsNeedsToBeRenamedOldName.Add(m_currentAssessmentSelected);
-      m_AssessmentsNeedsToBeRenamedNewName.Add(event.GetLabel());
-      m_RuntimeAssessments.Insert(event.GetLabel(), event.GetIndex());
-      m_AssessmentsNeedsToBeDeletedFromDB.Remove(event.GetLabel());
-    }
-    else{
-      // User Error
-      ErrorMessage = wxString::Format("Assessment %s already exists.", event.GetLabel());
-      wxMessageBox( ErrorMessage, "Error", wxOK | wxICON_INFORMATION );
-      event.Veto();
-    }
-  }
-  else if( !event.GetLabel().IsEmpty() && !oldAssessmentExistsInDB && !newAssessmentExistsInDB && !existsInRuntime || deletedFromDB){
-
-     // Insert Assessment If (newly inserted Assessment is not empty and it does not exists in the Database or in the
-     // Runtime list)
-     if(deletedFromDB){
-
-        m_AssessmentsMustBeDeletedFromDB.push_back(event.GetLabel());
-        m_AssessmentsNeedsToBeDeletedFromDB.Remove(event.GetLabel());
-     }
-
-      m_AssessmentsNeedsToBeInserted.Add(event.GetLabel());
-      m_RuntimeAssessments.Add(event.GetLabel());
-      listBox->SetStrings(m_RuntimeAssessments);
-  }
-  else{
-    // User Error
-    if(!event.GetLabel().IsEmpty()){
-
-      ErrorMessage = wxString::Format("Assessment %s already exists.", event.GetLabel());
-      wxMessageBox( ErrorMessage, "Error", wxOK | wxICON_INFORMATION );
-    }
-    else{
-
-      ErrorMessage = wxString::Format("Please enter a name.");
-      wxMessageBox( ErrorMessage, "Error", wxOK | wxICON_INFORMATION );
-    }
-    event.Veto();
-  }
-
-  // If previous Assessment exists in the Database but not in the Runtime list and there are no duplicate then delete previous Assessment from Database
-  if(oldAssessmentExistsInDB && !existsInRuntime && duplicateRuntime < 1)
-  {m_AssessmentsNeedsToBeDeletedFromDB.Add(m_currentAssessmentSelected);}
-  // If previous Assessment exists in the Runtime list but new Assessment does not exists in the Runtime list then delete previous Assessment from Runtime list
-  if(AssessmentExistsInRuntime(m_currentAssessmentSelected) && !existsInRuntime)
-  {m_RuntimeAssessments.Remove(m_currentAssessmentSelected);}
-
-  listBox->Refresh();
+  delete m_pCurrentCourse;
 }
 
 /**
-  * @brief  Determines the total number of the same Assessments there are
-  *         in the Runtime list.
-  * @param  wxString title
-  * @retval int: Total number of the same Assessments in the Runtime list.
-  */
-int GBDialogAssessmentController::DuplicateAssessmentInRuntime(wxString title){
-
-  int match = 0;
-
-  for (int i = 0; i < m_RuntimeAssessments.size(); ++i) {
-
-      if(title.IsSameAs(m_RuntimeAssessments[i])){
-
-          match++;
-      }
-  }
-
-  return match;
-
-}
-
-/**
-  * @brief  Determines the total number of the same Assessments there are
-  *         that need to be renamed.
-  * @param  wxString title
-  * @retval int: Total number of the same Assessments in the Runtime list.
-  */
-int GBDialogAssessmentController::DuplicateAssessmentInNeedToBeRenamed(wxString title){
-
-  int match = 0;
-
-  for (int i = 0; i < m_AssessmentsNeedsToBeRenamedNewName.size(); ++i) {
-
-      if(title.IsSameAs(m_AssessmentsNeedsToBeRenamedNewName[i])){
-
-          match++;
-      }
-  }
-
-  return match;
-}
-
-/**
-  * @brief  Determines if the Assessment needs to be deleted from the Runtime list
-  * @param  wxString title
-  * @retval bool: True if the Assessment needs to be deleted from the Runtime list
-  *         False otherwise.
-  */
-bool GBDialogAssessmentController::AssessmentNeedsToBeDeletedFromRuntime(wxString title){
-
-  for (int i = 0; i < m_AssessmentsNeedsToBeDeletedFromRuntime.size(); ++i) {
-
-      if(title.IsSameAs(m_AssessmentsNeedsToBeDeletedFromRuntime[i])){
-
-          return true;
-      }
-  }
-
-  return false;
-}
-
-/**
-  * @brief  Determines if the Assessment needs to be deleted from the Database
-  * @param  wxString title
-  * @retval bool: True if the Assessment needs to be deleted from the Database
-  *         False otherwise.
-  */
-bool GBDialogAssessmentController::AssessmentNeedsToBeDeletedFromDB(wxString title){
-
-  for (int i = 0; i < m_AssessmentsNeedsToBeDeletedFromDB.size(); ++i) {
-
-      if(title.IsSameAs(m_AssessmentsNeedsToBeDeletedFromDB[i])){
-
-          return true;
-      }
-  }
-
-  return false;
-}
-
-/**
-  * @brief  Determines if the Assessment needs to be renamed
-  * @param  wxString title
-  * @retval bool: True if the Assessment needs to be renamed
-  */
-bool GBDialogAssessmentController::AssessmentNeedsToBeRenamed(wxString title){
-
-  for (int i = 0; i < m_AssessmentsNeedsToBeRenamedNewName.size(); ++i) {
-
-      if(title.IsSameAs(m_AssessmentsNeedsToBeRenamedNewName[i])){
-
-          return true;
-      }
-  }
-
-  return false;
-}
-
-/**
-  * @brief  Determines if the Assessment has been deleted by the User
-  * @param  wxEVT_LIST_DELETE_ITEM
+  * @brief  A cell in the grid view has changed and the row will be stored
+  *         so an Update transaction to the DataBase can be committed.
+  * @param  wxEVT_GRID_CELL_CHANGED
   * @retval none.
   */
-void GBDialogAssessmentController::AssessmentHasBeenDeleted(wxListEvent& event){
+void GBDialogAssessmentController::GridCellChanged(wxGridEvent& event){
 
-  if(AssessmentExistsInDB(event.GetLabel())){
+  if(!RowAlreadyNeedsToBeUpdated(event.GetRow())){
 
-    m_AssessmentsNeedsToBeDeletedFromDB.Add(event.GetLabel());
+    m_RowsNeedToBeUpdated.push_back(event.GetRow());
+  }
+}
+
+/**
+  * @brief  The Add Assessment Button Was Clicked. Validation will be processed on the TextBox Control
+  *         to verify the Assessment Name is not empty. If Assessment Name is not empty then the Assessment
+  *         will be inserted into the DataBase.
+  * @param  wxEVT_BUTTON
+  * @retval none.
+  */
+void GBDialogAssessmentController::AddAssessmentButtonWasClicked(wxCommandEvent& event){
+
+  wxTextCtrl    *AssessmentName = m_pDialogView->m_pAssessmentNameTextCtrl;
+  wxString      ErrorMessage;
+  Assessment    a;
+
+  if( AssessmentName->IsEmpty() ||  m_pCurrentCourse == NULL  ){
+
+        if( m_pCurrentCourse == NULL ){
+
+            ErrorMessage = wxString::Format("Please select a course.");
+        }
+        else{
+
+            ErrorMessage = wxString::Format("Please enter a name for your Assessment.");
+        }
+
+      wxMessageBox( ErrorMessage, "Error", wxOK | wxICON_INFORMATION );
   }
   else{
 
-    m_AssessmentsNeedsToBeDeletedFromRuntime.Add(event.GetLabel());
-  }
+    a.SetTitle( AssessmentName->GetValue() );
 
-  if(AssessmentExistsInRuntime(event.GetLabel()))
-    { m_RuntimeAssessments.Remove(event.GetLabel()); }
+    if( m_pSql->InsertAssessmentIntoCourse( a , *m_pCurrentCourse) == -1 ){    cerr << "Failed to insert assessment in course" << endl;}
 
-
-  for (int i = 0; i < m_AssessmentsNeedsToBeInserted.size(); ++i) {
-
-      if(event.GetLabel().IsSameAs(m_AssessmentsNeedsToBeInserted[i])){
-
-          m_AssessmentsNeedsToBeInserted.Remove(event.GetLabel());
-      }
-  }
-
-  for (int i = 0; i < m_AssessmentsNeedsToBeRenamedNewName.size(); ++i) {
-
-      if(event.GetLabel().IsSameAs(m_AssessmentsNeedsToBeRenamedNewName[i])){
-
-          m_AssessmentsNeedsToBeRenamedNewName.RemoveAt(i);
-          m_AssessmentsNeedsToBeRenamedOldName.RemoveAt(i);
-      }
+    m_pDialogView->EndModal(0);
+    m_pDialogView->Destroy();
   }
 
 }
 
 /**
-  * @brief  Determines what the assessment was previously named
-  * @param  wxEVT_LIST_BEGIN_LABEL_EDIT
+  * @brief  If a row already needs to be Updated then return true, otherwise false.
+  * @param  int: row
+  * @retval bool: True, if row already needs to be Updated; False, otherwise.
+  */
+bool GBDialogAssessmentController::RowAlreadyNeedsToBeUpdated(int row){
+
+  for(int i = 0; i < m_RowsNeedToBeUpdated.size(); ++i){
+
+    if(row == m_RowsNeedToBeUpdated[i]) return true;
+  }
+
+  return false;
+}
+
+/**
+  * @brief  This function will use the rows stored in m_RowsNeedToBeUpdated to
+  *         commit an Update transaction for each row to the DataBase.
+  * @param  none.
   * @retval none.
   */
-void GBDialogAssessmentController::BeginAssessmentLabelEdit(wxListEvent& event){
+void GBDialogAssessmentController::SaveChanges(){
 
-  m_currentAssessmentSelected = event.GetLabel();
-}
+  wxGrid *grid = m_pDialogView->m_pModifyAssessmentGrid;
 
-/**
-  * @brief  Determines if the Assessment exists in the Runtime list
-  * @param  wxString title
-  * @retval bool: True if the Assessment exists in the Runtime list
-  */
-bool GBDialogAssessmentController::AssessmentExistsInRuntime(wxString title){
+  if(m_pCurrentCourse != NULL){
 
-  if(!title.IsEmpty()){
-	  for (int i = 0; i < m_RuntimeAssessments.size(); ++i) {
-		if (title.IsSameAs(m_RuntimeAssessments[i])) {
-		  return true;
-		}
-	  }
-  }
+    for(int i = 0; i < m_RowsNeedToBeUpdated.size(); ++i){
 
-  return false;
-}
+      Assessment a = m_pCurrentCourse->GetAssessment(m_RowsNeedToBeUpdated[i]);
 
-/**
-  * @brief  Determines if the Assessment exists in the Database
-  * @param  wxString title
-  * @retval bool: True if the Assessment exists in the Database
-  */
-bool GBDialogAssessmentController::AssessmentExistsInDB(wxString title){
+      for (int x = 0; x < grid->GetNumberCols(); ++x) {
 
-  if(!title.IsEmpty()){
-    for (int i = 0; i < m_pCurrentCourse->AssessmentCount(); ++i) {
-      if (title.IsSameAs(m_pCurrentCourse->GetAssessment(i).Title())) {
-        return true;
+        if(grid->GetColLabelValue(x).IsSameAs("Assessment Name")){
+
+          a.SetTitle(grid->GetCellValue(m_RowsNeedToBeUpdated[i], x));
+        }
+
       }
+      m_pSql->UpdateAssessment(a);
     }
+
+    m_RowsNeedToBeUpdated.clear();
+    LoadAssessments();
   }
 
-  return false;
 }
+
 
 /**
   * @brief  Get the Current Course has selected from the main frame.
@@ -346,9 +183,65 @@ int GBDialogAssessmentController::GetCurrentCourse(wxString CourseTitle){
   else{
 
       m_pCurrentCourse = NULL;
-	  (m_pDialogView->m_pModifyAssignmentListBox)->Disable();
       return -1;
 	}
+}
+
+/**
+  * @brief  Loads the Assessment from the currently selected course into the grid view for editing.
+  * @param  none.
+  * @retval none.
+  */
+void GBDialogAssessmentController::LoadAssessments(){
+
+  wxGrid *grid = m_pDialogView->m_pModifyAssessmentGrid;
+
+  m_pCurrentCourse->ClearAssessments();
+
+  if( m_pSql->SelectAssessmentsByCourse(*m_pCurrentCourse) == -1 ) return;
+
+  if(grid->GetNumberRows() == 0){
+
+    grid->AppendRows(m_pCurrentCourse->AssessmentCount());
+  }
+  else{
+
+    grid->ClearGrid();
+  }
+
+  // Populate Assessment data
+  for (int i = 0; i < m_pCurrentCourse->AssessmentCount(); ++i) {
+
+    Assessment a = m_pCurrentCourse->GetAssessment(i);
+
+    // Populate Assessment Names
+    for (int x = 0; x < grid->GetNumberCols(); ++x) {
+
+      if(grid->GetColLabelValue(x).IsSameAs("Assessment Name")){
+        grid->SetCellValue(i, x, a.Title());
+      }
+    }
+
+    // Populate row labels
+    grid->SetRowLabelValue(i, wxString::Format("%s", a.Title()));
+  }
+
+  // Refresh grid
+  grid->SetRowLabelSize(wxGRID_AUTOSIZE);
+  grid->AutoSize();
+  grid->Refresh();
+}
+
+/**
+  * @brief  The "Save" Button was clicked so we will save any rows that need to be Updated.
+  * @param  wxEVT_BUTTON
+  * @retval none.
+  */
+void GBDialogAssessmentController::SaveAssessmentChangesButtonWasClicked(wxCommandEvent& event){
+
+  SaveChanges();
+  LoadAssessments();
+
 }
 
 /**
@@ -360,56 +253,7 @@ void GBDialogAssessmentController::DialogIsBeingClosed(wxCloseEvent& event){
 
   // Handle Event
 
-  if( m_pCurrentCourse != NULL){
-
-    Assessment a;
-
-    for(int i = 0 ; i < m_AssessmentsNeedsToBeDeletedFromDB.size(); ++i){
-
-      m_AssessmentsMustBeDeletedFromDB.push_back(m_AssessmentsNeedsToBeDeletedFromDB[i]);
-    }
-
-    // Inserting Assessments ...
-    for (int i = 0; i < m_AssessmentsNeedsToBeInserted.size(); ++i) {
-
-      a.SetTitle(m_AssessmentsNeedsToBeInserted[i]);
-      m_pSql->InsertAssessmentIntoCourse(a , *m_pCurrentCourse);
-    }
-
-    // Renaming Assessments ...
-    m_pSql->SelectAssessmentsByCourse(*m_pCurrentCourse);
-    for (int i = 0; i < m_AssessmentsNeedsToBeRenamedOldName.size(); ++i) {
-
-      for(int j = 0; j < m_pCurrentCourse->AssessmentCount(); ++j){
-
-        if ( m_AssessmentsNeedsToBeRenamedOldName[i].IsSameAs( m_pCurrentCourse->GetAssessment(j).Title() )){
-
-            m_pSql->UpdateAssessmentIntoCourse(m_AssessmentsNeedsToBeRenamedNewName[i] , m_AssessmentsNeedsToBeRenamedOldName[i] , *m_pCurrentCourse);
-        }
-      }
-    }
-
-    // Get current Assessments
-    if(m_pCurrentCourse->AssessmentCount() > 0){
-
-      m_pCurrentCourse->ClearAssessments();
-      m_pSql->SelectAssessmentsByCourse(*m_pCurrentCourse);
-    }
-
-    // Deleting Assessments ...
-    for (int i = 0; i < m_AssessmentsMustBeDeletedFromDB.size(); ++i) {
-
-      for (int j = 0; j < m_pCurrentCourse->AssessmentCount(); ++j) {
-
-        if ( m_AssessmentsMustBeDeletedFromDB[i].IsSameAs( m_pCurrentCourse->GetAssessment(j).Title() )){
-
-          m_pSql->DeleteAssessment(m_pCurrentCourse->GetAssessmentByTitle(m_AssessmentsMustBeDeletedFromDB[i]));
-        }
-      }
-
-    }
-  }
-
+  SaveChanges();
   m_pDialogView->EndModal(0);
   m_pDialogView->Destroy();
 }

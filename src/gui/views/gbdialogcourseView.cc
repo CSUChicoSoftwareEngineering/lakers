@@ -25,6 +25,7 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
 	// Connect Controller
 	m_pController = new GBDialogCourseController(this);
 	// Connect Events Handler(s) to Controller
+    Bind(wxEVT_CLOSE_WINDOW, &GBDialogCourseController::DialogIsBeingClosed, m_pController);
 	m_pSelectFileLocationCtrl->Bind(wxEVT_FILEPICKER_CHANGED, &GBDialogCourseController::FileHasBeenSelected, m_pController);
 	m_pImportButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::AddButtonWasClicked, m_pController);
 	m_pcsvFileViewListBox->Bind(wxEVT_CHECKLISTBOX, &GBDialogCourseController::StudentHasBeenUnchecked, m_pController);
