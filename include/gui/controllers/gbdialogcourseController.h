@@ -20,11 +20,9 @@ class  GBDialogCourseController
     GBDialogCourseController(GBDialogCourseView *view);
     void AddButtonWasClicked(wxCommandEvent& event);
     void FileHasBeenSelected(wxFileDirPickerEvent& event);
-    void StudentHasBeenUnchecked(wxCommandEvent& event);
     void DialogIsBeingClosed(wxCloseEvent& event);
 
 	private:
-    void ImportStudents();
     wxArrayString StudentSelection;
     std::vector<Student*> *csv_Ptr;
     vector<Course*>     m_courses;

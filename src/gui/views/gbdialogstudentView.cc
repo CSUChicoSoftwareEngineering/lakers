@@ -25,20 +25,20 @@ GBDialogStudentView::GBDialogStudentView(wxWindow *parent, wxString CourseTitle,
 	// Create Panel
     m_pGBDialogPanel = new wxPanel(this, wxID_ANY, wxPoint(0,0), GB_ADD_STUDENT_DIALOGSIZE, wxTAB_TRAVERSAL, "ID_GBDialogPanel");
 
+	// Create StaticBox and TextCtrl
     StudentIDStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Student ID", wxPoint(10,10), wxSize(325,50), 0,"StudentID");
-    m_pStudentIDTextCtrl	= new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxPoint(20,30), wxSize(300,25), wxTE_CAPITALIZE | wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentIDTextCtrl");
-
-
+    m_pStudentIDTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxPoint(20,30), wxSize(300,25), wxTE_CAPITALIZE | wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentIDTextCtrl");
     StudentFirstNameStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Student First Name", wxPoint(10,60), wxSize(325,50), 0,"StudentFirstName");
     m_pStudentFirstNameTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxPoint(20,80), wxSize(300,25), wxTE_CAPITALIZE | wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentFirstNameTextCtrl");
-
-
     StudentLastNameStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Student Last Name", wxPoint(10,120), wxSize(325,50), 0,"StudentLastName");
     m_pStudentLastNameTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxPoint(20,140), wxSize(300,25), wxTE_CAPITALIZE |wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentLastNameTextCtrl");
 
+    // Create Button
     m_pAddStudentButton = new wxButton(m_pGBDialogPanel, ID_AddStudentButton, "Add Student", wxPoint(20, 180),wxDefaultSize, 0,wxDefaultValidator, "AddStudentButton");
+
 	// Connect Controller
     m_pCon = new GBDialogStudentController(this, CourseTitle, style);
+
     // Connect Events Handler(s) to Controller
     m_pAddStudentButton->Bind(wxEVT_BUTTON, &GBDialogStudentController::AddStudentButtonWasClicked, m_pCon);
     m_pStudentIDTextCtrl->Bind(wxEVT_TEXT_ENTER, &GBDialogStudentController::AddStudentButtonWasClicked, m_pCon);

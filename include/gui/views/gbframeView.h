@@ -45,8 +45,8 @@ class GBFrameView : public wxFrame {
     wxGrid						*m_pGridView;
     wxDialog					*m_pGBDialog;
     wxPanel						*m_pGBDialogPanel;
-		GradeTable				*m_pGradeTable;
-		wxMenu *m_pLabelMenu;
+	GradeTable					*m_pGradeTable;
+	wxMenu 						*m_pLabelMenu;
 
 	protected:
     GBFrameController			*m_pCon;

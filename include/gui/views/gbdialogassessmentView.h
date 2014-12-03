@@ -18,23 +18,20 @@
 
 class GBDialogAssessmentView: public wxDialog
 {
-	friend class GBDialogAssessmentController;
 	public:
 	GBDialogAssessmentView();
 	GBDialogAssessmentView(wxWindow *parent, wxString CourseTitle, int style);
 	~GBDialogAssessmentView()
-		{delete m_pCon, m_pGBDialogPanel, m_pCourseComboBox, m_pModifyAssignmentListBox;}
+		{delete m_pCon, m_pGBDialogPanel;}
 
     wxGrid        *m_pModifyAssessmentGrid;
     wxTextCtrl    *m_pAssessmentNameTextCtrl;
     wxButton      *m_pAddAssessmentButton;
 	wxButton      *m_pSaveAssessmentChangesButton;
 
-	protected:
+	private:
 	GBDialogAssessmentController	*m_pCon;
 	wxPanel							*m_pGBDialogPanel;
-	wxComboBox 						*m_pCourseComboBox;
-	wxEditableListBox				*m_pModifyAssignmentListBox;
     wxBoxSizer                      *m_pGridSizer;
     wxBoxSizer                      *m_pDialogSizer;
 
@@ -47,7 +44,5 @@ enum {
 	ID_AddAssessmentButton = 4,
 	ID_SaveAssessmentChangesButton = 5,
 };
-
-
 
 #endif

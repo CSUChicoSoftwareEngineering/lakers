@@ -6,6 +6,11 @@
 
 using namespace std;
 
+/**
+  * @brief  Constructor to connect GBFrameController with a view.
+  * @param  GBFrameView * view: The view to connect the Controller to.
+  * @retval none.
+  */
 GBFrameController::GBFrameController(GBFrameView *view)
   : m_pMainFrameView(view),
     m_pSql(GBSql::Instance()) {
@@ -47,14 +52,17 @@ void GBFrameController::CreateGridView(){
 // UpdateStudents
 // UpdateAssessments
 // UpdateGrades
+/**
+  * @brief  Updates the Grid view rows and columns.
+  * @param  none.
+  * @retval none.
+  */
 void GBFrameController::UpdateGridView() {
   Course *course(NULL);
   wxGrid *grid = m_pMainFrameView->m_pGridView;
   GradeTable *table = m_pMainFrameView->m_pGradeTable;
   wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
   wxString strSelection = combo->GetValue();
-
-  //cout << "Debugging . . . " << strSelection << endl;
 
   // Determine selected course
   for (int i = 0; i < m_courses.size(); ++i) {
@@ -70,8 +78,6 @@ void GBFrameController::UpdateGridView() {
 
     return;
   }
-
-  //cout << "Updating Grid View for  . . . " << course->Title() << endl;
 
   // Ensure course is empty
   course->Clear();
@@ -118,11 +124,20 @@ void GBFrameController::UpdateGridView() {
   grid->Refresh();
 }
 
+/**
+  * @brief  If a New Course is Selected then update the grid view with the appropriate Students and Assessments.
+  * @param  wxCommandEvent wxEVT_COMBOBOX: An event from a combo box.
+  * @retval none.
+  */
 void  GBFrameController::NewCourseSelected(wxCommandEvent& event){
   UpdateGridView();
 }
 
-
+/**
+  * @brief  On a right click on the Grid rows or columns and the label "delete" is selected.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::OnLabelDelete(wxCommandEvent &event) {
 	wxGrid *grid = m_pMainFrameView->m_pGridView;
 	GradeTable *table = m_pMainFrameView->m_pGradeTable;
@@ -145,6 +160,11 @@ void GBFrameController::OnLabelDelete(wxCommandEvent &event) {
 	}
 }
 
+/**
+  * @brief  If a course is selected to be removed from the menu then delete from the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::OnRemoveCourse(wxCommandEvent &event) {
   Course *course(NULL);
   wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
@@ -168,8 +188,13 @@ void GBFrameController::OnRemoveCourse(wxCommandEvent &event) {
 	m_pSql->DeleteCourse(*course);
 }
 
+/**
+  * @brief  If a Course was updated in another view then update the Course on the Main Frame as well.
+  * @param  SubscriberUpdateType type: type can be one of the following; SQL_INSERT, SQL_UPDATE, SQL_DELETE
+  * @retval none.
+  */
 void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
-   //cout << "Course Started Updating !!! " << endl;
+
   PopulateCourseDropDownList();
 
   UpdateGridView();
@@ -179,19 +204,32 @@ void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
     return;
   }
   (m_pMainFrameView->m_pCourseComboBox)->SetSelection(m_courses.size() - 1);
- // cout << "Course Finished Updating !!! " << endl;
 
 }
 
+/**
+  * @brief  If a Student was updated in another view then update the Student on the Main Frame as well.
+  * @param  SubscriberUpdateType type: type can be one of the following; SQL_INSERT, SQL_UPDATE, SQL_DELETE
+  * @retval none.
+  */
 void GBFrameController::OnStudentUpdate(SubscriberUpdateType type){
 	UpdateGridView();
 }
 
+/**
+  * @brief  If an Assessment was updated in another view then update the Assessment on the Main Frame as well.
+  * @param  SubscriberUpdateType type: type can be one of the following; SQL_INSERT, SQL_UPDATE, SQL_DELETE
+  * @retval none.
+  */
 void GBFrameController::OnAssessmentUpdate(SubscriberUpdateType type){
 	UpdateGridView();
 }
 
-// *** Need to pull data from DB to populate Dropdown list ***
+/**
+  * @brief  Will populate the Dropdown List with all the Courses from the Database.
+  * @param  none.
+  * @retval none.
+  */
 void GBFrameController::PopulateCourseDropDownList(){
   wxComboBox *course = m_pMainFrameView->m_pCourseComboBox;
 
@@ -213,31 +251,56 @@ void GBFrameController::PopulateCourseDropDownList(){
 
 }
 
+/**
+  * @brief  Will display a view to add Assessment(s) into the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::AddAssessment(wxCommandEvent& event){
     GBDialogAssessmentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection(), AddAssessmentStyleView);
 
 	dlg.ShowModal();
 }
 
+
+/**
+  * @brief  Will display a view to modify Assessment(s) in the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::ModifyAssessment(wxCommandEvent& event){
 	GBDialogAssessmentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection(), ModifyAssessmentStyleView);
 
 	dlg.ShowModal();
 }
 
-
+/**
+  * @brief  Will display a view to add Course(s) in the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::AddCourse(wxCommandEvent& event){
   GBDialogCourseView dlg(m_pMainFrameView);
 
   dlg.ShowModal();
 }
 
+/**
+  * @brief  Will display a view to add Student(s) in the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::AddStudent(wxCommandEvent& event){
   GBDialogStudentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection(), AddStudentStyleView);
 
   dlg.ShowModal();
 }
 
+/**
+  * @brief  Will display a view to modify Student(s) in the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::ModifyStudent(wxCommandEvent& event){
 	// Handle Event
   GBDialogStudentView dlg(m_pMainFrameView, (m_pMainFrameView->m_pCourseComboBox)->GetStringSelection(), ModifyStudentStyleView);
@@ -245,11 +308,21 @@ void GBFrameController::ModifyStudent(wxCommandEvent& event){
   dlg.ShowModal();
 }
 
+/**
+  * @brief  Will close the Main Frame.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::OnExit(wxCommandEvent& event) {
 	// Handle Event
     (m_pMainFrameView->Close)( true );
 }
 
+/**
+  * @brief  Will display an "about" dialog with information about the GradeBook Application
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
 void GBFrameController::OnAbout(wxCommandEvent& event) {
 	// Handle Event
     wxMessageBox( "GradeBook Application version 1.0.0",

@@ -15,7 +15,14 @@ GBDialogStudentController::~GBDialogStudentController(){
   delete m_pCurrentCourse;
 }
 
-// Constructor 1
+/**
+  * @brief  Constructor to connect GBDialogStudentController with a view.
+  * @param  GBDialogStudentController * view: The view to connect the Controller to.
+  *         wxString CourseTitle: The course selected to add or modify Student(s).
+  *         int style: When Style = 0 the controller will connect to a view to Add an Assessment
+                       When Style = 1 the controller will connect to a view to Modify Assessment(s).
+  * @retval none.
+  */
 GBDialogStudentController::GBDialogStudentController(GBDialogStudentView *view, wxString CourseTitle, int style)
   : m_pSql(GBSql::Instance()),
     m_pDialogView(view) {
@@ -106,7 +113,7 @@ void GBDialogStudentController::LoadStudents(){
 /**
   * @brief  The "Add Student" Button was clicked, therefore an Insert transaction to the DataBase
   *         will be committed.
-  * @param  wxEVT_BUTTON
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
   * @retval none.
   */
 void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event){
@@ -154,7 +161,7 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
 }
 
 /**
-  * @brief  Get the Current Course has selected from the main frame.
+  * @brief  Get the Current Course selected from the main frame.
   * @param  wxString CourseTitle
   * @retval int: Returns the status of the Database transaction.
   *         Returns -1 if transaction fails or no course was selected.
@@ -185,7 +192,7 @@ int GBDialogStudentController::GetCurrentCourse(wxString CourseTitle){
 /**
   * @brief  A cell in the grid view has changed and the row will be stored
   *         so an Update transaction to the DataBase can be committed.
-  * @param  wxEVT_GRID_CELL_CHANGED
+  * @param  wxGridEvent wxEVT_GRID_CELL_CHANGED: An event from a cell in the grid.
   * @retval none.
   */
 void GBDialogStudentController::GridCellChanged(wxGridEvent& event){
@@ -214,7 +221,7 @@ bool GBDialogStudentController::RowAlreadyNeedsToBeUpdated(int row){
 
 /**
   * @brief  The "Save" Button was clicked so we will save any rows that need to be Updated.
-  * @param  wxEVT_BUTTON
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a Button.
   * @retval none.
   */
 void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEvent& event){
@@ -264,7 +271,7 @@ void GBDialogStudentController::SaveChanges(){
 
 /**
   * @brief  Makes the Database transactions when Dialog is being close by the User.
-  * @param  wxEVT_CLOSE_WINDOW
+  * @param  wxCloseEvent wxEVT_CLOSE_WINDOW: An event from a window/dialog being closed.
   * @retval none.
   */
 void GBDialogStudentController::DialogIsBeingClosed(wxCloseEvent& event){

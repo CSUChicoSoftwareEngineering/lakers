@@ -1,6 +1,14 @@
 #include "gui/views/gbframeView.h"
 #include "sql/gbsql.h"
 
+/**
+  * @brief  Constructor to create a GBFrameView. To display the view one must
+  *         call the virtual function Show().
+  * @param  const wxString& title: Provides a title to the Main Frame Window.
+  *         const wxPoint& pos: Provides the position of the Main Frame Window.
+  *         const wxSize& size: Provides the size of the Main Frame Window.
+  * @retval none.
+  */
 GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize& size)
 	: wxFrame(NULL, wxID_ANY, title, pos, size) {
 	// Create File Menu
@@ -19,7 +27,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	wxMenu *menuAssessment = new wxMenu;
 	menuAssessment->Append(ID_AddAssessmentMenuSelect, "&Add an Assessment \tCtrl-A", "Add an individual Assessment to your GradBook");
 	menuAssessment->Append(ID_ModifyAssessmentMenuSelect, "&Modify Assessments ", "Modify Assessment(s) to your GradBook");
- // Create Help Menu
+    // Create Help Menu
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
 	// Adds Menus to MenuBar

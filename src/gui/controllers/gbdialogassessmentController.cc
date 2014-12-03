@@ -159,7 +159,7 @@ void GBDialogAssessmentController::SaveChanges(){
 
 
 /**
-  * @brief  Get the Current Course has selected from the main frame.
+  * @brief  Get the Current Course selected from the main frame.
   * @param  wxString CourseTitle
   * @retval int: Returns the status of the Database transaction.
   *         Returns -1 if transaction fails or no course was selected.

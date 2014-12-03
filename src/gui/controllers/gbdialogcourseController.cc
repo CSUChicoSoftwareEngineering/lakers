@@ -16,6 +16,12 @@ GBDialogCourseController::GBDialogCourseController(GBDialogCourseView *view)
  (m_pDialogView->m_pcsvFileViewListBox)->Disable();
 }
 
+/**
+  * @brief  The "Add Course" Button was clicked, therefore an Insert transaction to the DataBase
+  *         will be committed.
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
+  * @retval none.
+  */
 void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 
   wxTextCtrl *name = m_pDialogView->m_pCourseNameTextCtrl;
@@ -45,6 +51,11 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 
 }
 
+/**
+  * @brief  The "Browse" Button was clicked and a file was selected.
+  * @param  wxFileDirPickerEvent wxEVT_FILEPICKER_CHANGED: An event from a FileLocationCtrl.
+  * @retval none.
+  */
 void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
 	// Handle Event
   wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
@@ -52,9 +63,6 @@ void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
   wxString Path = event.GetPath();
   wxString  StudentName ;
   Student *importStudent;
-
-  cout << Path << endl;
-
 
   csv_Ptr = cur_Importer.GetCourse(Path.mb_str());
 
@@ -76,9 +84,13 @@ void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
 
 }
 
+/**
+  * @brief  Makes the Database transactions when Dialog is being close by the User.
+  * @param  wxCloseEvent wxEVT_CLOSE_WINDOW: An event from a window/dialog being closed.
+  * @retval none.
+  */
 void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
 
-  cout << "closing . . ." << endl;
   wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
   Student *importStudent;
   wxString StudentName;
@@ -95,8 +107,6 @@ void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
         m_pCurrentCourse = m_courses[i];
     }
   }
-
-  cout << "Course Has Now Been Selected . . . " << m_pCurrentCourse->Title() << endl;
 
   for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
 
@@ -120,10 +130,4 @@ void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
   m_pDialogView->Destroy();
 }
 
-void GBDialogCourseController::StudentHasBeenUnchecked(wxCommandEvent& event){
-	// Handle Event
-}
 
-void GBDialogCourseController::ImportStudents(){
-	// Handle Event
-}

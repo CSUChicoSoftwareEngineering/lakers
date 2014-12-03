@@ -1,6 +1,12 @@
 #include "gui/views/gbdialogcourseView.h"
 #include "sql/gbsql.h"
 
+/**
+  * @brief  Constructor to create a GBDialogCourseView. To display the view one must
+  *         call the virtual function ShowModal().
+  * @param  wxWindow *parent: The parent of the dialog.
+  * @retval none.
+  */
 GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
   : wxDialog(parent, wxID_ANY, wxT("Add Course"), wxDefaultPosition, GB_COURSE_DIALOGSIZE) {
 
@@ -28,7 +34,6 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
     Bind(wxEVT_CLOSE_WINDOW, &GBDialogCourseController::DialogIsBeingClosed, m_pController);
 	m_pSelectFileLocationCtrl->Bind(wxEVT_FILEPICKER_CHANGED, &GBDialogCourseController::FileHasBeenSelected, m_pController);
 	m_pImportButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::AddButtonWasClicked, m_pController);
-	m_pcsvFileViewListBox->Bind(wxEVT_CHECKLISTBOX, &GBDialogCourseController::StudentHasBeenUnchecked, m_pController);
 }
 
 GBDialogCourseView::~GBDialogCourseView(){
