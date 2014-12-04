@@ -145,7 +145,7 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
 
     if( m_pSql->InsertStudentIntoCourse( s , *m_pCurrentCourse) == -1 ) {
 	  	cerr << "Failed to insert student in course" << endl;
-	
+
 			return;
 		}
 
@@ -219,10 +219,9 @@ bool GBDialogStudentController::RowAlreadyNeedsToBeUpdated(int row){
   * @retval none.
   */
 void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEvent& event){
+
   SaveChanges();
   LoadStudents();
-
-	m_pDialogView->EndModal(0);
 }
 
 /**
