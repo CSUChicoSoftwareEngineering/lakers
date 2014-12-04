@@ -25,6 +25,7 @@ class GBDialogAssessmentController{
   void DialogIsBeingClosed(wxCloseEvent& event);
   void GridCellChanged(wxGridEvent& event);
   void AddAssessmentButtonWasClicked(wxCommandEvent& event);
+  void CloseButtonWasClicked(wxCommandEvent& event);
   void SaveAssessmentChangesButtonWasClicked(wxCommandEvent& event);
 
   private:

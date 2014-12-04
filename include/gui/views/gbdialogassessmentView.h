@@ -14,7 +14,7 @@
 #include <wx/sizer.h>
 
 #define GB_MODIFY_ASSESSNMENT_DIALOGSIZE wxSize(350,500)
-#define GB_ADD_ASSESSNMENT_DIALOGSIZE wxSize(350,250)
+#define GB_ADD_ASSESSNMENT_DIALOGSIZE wxSize(350,120)
 
 class GBDialogAssessmentView: public wxDialog
 {
@@ -28,12 +28,15 @@ class GBDialogAssessmentView: public wxDialog
     wxTextCtrl    *m_pAssessmentNameTextCtrl;
     wxButton      *m_pAddAssessmentButton;
 	wxButton      *m_pSaveAssessmentChangesButton;
+	wxButton      *m_pCloseButton;
 
 	private:
 	GBDialogAssessmentController	*m_pCon;
 	wxPanel							*m_pGBDialogPanel;
     wxBoxSizer                      *m_pGridSizer;
     wxBoxSizer                      *m_pDialogSizer;
+    wxBoxSizer                      *m_pButtonSizer;
+    wxStaticBoxSizer                *m_pStudentLastNameBoxSizer;
 
 };
 
@@ -43,6 +46,7 @@ enum {
 	ID_ModifyAssessmentGrid = 3,
 	ID_AddAssessmentButton = 4,
 	ID_SaveAssessmentChangesButton = 5,
+	ID_CloseAssessmentButton = 6,
 };
 
 #endif

@@ -19,17 +19,19 @@ GBDialogAssessmentController::GBDialogAssessmentController(GBDialogAssessmentVie
   : m_pDialogView(view), m_pSql(GBSql::Instance()) {
 
   wxGrid *grid = m_pDialogView->m_pModifyAssessmentGrid;
-  wxButton *button = m_pDialogView->m_pAddAssessmentButton;
+  wxButton *AddAssessmentButton = m_pDialogView->m_pAddAssessmentButton;
+  wxButton *SaveAssessmentChangesButton = m_pDialogView->m_pSaveAssessmentChangesButton;
 
   if( GetCurrentCourse(CourseTitle) == -1){
 
      if(style == 0){
-       button->Disable();
+       AddAssessmentButton->Disable();
      }
      else if(style == 1){
 
        grid->CreateGrid(0, 0);
        grid->Disable();
+       SaveAssessmentChangesButton->Disable();
 
      }
 
@@ -65,10 +67,25 @@ GBDialogAssessmentController::~GBDialogAssessmentController() {
   */
 void GBDialogAssessmentController::GridCellChanged(wxGridEvent& event){
 
+  wxGrid *grid = m_pDialogView->m_pModifyAssessmentGrid;
+
   if(!RowAlreadyNeedsToBeUpdated(event.GetRow())){
 
     m_RowsNeedToBeUpdated.push_back(event.GetRow());
+    grid->AutoSize();
+    grid->Refresh();
   }
+}
+
+
+/**
+  * @brief  The "Close" Button was clicked, therefore the dialog will be closed.
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
+  * @retval none.
+  */
+void GBDialogAssessmentController::CloseButtonWasClicked(wxCommandEvent& event){
+
+  m_pDialogView->Close();
 }
 
 /**
@@ -152,7 +169,6 @@ void GBDialogAssessmentController::SaveChanges(){
     }
 
     m_RowsNeedToBeUpdated.clear();
-    LoadAssessments();
   }
 
 }

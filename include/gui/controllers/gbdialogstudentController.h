@@ -25,6 +25,7 @@ class GBDialogStudentController
 
   //Events
   void AddStudentButtonWasClicked(wxCommandEvent& event);
+  void CloseButtonWasClicked(wxCommandEvent& event);
   void DialogIsBeingClosed(wxCloseEvent& event);
   void GridCellChanged(wxGridEvent& event);
   void SaveStudentChangesButtonWasClicked(wxCommandEvent& event);

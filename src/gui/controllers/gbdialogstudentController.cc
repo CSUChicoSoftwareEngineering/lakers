@@ -110,6 +110,17 @@ void GBDialogStudentController::LoadStudents(){
   grid->Refresh();
 }
 
+
+/**
+  * @brief  The "Close" Button was clicked, therefore the dialog will be closed.
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
+  * @retval none.
+  */
+void GBDialogStudentController::CloseButtonWasClicked(wxCommandEvent& event){
+
+  m_pDialogView->Close();
+}
+
 /**
   * @brief  The "Add Student" Button was clicked, therefore an Insert transaction to the DataBase
   *         will be committed.
@@ -151,11 +162,12 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
     s.SetFirst( FirstName->GetValue() );
     s.SetLast( LastName->GetValue() );
 
-
     if( m_pSql->InsertStudentIntoCourse( s , *m_pCurrentCourse) == -1 ){    cerr << "Failed to insert student in course" << endl;}
 
-    m_pDialogView->EndModal(0);
-    m_pDialogView->Destroy();
+    StudentId->Clear();
+    FirstName->Clear();
+    LastName->Clear();
+    wxMessageBox( "Student Added", "Success", wxOK | wxICON_INFORMATION );
   }
 
 }
@@ -197,9 +209,13 @@ int GBDialogStudentController::GetCurrentCourse(wxString CourseTitle){
   */
 void GBDialogStudentController::GridCellChanged(wxGridEvent& event){
 
+  wxGrid *grid = m_pDialogView->m_pModifyStudentGrid;
+
   if(!RowAlreadyNeedsToBeUpdated(event.GetRow())){
 
     m_RowsNeedToBeUpdated.push_back(event.GetRow());
+    grid->AutoSize();
+    grid->Refresh();
   }
 }
 
@@ -268,6 +284,8 @@ void GBDialogStudentController::SaveChanges(){
   }
 
 }
+
+
 
 /**
   * @brief  Makes the Database transactions when Dialog is being close by the User.
