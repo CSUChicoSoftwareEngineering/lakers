@@ -22,18 +22,27 @@ class  GBDialogCourseView : public wxDialog {
     wxFilePickerCtrl 			*m_pSelectFileLocationCtrl;
     wxCheckListBox				*m_pcsvFileViewListBox;
     wxButton					*m_pImportButton;
+    wxButton					*m_pCloseButton;
+    wxButton                    *m_pClearButton;
 
 	private:
     // Member Variables
     GBDialogCourseController 	*m_pController;
     wxPanel						*m_pGBDialogPanel;
+    wxStaticBoxSizer            *m_pCourseNameStaticBoxSizer;
+    wxStaticBoxSizer            *m_pStudenSelectToImportBoxSizer;
+    wxStaticBoxSizer            *m_pImportStudentCSVBoxSizer;
+    wxBoxSizer                  *m_pGridSizer;
+    wxBoxSizer                  *m_pButtonSizer;
+    wxBoxSizer                  *m_pDialogSizer;
 
 };
 
 enum{
 	ID_AddButton = 1,
 	ID_FileSelect = 2,
-	ID_StudentSelection = 3
+	ID_StudentSelection = 3,
+
 };
 
 #endif

@@ -14,6 +14,7 @@ GBDialogCourseController::GBDialogCourseController(GBDialogCourseView *view)
     m_pDialogView(view) {
 
  (m_pDialogView->m_pcsvFileViewListBox)->Disable();
+
 }
 
 /**
@@ -29,6 +30,7 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
   wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
   Student *importStudent;
   wxString StudentName;
+
 
   if (name->GetValue().IsEmpty()) {
 
@@ -47,53 +49,6 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
   }
 
 
-  m_pDialogView->Close();
-
-}
-
-/**
-  * @brief  The "Browse" Button was clicked and a file was selected.
-  * @param  wxFileDirPickerEvent wxEVT_FILEPICKER_CHANGED: An event from a FileLocationCtrl.
-  * @retval none.
-  */
-void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
-	// Handle Event
-  wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
-  BBImporter cur_Importer;
-  wxString Path = event.GetPath();
-  wxString  StudentName ;
-  Student *importStudent;
-
-  csv_Ptr = cur_Importer.GetCourse(Path.mb_str());
-
-
-  StudentSelectionListBox->Enable();
-  for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
-    importStudent = *it;
-    StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
-    StudentSelection.Add(StudentName);
-  }
-
-  StudentSelectionListBox->InsertItems( StudentSelection , 0);
-
-  for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
-
-    StudentSelectionListBox->Check(i);
-  }
-
-
-}
-
-/**
-  * @brief  Makes the Database transactions when Dialog is being close by the User.
-  * @param  wxCloseEvent wxEVT_CLOSE_WINDOW: An event from a window/dialog being closed.
-  * @retval none.
-  */
-void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
-
-  wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
-  Student *importStudent;
-  wxString StudentName;
 
   if (m_pSql->SelectCourses(&m_courses) == -1) {
     return;
@@ -119,14 +74,81 @@ void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
           if(StudentSelectionListBox->GetString(i).IsSameAs(StudentName)){
 
             importStudent->SetStudentId(  wxString::Format("%d", rand() % 1000000) );
-            cout << "Insert Result: " << m_pSql->InsertStudentIntoCourse(*importStudent , *m_pCurrentCourse) << endl;
-            //cout << "Inserted! " << wxString::Format("%s, %s, %s  into  %s", importStudent->StudentId(), importStudent->Last() , importStudent->First(), c.Title()) << endl;
+            cout << i << " Insert Result: " << m_pSql->InsertStudentIntoCourse(*importStudent , *m_pCurrentCourse) << endl;
+
           }
       }
     }
   }
-   m_pDialogView->EndModal(0);
 
+  name->Clear();
+  StudentSelectionListBox->Clear();
+  StudentSelection.clear();
+}
+
+/**
+  * @brief  The "Browse" Button was clicked and a file was selected.
+  * @param  wxFileDirPickerEvent wxEVT_FILEPICKER_CHANGED: An event from a FileLocationCtrl.
+  * @retval none.
+  */
+void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
+	// Handle Event
+  wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
+  BBImporter cur_Importer;
+  wxString Path = event.GetPath();
+  wxString  StudentName ;
+  Student *importStudent;
+
+  csv_Ptr = cur_Importer.GetCourse(Path.mb_str());
+
+  StudentSelectionListBox->Enable();
+  for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
+    importStudent = *it;
+    StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
+    StudentSelection.Add(StudentName);
+  }
+
+  StudentSelectionListBox->InsertItems( StudentSelection , 0);
+
+  for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
+
+    StudentSelectionListBox->Check(i);
+  }
+
+
+}
+
+/**
+  * @brief  The "Clear" Button was clicked, therefore the object will be cleared.
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
+  * @retval none.
+  */
+void GBDialogCourseController::ClearButtonWasClicked(wxCommandEvent& event){
+
+  (m_pDialogView->m_pCourseNameTextCtrl)->Clear();
+  (m_pDialogView->m_pcsvFileViewListBox)->Clear();
+  StudentSelection.clear();
+}
+
+
+/**
+  * @brief  The "Close" Button was clicked, therefore the dialog will be closed.
+  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
+  * @retval none.
+  */
+void GBDialogCourseController::CloseButtonWasClicked(wxCommandEvent& event){
+
+  m_pDialogView->Close();
+}
+
+/**
+  * @brief  Makes the Database transactions when Dialog is being close by the User.
+  * @param  wxCloseEvent wxEVT_CLOSE_WINDOW: An event from a window/dialog being closed.
+  * @retval none.
+  */
+void GBDialogCourseController::DialogIsBeingClosed(wxCloseEvent& event){
+
+  m_pDialogView->EndModal(0);
   m_pDialogView->Destroy();
 }
 

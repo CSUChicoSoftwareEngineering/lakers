@@ -19,6 +19,8 @@ class  GBDialogCourseController
 	public:
     GBDialogCourseController(GBDialogCourseView *view);
     void AddButtonWasClicked(wxCommandEvent& event);
+    void CloseButtonWasClicked(wxCommandEvent& event);
+    void ClearButtonWasClicked(wxCommandEvent& event);
     void FileHasBeenSelected(wxFileDirPickerEvent& event);
     void DialogIsBeingClosed(wxCloseEvent& event);
 

@@ -14,7 +14,7 @@
 #include <wx/sizer.h>
 
 #define GB_MODIFY_ASSESSNMENT_DIALOGSIZE wxSize(350,500)
-#define GB_ADD_ASSESSNMENT_DIALOGSIZE wxSize(350,120)
+#define GB_ADD_ASSESSNMENT_DIALOGSIZE wxSize(350,100)
 
 class GBDialogAssessmentView: public wxDialog
 {

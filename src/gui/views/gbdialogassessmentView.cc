@@ -39,15 +39,15 @@ GBDialogAssessmentView::GBDialogAssessmentView(wxWindow *parent, wxString Course
       m_pCloseButton = new wxButton(m_pGBDialogPanel, ID_CloseAssessmentButton, "Close", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "CloseButton");
 
       // Apply Sizers to BoxSizer
-      m_pStudentLastNameBoxSizer->Add(m_pAssessmentNameTextCtrl, 1, wxEXPAND | wxBOTTOM, 10);
+      m_pStudentLastNameBoxSizer->Add(m_pAssessmentNameTextCtrl, 1, wxEXPAND | wxALL, 2);
 
 	  // Apply Sizers to Buttons
-      m_pButtonSizer->Add(m_pAddAssessmentButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 10);
-      m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 10);
+      m_pButtonSizer->Add(m_pAddAssessmentButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 2);
+      m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 2);
 
 	  // Apply Sizers to Dialog
-      m_pDialogSizer->Add(m_pStudentLastNameBoxSizer, 0, wxEXPAND | wxALL, 10);
-      m_pDialogSizer->Add(m_pButtonSizer, 1, wxEXPAND | wxSHAPED | wxBOTTOM | wxALIGN_BOTTOM , 10);
+      m_pDialogSizer->Add(m_pStudentLastNameBoxSizer, 0, wxEXPAND | wxALL, 2);
+      m_pDialogSizer->Add(m_pButtonSizer, 0, wxEXPAND | wxALL | wxALIGN_BOTTOM , 2);
 
 	  // Set m_pGridSizer as primary sizer
 	  m_pGBDialogPanel->SetSizer(m_pDialogSizer);
@@ -80,15 +80,15 @@ GBDialogAssessmentView::GBDialogAssessmentView(wxWindow *parent, wxString Course
       m_pCloseButton = new wxButton(m_pGBDialogPanel, ID_CloseAssessmentButton, "Close", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "CloseButton");
 
       // Apply Sizers to Buttons
-      m_pButtonSizer->Add(m_pSaveAssessmentChangesButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 10);
-      m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 10);
+      m_pButtonSizer->Add(m_pSaveAssessmentChangesButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 2);
+      m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 2);
 
 	  // Apply Sizer to GridView
-	  m_pGridSizer->Add(m_pModifyAssessmentGrid, 1, wxSHAPED, 0);
+	  m_pGridSizer->Add(m_pModifyAssessmentGrid, 1, wxSHAPED , 2);
 
       // Apply Sizer to Dialog
-      m_pDialogSizer->Add(m_pGridSizer, 1 , wxEXPAND ,  0);
-      m_pDialogSizer->Add(m_pButtonSizer, 0, wxEXPAND | wxBOTTOM | wxALIGN_BOTTOM , 10);
+      m_pDialogSizer->Add(m_pGridSizer, 1 , wxEXPAND ,  2);
+      m_pDialogSizer->Add(m_pButtonSizer, 0, wxEXPAND | wxALL | wxALIGN_BOTTOM , 2);
 
 	  // Set m_pDialogSizer as primary sizer
 	  m_pGBDialogPanel->SetSizer(m_pDialogSizer);
