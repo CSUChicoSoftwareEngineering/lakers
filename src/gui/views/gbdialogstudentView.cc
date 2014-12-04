@@ -1,5 +1,8 @@
+#include <wx/gbsizer.h>
+
 #include "gui/views/gbdialogstudentView.h"
 #include <wx/stattext.h>
+
 GBDialogStudentView::GBDialogStudentView(){}
 
 /**
@@ -12,116 +15,80 @@ GBDialogStudentView::GBDialogStudentView(){}
   * @retval none.
   */
 GBDialogStudentView::GBDialogStudentView(wxWindow *parent, wxString CourseTitle, int style)
-  : wxDialog(parent, wxID_ANY, wxT("Student"), wxDefaultPosition, wxDefaultSize) {
+  : wxDialog(parent, wxID_ANY, wxT("Student"), wxDefaultPosition, wxDefaultSize),
+		m_pStudentIDTextCtrl(NULL),
+		m_pStudentFirstNameTextCtrl(NULL),
+		m_pStudentLastNameTextCtrl(NULL),
+		m_pModifyStudentGrid(NULL) {
+	wxButton *button;
+	wxStaticBoxSizer *idSizer;
+	wxStaticBoxSizer *firstSizer;
+	wxStaticBoxSizer *lastSizer;
 
-  wxStaticBox         *StudentIDStaticBox;
-  wxStaticBox         *StudentFirstNameStaticBox;
-  wxStaticBox         *StudentLastNameStaticBox;
+	wxSize defaultTextCtrl(250, 25);
+	wxGridBagSizer *sizer = new wxGridBagSizer(2, 2);
 
   if(style == 0){
+		idSizer = new wxStaticBoxSizer(wxVERTICAL, this, "Student Id");
+		m_pStudentIDTextCtrl = new wxTextCtrl(idSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, defaultTextCtrl);
+		idSizer->Add(m_pStudentIDTextCtrl, wxSizerFlags().Border(wxALL, 2));
 
-    // Create  Sizers
-	m_pDialogSizer = new wxBoxSizer(wxVERTICAL);
-	m_pButtonSizer = new  wxBoxSizer(wxHORIZONTAL);
+		firstSizer = new wxStaticBoxSizer(wxVERTICAL, this, "First Name");
+		m_pStudentFirstNameTextCtrl = new wxTextCtrl(firstSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, defaultTextCtrl);
+		firstSizer->Add(m_pStudentFirstNameTextCtrl, wxSizerFlags().Border(wxALL, 2));
+			
+		lastSizer = new wxStaticBoxSizer(wxVERTICAL, this, "Last Name");
+		m_pStudentLastNameTextCtrl = new wxTextCtrl(lastSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, defaultTextCtrl);
+		lastSizer->Add(m_pStudentLastNameTextCtrl, wxSizerFlags().Border(wxALL, 2));
 
-	// Create Dialog
-    SetClientSize(GB_ADD_STUDENT_DIALOGSIZE);
-	// Create Panel
-    m_pGBDialogPanel = new wxPanel(this);
+		sizer->Add(idSizer, wxGBPosition(0, 0), wxGBSpan(1, 2), wxALL, 2);
+		sizer->Add(firstSizer, wxGBPosition(1, 0), wxGBSpan(1, 2), wxALL, 2);
+		sizer->Add(lastSizer, wxGBPosition(2, 0), wxGBSpan(1, 2), wxALL, 2);
 
-	// Create StaticBox, StaticBoxSize, and TextCtrl for Student ID
-    StudentIDStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Student ID", wxDefaultPosition, wxDefaultSize, 0,"StudentID");
-    m_pStudentIDStaticBoxSizer = new wxStaticBoxSizer(StudentIDStaticBox, wxHORIZONTAL);
-    m_pStudentIDTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CAPITALIZE | wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentIDTextCtrl");
+		m_pAddStudentButton = new wxButton(this, ID_AddStudentButton, "Add Student");
+		sizer->Add(m_pAddStudentButton, wxGBPosition(3, 0), wxGBSpan(1, 1), wxALL | wxALIGN_RIGHT, 2);
 
-    // Create StaticBox, StaticBoxSize, and TextCtrl for Student First Name
-    StudentFirstNameStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Student First Name", wxDefaultPosition, wxDefaultSize, 0,"StudentFirstName");
-    m_pStudentFirstNameBoxSizer = new wxStaticBoxSizer(StudentFirstNameStaticBox, wxHORIZONTAL);
-    m_pStudentFirstNameTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CAPITALIZE | wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentFirstNameTextCtrl");
+		button = new wxButton(this, ID_CloseDialog, "Close");
+		sizer->Add(button, wxGBPosition(3, 1), wxGBSpan(1, 1), wxALL | wxALIGN_RIGHT, 2);
 
-    // Create StaticBox, StaticBoxSize, and TextCtrl for Student Last Name
-    StudentLastNameStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Student Last Name", wxDefaultPosition, wxDefaultSize, 0,"StudentLastName");
-    m_pStudentLastNameBoxSizer = new wxStaticBoxSizer(StudentLastNameStaticBox, wxHORIZONTAL);
-    m_pStudentLastNameTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CAPITALIZE |wxTE_PROCESS_ENTER, wxDefaultValidator, "StudentLastNameTextCtrl");
-
-    // Create Save and Close Button
-    m_pAddStudentButton = new wxButton(m_pGBDialogPanel, ID_AddStudentButton, "Add Student", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "AddStudentButton");
-    m_pCloseButton = new wxButton(m_pGBDialogPanel, ID_CloseButton, "Close", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "CloseButton");
-
-	// Apply Sizers to Buttons
-    m_pButtonSizer->Add(m_pAddStudentButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 10);
-    m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 10);
-
-	// Apply Sizers to StaticBox
-    m_pStudentIDStaticBoxSizer->Add(m_pStudentIDTextCtrl, 1, wxEXPAND | wxBOTTOM, 10);
-    m_pStudentFirstNameBoxSizer->Add(m_pStudentFirstNameTextCtrl, 1, wxEXPAND | wxBOTTOM , 10);
-    m_pStudentLastNameBoxSizer->Add(m_pStudentLastNameTextCtrl, 1, wxEXPAND | wxBOTTOM , 10);
-
-	// Apply Sizers to Dialog
-    m_pDialogSizer->Add(m_pStudentIDStaticBoxSizer, 1, wxEXPAND | wxALL, 10);
-    m_pDialogSizer->Add(m_pStudentFirstNameBoxSizer, 1, wxEXPAND | wxALL, 10);
-    m_pDialogSizer->Add(m_pStudentLastNameBoxSizer, 1, wxEXPAND | wxALL, 10);
-    m_pDialogSizer->Add(m_pButtonSizer, 1, wxEXPAND | wxSHAPED | wxBOTTOM | wxALIGN_BOTTOM , 10);
-
-	// Set m_pGridSizer as primary sizer
-	m_pGBDialogPanel->SetSizer(m_pDialogSizer);
-
-	// Connect Controller
+		// Connect Controller
     m_pCon = new GBDialogStudentController(this, CourseTitle, style);
     // Connect Events Handler(s) to Controller
     m_pAddStudentButton->Bind(wxEVT_BUTTON, &GBDialogStudentController::AddStudentButtonWasClicked, m_pCon);
-    m_pCloseButton->Bind(wxEVT_BUTTON, &GBDialogStudentController::CloseButtonWasClicked, m_pCon);
+		button->Bind(wxEVT_BUTTON, &GBDialogStudentView::OnCloseClicked, this);
     m_pStudentIDTextCtrl->Bind(wxEVT_TEXT_ENTER, &GBDialogStudentController::AddStudentButtonWasClicked, m_pCon);
     m_pStudentFirstNameTextCtrl->Bind(wxEVT_TEXT_ENTER, &GBDialogStudentController::AddStudentButtonWasClicked, m_pCon);
     m_pStudentLastNameTextCtrl->Bind(wxEVT_TEXT_ENTER, &GBDialogStudentController::AddStudentButtonWasClicked, m_pCon);
-  }
-  else if( style == 1){
+  } else if(style == 1) {
+    m_pModifyStudentGrid = new wxGrid(this, ID_ModifyStudentGrid, wxDefaultPosition, wxSize(400, 400));
+		sizer->Add(m_pModifyStudentGrid, wxGBPosition(0, 0), wxGBSpan(1, 2), wxALL, 2);
 
-    // Create Sizers
-    m_pButtonSizer = new  wxBoxSizer(wxHORIZONTAL);
-	m_pGridSizer = new wxBoxSizer(wxHORIZONTAL);
-	m_pDialogSizer = new wxBoxSizer(wxVERTICAL);
+    m_pSaveStudentChangesButton = new wxButton(this, ID_SaveStudentChangesButton, "Save");
+		sizer->Add(m_pSaveStudentChangesButton, wxGBPosition(1, 0), wxGBSpan(1, 1), wxALL, 2);
 
-	// Create Dialog
-    SetClientSize(GB_MODIFY_STUDENT_DIALOGSIZE);
+		button = new wxButton(this, ID_CloseDialog, "Close");
+		button->Bind(wxEVT_BUTTON, &GBDialogStudentView::OnCloseClicked, this);
+		sizer->Add(button, wxGBPosition(1, 1), wxGBSpan(1, 1), wxALL, 2);
 
-	// Create Panel
-    m_pGBDialogPanel = new wxPanel(this);
-
-    m_pModifyStudentGrid = new wxGrid(m_pGBDialogPanel, ID_ModifyStudentGrid, wxDefaultPosition, wxDefaultSize, 0, "ID_GridView" );
-
-    // Create Buttons
-    m_pSaveStudentChangesButton = new wxButton(m_pGBDialogPanel, ID_SaveStudentChangesButton, "Save", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "SaveStudentChangesButton");
-    m_pCloseButton = new wxButton(m_pGBDialogPanel, ID_CloseButton, "Close", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "CloseButton");
-
-    // Apply Sizers to Buttons
-    m_pButtonSizer->Add(m_pSaveStudentChangesButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 10);
-    m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 10);
-
-	// Apply Sizer to GridView
-	m_pGridSizer->Add(m_pModifyStudentGrid, 1, wxSHAPED, 0);
-
-    // Apply Sizer to Dialog
-    m_pDialogSizer->Add(m_pGridSizer, 1 , wxEXPAND ,  0);
-    m_pDialogSizer->Add(m_pButtonSizer, 0, wxEXPAND | wxBOTTOM | wxALIGN_BOTTOM , 10);
-
-	// Set m_pGridSizer as primary sizer
-	m_pGBDialogPanel->SetSizer(m_pDialogSizer);
-
-	// Connect Controller
+		// Connect Controller
     m_pCon = new GBDialogStudentController(this, CourseTitle, style);
+
     // Connect Events Handler(s) to Controller
-	Bind(wxEVT_CLOSE_WINDOW, &GBDialogStudentController::DialogIsBeingClosed, m_pCon);
-    m_pModifyStudentGrid->Bind(wxEVT_GRID_CELL_CHANGED, &GBDialogStudentController::GridCellChanged, m_pCon);
     m_pSaveStudentChangesButton->Bind(wxEVT_BUTTON, &GBDialogStudentController::SaveStudentChangesButtonWasClicked, m_pCon);
-    m_pCloseButton->Bind(wxEVT_BUTTON, &GBDialogStudentController::CloseButtonWasClicked, m_pCon);
+    m_pModifyStudentGrid->Bind(wxEVT_GRID_CELL_CHANGED, &GBDialogStudentController::GridCellChanged, m_pCon);
   }
 
+	SetSizer(sizer);
+	Fit();
 }
 
 GBDialogStudentView::~GBDialogStudentView(){
+	if (m_pStudentIDTextCtrl != NULL) delete m_pStudentIDTextCtrl;
+	if (m_pStudentFirstNameTextCtrl != NULL) delete m_pStudentFirstNameTextCtrl;
+	if (m_pStudentLastNameTextCtrl != NULL) delete m_pStudentLastNameTextCtrl;
+	if (m_pModifyStudentGrid != NULL) delete m_pModifyStudentGrid;
+}
 
-  delete m_pGBDialogPanel, m_pGridSizer, m_pDialogSizer,
-  m_pStudentIDTextCtrl, m_pStudentFirstNameTextCtrl, m_pStudentLastNameTextCtrl,
-  m_pAddStudentButton, m_pSaveStudentChangesButton, m_pModifyStudentGrid;
+void GBDialogStudentView::OnCloseClicked(wxCommandEvent &event) {
+	EndModal(0);
 }

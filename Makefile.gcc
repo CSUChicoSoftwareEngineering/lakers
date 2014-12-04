@@ -30,7 +30,7 @@ OBJS := $(SRCS:%.cc=$(BUILD_DIR)/%.o)
 
 TEST_OBJS := $(TEST_SRCS:%.cc=$(BUILD_DIR)/%.o)
 
-CPPFLAGS := -Iinclude \
+CPPFLAGS := -g -Iinclude \
 						-Ilib/wxwidgets-3.0.1/include \
 						-Ilib/wxwidgets-3.0.1/lib/wx/include/gtk2-unicode-static-3.0 \
 						-Ilib/wxsqlite3-3.1.1/include \

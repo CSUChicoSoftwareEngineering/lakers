@@ -11,7 +11,6 @@ GBDialogStudentController::GBDialogStudentController(){}
 
 // Destructor
 GBDialogStudentController::~GBDialogStudentController(){
-
   delete m_pCurrentCourse;
 }
 
@@ -26,9 +25,7 @@ GBDialogStudentController::~GBDialogStudentController(){
 GBDialogStudentController::GBDialogStudentController(GBDialogStudentView *view, wxString CourseTitle, int style)
   : m_pSql(GBSql::Instance()),
     m_pDialogView(view) {
-
   wxGrid *grid = m_pDialogView->m_pModifyStudentGrid;
-
 
   if( GetCurrentCourse(CourseTitle) == -1){
      if(style == 0){
@@ -46,9 +43,7 @@ GBDialogStudentController::GBDialogStudentController(GBDialogStudentView *view, 
     return;
   }
   else{
-
     if(style == 1){
-
       grid->CreateGrid(0, 3);
       grid->SetColLabelValue(0, "Student ID");
       grid->SetColLabelValue(1, "First Name");
@@ -65,7 +60,6 @@ GBDialogStudentController::GBDialogStudentController(GBDialogStudentView *view, 
   * @retval none.
   */
 void GBDialogStudentController::LoadStudents(){
-
   wxGrid *grid = m_pDialogView->m_pModifyStudentGrid;
 
  m_pCurrentCourse->ClearStudents();
@@ -110,17 +104,6 @@ void GBDialogStudentController::LoadStudents(){
   grid->Refresh();
 }
 
-
-/**
-  * @brief  The "Close" Button was clicked, therefore the dialog will be closed.
-  * @param  wxCommandEvent wxEVT_BUTTON: An event from a button.
-  * @retval none.
-  */
-void GBDialogStudentController::CloseButtonWasClicked(wxCommandEvent& event){
-
-  m_pDialogView->Close();
-}
-
 /**
   * @brief  The "Add Student" Button was clicked, therefore an Insert transaction to the DataBase
   *         will be committed.
@@ -128,7 +111,6 @@ void GBDialogStudentController::CloseButtonWasClicked(wxCommandEvent& event){
   * @retval none.
   */
 void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event){
-
   wxTextCtrl    *StudentId = m_pDialogView->m_pStudentIDTextCtrl;
   wxTextCtrl    *FirstName = m_pDialogView->m_pStudentFirstNameTextCtrl;
   wxTextCtrl    *LastName = m_pDialogView->m_pStudentLastNameTextCtrl;
@@ -157,19 +139,20 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
       wxMessageBox( ErrorMessage, "Error", wxOK | wxICON_INFORMATION );
   }
   else{
-
     s.SetStudentId( StudentId->GetValue() );
     s.SetFirst( FirstName->GetValue() );
     s.SetLast( LastName->GetValue() );
 
-    if( m_pSql->InsertStudentIntoCourse( s , *m_pCurrentCourse) == -1 ){    cerr << "Failed to insert student in course" << endl;}
+    if( m_pSql->InsertStudentIntoCourse( s , *m_pCurrentCourse) == -1 ) {
+	  	cerr << "Failed to insert student in course" << endl;
+	
+			return;
+		}
 
-    StudentId->Clear();
-    FirstName->Clear();
-    LastName->Clear();
-    wxMessageBox( "Student Added", "Success", wxOK | wxICON_INFORMATION );
+		StudentId->SetValue("");
+		FirstName->SetValue("");
+		LastName->SetValue("");
   }
-
 }
 
 /**
@@ -179,7 +162,6 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
   *         Returns -1 if transaction fails or no course was selected.
   */
 int GBDialogStudentController::GetCurrentCourse(wxString CourseTitle){
-
   if (m_pSql->SelectCourses(&m_courses) == -1) {
     m_pCurrentCourse == NULL;
   }
@@ -225,13 +207,9 @@ void GBDialogStudentController::GridCellChanged(wxGridEvent& event){
   * @retval bool: True, if row already needs to be Updated; False, otherwise.
   */
 bool GBDialogStudentController::RowAlreadyNeedsToBeUpdated(int row){
-
   for(int i = 0; i < m_RowsNeedToBeUpdated.size(); ++i){
-
     if(row == m_RowsNeedToBeUpdated[i]) return true;
-
   }
-
   return false;
 }
 
@@ -241,9 +219,10 @@ bool GBDialogStudentController::RowAlreadyNeedsToBeUpdated(int row){
   * @retval none.
   */
 void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEvent& event){
-
   SaveChanges();
   LoadStudents();
+
+	m_pDialogView->EndModal(0);
 }
 
 /**
@@ -253,7 +232,6 @@ void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEven
   * @retval none.
   */
 void GBDialogStudentController::SaveChanges(){
-
   wxGrid *grid = m_pDialogView->m_pModifyStudentGrid;
 
   if(m_pCurrentCourse != NULL){
@@ -282,19 +260,4 @@ void GBDialogStudentController::SaveChanges(){
 
     m_RowsNeedToBeUpdated.clear();
   }
-
-}
-
-
-
-/**
-  * @brief  Makes the Database transactions when Dialog is being close by the User.
-  * @param  wxCloseEvent wxEVT_CLOSE_WINDOW: An event from a window/dialog being closed.
-  * @retval none.
-  */
-void GBDialogStudentController::DialogIsBeingClosed(wxCloseEvent& event){
-
-  SaveChanges();
-  m_pDialogView->EndModal(0);
-  m_pDialogView->Destroy();
 }
