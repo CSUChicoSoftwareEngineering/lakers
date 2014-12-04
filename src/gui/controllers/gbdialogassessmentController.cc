@@ -120,8 +120,7 @@ void GBDialogAssessmentController::AddAssessmentButtonWasClicked(wxCommandEvent&
 
     if( m_pSql->InsertAssessmentIntoCourse( a , *m_pCurrentCourse) == -1 ){    cerr << "Failed to insert assessment in course" << endl;}
 
-    m_pDialogView->EndModal(0);
-    m_pDialogView->Destroy();
+    AssessmentName->Clear();
   }
 
 }
