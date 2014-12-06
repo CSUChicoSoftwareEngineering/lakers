@@ -34,14 +34,6 @@ GBFrameController::~GBFrameController() {
 
 // *** Modify grid to populate it with data pulled from DB ***
 void GBFrameController::CreateGridView(){
-	// Create Student Grid view.
-	// Number of students in course = rows
-	// Total assessments = columns
-	//  (m_pMainFrameView->m_pGridView)->CreateGrid(0, 0);
-	//  (m_pMainFrameView->m_pGridView)->SetBackgroundColour(wxColour(char(255),char(255), char(255), char(0)));
-	//	(m_pMainFrameView->m_pGridView)->EnableDragColMove(true);
-	//	(m_pMainFrameView->m_pGridView)->EnableEditing(true);
-
   UpdateGridView();
 }
 
@@ -113,9 +105,11 @@ void GBFrameController::UpdateGridView() {
 		for (int x = 0; x < grid->GetNumberCols(); ++x) {
 			Assessment a = course->GetAssessmentByTitle(grid->GetColLabelValue(x));
 
-			//Grade g = s.GetGradeByAssessmentId(a.Id());
+			Grade g = s.GetGradeByAssessmentId(a.Id());
 
-			//table->AddGrade(i, x, g);
+			if (!g.Id().IsSameAs("-1")) {
+				table->AddGrade(i, x, g);
+			}
 		}
 	}
 
@@ -188,6 +182,38 @@ void GBFrameController::OnRemoveCourse(wxCommandEvent &event) {
 	m_pSql->DeleteCourse(*course);
 }
 
+void GBFrameController::OnGradeCellChanged(wxGridEvent &event) {
+	GradeTable *table = m_pMainFrameView->m_pGradeTable;
+  Course *course(NULL);
+  wxComboBox *combo = m_pMainFrameView->m_pCourseComboBox;
+  wxString strSelection = combo->GetValue();
+
+  // Determine selected course
+  for (int i = 0; i < m_courses.size(); ++i) {
+    if (m_courses[i]->Title().IsSameAs(strSelection)) {
+      course = m_courses[i];
+
+      break;
+    }
+  }
+
+  if (course == NULL) {
+    cerr << "Failed to find selected course" << endl;
+
+    return;
+  }
+
+	Assessment a = table->GetAssessment(event.GetCol());
+	Student s = table->GetStudent(event.GetRow());
+	Grade g = table->GetGrade(event.GetRow(), event.GetCol());
+
+	if (m_pSql->GradeExistsForStudent(g) == 0) {
+		m_pSql->InsertGradeForStudent(g, s, *course, a);
+	} else {
+		m_pSql->UpdateGrade(g);
+	}
+}
+
 /**
   * @brief  If a Course was updated in another view then update the Course on the Main Frame as well.
   * @param  SubscriberUpdateType type: type can be one of the following; SQL_INSERT, SQL_UPDATE, SQL_DELETE
@@ -203,8 +229,8 @@ void GBFrameController::OnCourseUpdate(SubscriberUpdateType type) {
   if (m_pSql->SelectCourses(&m_courses) == -1) {
     return;
   }
-  (m_pMainFrameView->m_pCourseComboBox)->SetSelection(m_courses.size() - 1);
 
+  (m_pMainFrameView->m_pCourseComboBox)->SetSelection(m_courses.size() - 1);
 }
 
 /**

@@ -39,8 +39,9 @@ class GBFrameController : public Subscriber {
     void OnAbout(wxCommandEvent& event);
     void NewCourseSelected(wxCommandEvent& event);
     void OnLabelDelete(wxCommandEvent &event);
-	void OnRemoveCourse(wxCommandEvent &event);
-	void UserOptions(wxCommandEvent &event);
+		void OnRemoveCourse(wxCommandEvent &event);
+		void UserOptions(wxCommandEvent &event);
+		void OnGradeCellChanged(wxGridEvent &event);
 
     virtual void OnCourseUpdate(SubscriberUpdateType type);
     virtual void OnAssessmentUpdate(SubscriberUpdateType type);
@@ -60,6 +61,5 @@ class GBFrameController : public Subscriber {
     vector<Course*> m_courses;
     wxArrayString   m_StudentList;
 };
-
 
 #endif

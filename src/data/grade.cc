@@ -1,7 +1,7 @@
 #include "data/grade.h"
 
 Grade::Grade()
-  : m_id(),
+  : m_id("-1"),
     m_assessmentId(),
     m_value() {
 

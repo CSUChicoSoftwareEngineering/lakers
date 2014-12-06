@@ -66,6 +66,8 @@ class GBSql : public Observer {
 		int DeleteAssessmentsForCourse(const Course &c);
     // Populates student with all grades
     int SelectGradesForStudentInCourse(Student &s, const Course &c);
+		// Test is a grade exists
+		int GradeExistsForStudent(const Grade &g);
     // Inserts grade for student into database
     int InsertGradeForStudent(const Grade &g, const Student &s, const Course &c, const Assessment &a);
     // Updates grade in database
@@ -90,6 +92,8 @@ class GBSql : public Observer {
     int Update(const wxString &sql);
     // Executes sql query statement
     wxSQLite3ResultSet *Query(const wxString &sql);
+		// Executes sql scalar
+		int Scalar(const wxString &sql);
     // Singleton instance
     static GBSql *m_pInstance;
     // sqlite3 instance variable

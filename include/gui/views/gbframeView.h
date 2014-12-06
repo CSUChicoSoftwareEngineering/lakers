@@ -28,6 +28,7 @@ class GradeTable : public wxGridTableBase {
 
 		Student &GetStudent(int index);
 		Assessment &GetAssessment(int index);
+		Grade &GetGrade(int row, int col);
 
 	private:
 		vector<Student> m_rows;
@@ -38,15 +39,16 @@ class GradeTable : public wxGridTableBase {
 class GBFrameView : public wxFrame {
   public:
     GBFrameView(const wxString& title, const wxPoint& pos, const wxSize& size);
-    wxBoxSizer 					*m_pCourseDropDownListSizer;
-    wxBoxSizer 					*m_pGBFrameSizer;
-  	wxComboBox 					*m_pCourseComboBox;
+    wxBoxSizer 				*m_pCourseDropDownListSizer;
+    wxBoxSizer 				*m_pGBFrameSizer;
+  	wxComboBox 				*m_pCourseComboBox;
     wxPanel						*m_pGBFramePanel;
     wxGrid						*m_pGridView;
     wxDialog					*m_pGBDialog;
     wxPanel						*m_pGBDialogPanel;
-	GradeTable					*m_pGradeTable;
-	wxMenu 						*m_pLabelMenu;
+		GradeTable				*m_pGradeTable;
+		wxMenu 						*m_pColumnMenu;
+		wxMenu						*m_pRowMenu;
 
 	protected:
     GBFrameController			*m_pCon;
@@ -55,9 +57,7 @@ class GBFrameView : public wxFrame {
 		void OnLabelRightClick(wxGridEvent &event);
 };
 
-
-enum
-{
+enum {
 	ID_AddCourseMenuSelect = 1,
 	ID_CourseDropDownList = 2,
 	ID_GradeBookPanel = 3,
@@ -69,6 +69,7 @@ enum
 	ID_AddStudentMenuSelect = 9,
 	ID_ModifyStudentMenuSelect = 10,
 	ID_LabelDelete,
+	ID_LabelGraph,
 	ID_RemoveCourseMenuSelect,
 	ID_OptionsMenuSelect,
 };

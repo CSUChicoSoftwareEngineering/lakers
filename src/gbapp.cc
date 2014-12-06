@@ -18,7 +18,7 @@ bool GBApp::OnInit() {
   wxString DatabasePath;
   wxFileConfig *config;
 
-  ifstream InFile(ini_filename);
+  ifstream InFile(ini_filename.c_str());
 
   if(!InFile){
 

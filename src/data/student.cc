@@ -36,6 +36,8 @@ Grade Student::GetGradeByAssessmentId(const wxString &id) const {
       return *m_grades[i];
     }
   }
+
+	return Grade("-1");
 }
 
 int Student::GradeCount() {

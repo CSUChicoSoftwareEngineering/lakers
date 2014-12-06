@@ -14,6 +14,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Create File Menu
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(wxID_EXIT);
+
 	wxMenu *menuStudent = new wxMenu();
 	menuStudent->Append(ID_AddStudentMenuSelect, "&Add Student \tCtrl-S", "Add an individual to your GradeBook");
 	menuStudent->AppendSeparator();
@@ -42,6 +43,13 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	menuBar->Append( menuAssessment, "&Assessments" );
 	menuBar->Append( menuOptions, "&Options");
 	menuBar->Append( menuHelp, "&Help" );
+
+	m_pColumnMenu = new wxMenu();
+	m_pColumnMenu->Append(ID_LabelGraph, "Graph");
+	m_pColumnMenu->Append(ID_LabelDelete, "Delete");
+
+	m_pRowMenu = new wxMenu();
+	m_pRowMenu->Append(ID_LabelDelete, "Delete");
 
 	SetMenuBar( menuBar );
 	CreateStatusBar();
@@ -72,9 +80,6 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Set GBFrameSizer as primary sizer
 	m_pGBFramePanel->SetSizer(m_pGBFrameSizer);
 
-	m_pLabelMenu = new wxMenu();
-	m_pLabelMenu->Append(ID_LabelDelete, "Delete");
-
 	// Connect Controller
 	m_pCon = new GBFrameController(this);
 
@@ -91,7 +96,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::UserOptions, m_pCon, ID_OptionsMenuSelect);
 	Bind(wxEVT_COMBOBOX, &GBFrameController::NewCourseSelected, m_pCon, ID_CourseDropDownList);
 	Bind(wxEVT_MENU, &GBFrameController::OnRemoveCourse, m_pCon, ID_RemoveCourseMenuSelect);
-
+	Bind(wxEVT_GRID_CELL_CHANGED, &GBFrameController::OnGradeCellChanged, m_pCon, ID_GridView);
 }
 
 void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
@@ -101,16 +106,15 @@ void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
 
 	if (event.GetCol() >= 0 && event.GetRow() == -1) {
 		m_pGridView->SelectCol(event.GetCol());
+
+		m_pGridView->PopupMenu(m_pColumnMenu, event.GetPosition().x, event.GetPosition().y);
 	} else if (event.GetCol() == -1 && event.GetRow() >= 0) {
 		m_pGridView->SelectRow(event.GetRow());
-	}
 
-	m_pGridView->PopupMenu(m_pLabelMenu, event.GetPosition().x, event.GetPosition().y);
+		m_pGridView->PopupMenu(m_pRowMenu, event.GetPosition().x, event.GetPosition().y);
+	}
 }
 
-#include <iostream>
-using namespace std;
-#warning "Remove"
 GradeTable::GradeTable()
 	:	wxGridTableBase() {
 
@@ -129,7 +133,15 @@ wxString GradeTable::GetValue(int row, int col) {
 }
 
 void GradeTable::SetValue(int row, int col, const wxString &value) {
+	if (m_grades[row][col].Id().IsSameAs("-1")) {
+		Grade g;
 
+		g.SetValue(value);
+
+		m_grades[row][col] = g;
+	} else {
+		m_grades[row][col].SetValue(value);
+	}
 }
 
 void GradeTable::Clear() {
@@ -202,4 +214,8 @@ Student &GradeTable::GetStudent(int index) {
 
 Assessment &GradeTable::GetAssessment(int index) {
 	return m_cols[index];
+}
+
+Grade &GradeTable::GetGrade(int row, int col) {
+	return m_grades[row][col];
 }

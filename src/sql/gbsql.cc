@@ -44,6 +44,16 @@ wxSQLite3ResultSet *GBSql::Query(const wxString &sql) {
   }
 }
 
+int GBSql::Scalar(const wxString &sql) {
+	try {
+		return m_db.ExecuteScalar(sql);
+	} catch (wxSQLite3Exception &e) {
+		cerr << e.GetMessage() << endl;
+		
+		return -1;
+	}
+}
+
 // Opens and initializes database with tables
 // Returns 0 on success
 int GBSql::Initialize(const wxString &file) {
@@ -392,6 +402,13 @@ int GBSql::SelectGradesForStudentInCourse(Student &s, const Course &c) {
   }
 
   return s.GradeCount();
+}
+
+int GBSql::GradeExistsForStudent(const Grade &g) {
+	wxString sql = wxString::Format("SELECT COUNT(*) FROM grades \
+		WHERE id='%s'", g.Id());
+
+	return Scalar(sql);
 }
 
 int GBSql::InsertGradeForStudent(const Grade &g, const Student &s, const Course &c, const Assessment &a) {
