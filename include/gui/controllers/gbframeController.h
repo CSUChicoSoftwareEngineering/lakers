@@ -3,6 +3,10 @@
 
 #include <stdlib.h>
 #include <wx/wxprec.h>
+#include <fstream>
+#include <wx/fileconf.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include <wx/panel.h>
 #include <wx/grid.h>
 #include <wx/editlbox.h>
@@ -14,6 +18,7 @@
 #include "gui/views/gbdialogassessmentView.h"
 #include "gui/views/gbdialogcourseView.h"
 #include "gui/views/gbdialogstudentView.h"
+#include "gui/views/gbdialoguseroptionsView.h"
 #include "data/subscriber.h"
 
 class GBFrameView;
@@ -35,6 +40,7 @@ class GBFrameController : public Subscriber {
     void NewCourseSelected(wxCommandEvent& event);
     void OnLabelDelete(wxCommandEvent &event);
 	void OnRemoveCourse(wxCommandEvent &event);
+	void UserOptions(wxCommandEvent &event);
 
     virtual void OnCourseUpdate(SubscriberUpdateType type);
     virtual void OnAssessmentUpdate(SubscriberUpdateType type);

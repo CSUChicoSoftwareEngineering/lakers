@@ -308,6 +308,20 @@ void GBFrameController::ModifyStudent(wxCommandEvent& event){
   dlg.ShowModal();
 }
 
+
+/**
+  * @brief  Will display a view with user Options.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
+void GBFrameController::UserOptions(wxCommandEvent &event){
+
+
+  GBDialogUserOptionsView dlg(m_pMainFrameView);
+
+  dlg.ShowModal();
+}
+
 /**
   * @brief  Will close the Main Frame.
   * @param  wxCommandEvent wxEVT_MENU: An event from a menu.

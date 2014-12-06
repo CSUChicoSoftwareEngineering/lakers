@@ -70,4 +70,5 @@ enum
 	ID_ModifyStudentMenuSelect = 10,
 	ID_LabelDelete,
 	ID_RemoveCourseMenuSelect,
+	ID_OptionsMenuSelect,
 };

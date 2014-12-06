@@ -18,7 +18,7 @@ class GBDialogStudentView : public wxDialog {
 		wxTextCtrl    *m_pStudentIDTextCtrl;
 		wxTextCtrl    *m_pStudentFirstNameTextCtrl;
 		wxTextCtrl    *m_pStudentLastNameTextCtrl;
-		wxButton 		  *m_pAddStudentButton;
+		wxButton 	  *m_pAddStudentButton;
 		wxButton      *m_pSaveStudentChangesButton;
 		wxGrid        *m_pModifyStudentGrid;
 

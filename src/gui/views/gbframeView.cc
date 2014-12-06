@@ -27,6 +27,10 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	wxMenu *menuAssessment = new wxMenu;
 	menuAssessment->Append(ID_AddAssessmentMenuSelect, "&Add an Assessment \tCtrl-A", "Add an individual Assessment to your GradBook");
 	menuAssessment->Append(ID_ModifyAssessmentMenuSelect, "&Modify Assessments ", "Modify Assessment(s) to your GradBook");
+	// Create Options Menu
+	wxMenu *menuOptions = new wxMenu;
+	menuOptions->Append(ID_OptionsMenuSelect, "&Change Database Location ");
+
     // Create Help Menu
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
@@ -36,6 +40,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	menuBar->Append( menuCourse, "&Course" );
 	menuBar->Append( menuStudent, "&Student");
 	menuBar->Append( menuAssessment, "&Assessments" );
+	menuBar->Append( menuOptions, "&Options");
 	menuBar->Append( menuHelp, "&Help" );
 
 	SetMenuBar( menuBar );
@@ -45,24 +50,24 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Create Frame Sizers
 	m_pCourseDropDownListSizer = new wxBoxSizer(wxHORIZONTAL);
 	m_pGBFrameSizer = new wxBoxSizer(wxVERTICAL);
-
+	SetClientSize(GBAPPSIZE);
 	// Create Base Panel
-	m_pGBFramePanel = new wxPanel(this, ID_GradeBookPanel, wxPoint(0,0), GBAPPSIZE, wxTAB_TRAVERSAL, "GBFramePanel");
+	m_pGBFramePanel = new wxPanel(this);
 	m_pGBFramePanel->SetBackgroundColour(wxColour(char(255),char(255), char(255), char(0) ));//wxWHITE
 
 	// Add CourseDropDownList and GridView to Panel
-	m_pCourseComboBox = new wxComboBox(m_pGBFramePanel, ID_CourseDropDownList,  wxEmptyString, wxDefaultPosition, wxSize(200, 20));
+	m_pCourseComboBox = new wxComboBox(m_pGBFramePanel, ID_CourseDropDownList,  wxEmptyString, wxDefaultPosition, wxDefaultSize);
 	m_pCourseComboBox->SetEditable(false);
 
-	m_pGridView = new wxGrid(m_pGBFramePanel, ID_GridView, wxDefaultPosition, GBAPPSIZE, 0, "ID_GridView" );
+	m_pGridView = new wxGrid(m_pGBFramePanel, ID_GridView, wxDefaultPosition, wxDefaultSize, 0, "ID_GridView" );
 
 	m_pGradeTable = new GradeTable();
 	m_pGridView->SetTable(m_pGradeTable);
 
 	// Apply Sizer to CourseDropDownList and GridView
-	m_pCourseDropDownListSizer->Add(m_pCourseComboBox, 0, wxLEFT | wxTOP, 25);
-	m_pGBFrameSizer->Add(m_pCourseDropDownListSizer, 0 , 0);
-	m_pGBFrameSizer->Add(m_pGridView, 0, wxEXPAND | wxALL, 25);
+	m_pCourseDropDownListSizer->Add(m_pCourseComboBox, 1, wxEXPAND |  wxTOP, 10);
+	m_pGBFrameSizer->Add(m_pCourseDropDownListSizer, 0 , wxSHAPED | wxALL , 2);
+	m_pGBFrameSizer->Add(m_pGridView, 1, wxEXPAND | wxALL, 2);
 
 	// Set GBFrameSizer as primary sizer
 	m_pGBFramePanel->SetSizer(m_pGBFrameSizer);
@@ -83,8 +88,10 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::AddCourse, m_pCon, ID_AddCourseMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::ModifyAssessment, m_pCon, ID_ModifyAssessmentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::AddAssessment, m_pCon, ID_AddAssessmentMenuSelect);
+	Bind(wxEVT_MENU, &GBFrameController::UserOptions, m_pCon, ID_OptionsMenuSelect);
 	Bind(wxEVT_COMBOBOX, &GBFrameController::NewCourseSelected, m_pCon, ID_CourseDropDownList);
 	Bind(wxEVT_MENU, &GBFrameController::OnRemoveCourse, m_pCon, ID_RemoveCourseMenuSelect);
+
 }
 
 void GBFrameView::OnLabelRightClick(wxGridEvent &event) {

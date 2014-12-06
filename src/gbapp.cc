@@ -1,21 +1,51 @@
 #include "gbapp.h"
 #include "gui/views/gbframeView.h"
 #include "sql/gbsql.h"
+#include <wx/fileconf.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
+#include <iostream>
 
+using namespace std;
 #ifdef __GUI__
 IMPLEMENT_APP(GBApp)
 #endif
 
 bool GBApp::OnInit() {
-  GBSql::Instance()->Initialize("gb.db");
 
-	GBFrameView *pGBBase = new GBFrameView("Grade Book", wxPoint(0,0), GBAPPSIZE);
+  wxString ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
+  wxString ExecutablePath = wxStandardPaths::Get().GetExecutablePath();
+  wxString DatabasePath;
+  wxFileConfig *config;
 
-	pGBBase->Show();
+  ifstream InFile(ini_filename);
 
-	SetTopWindow(pGBBase);
+  if(!InFile){
 
-  return true;
+    config = new wxFileConfig( "", "", ini_filename);
+    ExecutablePath.Replace("gbapp.exe","");
+    DatabasePath = ExecutablePath + "gb.db";
+    config->Write( wxT("/gbDataBasePath"),  DatabasePath );
+    config->Flush();
+    delete config;
+  }
+  else{
+
+    config = new wxFileConfig( "", "", ini_filename);
+    DatabasePath = config->Read(wxT("gbDataBasePath"), DatabasePath) ;
+    delete config;
+    InFile.close();
+  }
+
+  GBSql::Instance()->Initialize(DatabasePath);
+
+  GBFrameView *pGBBase = new GBFrameView("Grade Book", wxPoint(0,0), GBAPPSIZE);
+
+  pGBBase->Show();
+
+  SetTopWindow(pGBBase);
+
+    return true;
 }
 
 int GBApp::OnExit() {
