@@ -17,6 +17,8 @@ using std::vector;
 // other calls
 // Class is not thread safe
 class GBSql : public Observer {
+	friend class GBSqlTest;
+
   public:
     // Returns singleton instances of GBSql
     static GBSql *Instance();
@@ -46,6 +48,10 @@ class GBSql : public Observer {
     int UpdateStudent(const Student &s);
     // Deletes student from database
     int DeleteStudent(const Student &s);
+		// Deletes student from course
+		int DeleteStudentFromCourse(const Student &s, const Course &c);
+		// Deletes students for a course
+		int DeleteStudentsForCourse(const Course &c);
     // Populates course with all assessments
     int SelectAssessmentsByCourse(Course &c);
     // Inserts assessment for course
@@ -56,14 +62,22 @@ class GBSql : public Observer {
     int UpdateAssessment(const Assessment &a);
     // Deletes assessment from database
     int DeleteAssessment(const Assessment &a);
+		// Deletes all assessments for a course
+		int DeleteAssessmentsForCourse(const Course &c);
     // Populates student with all grades
     int SelectGradesForStudentInCourse(Student &s, const Course &c);
-    // Updates grade in database
-    int UpdateGrade(const Grade &g);
     // Inserts grade for student into database
     int InsertGradeForStudent(const Grade &g, const Student &s, const Course &c, const Assessment &a);
+    // Updates grade in database
+    int UpdateGrade(const Grade &g);
     // Deletes grade from database
     int DeleteGrade(const Grade &g);
+		// Deletes all grades for an assessment
+		int DeleteGradesForAssessment(const Assessment &a);
+		// Deletes all grades for a student in a course	
+		int DeleteGradesForStudentInCourse(const Student &s, const Course &c);
+		// Deletes all grades for a course
+		int DeleteGradesForCourse(const Course &c);
 
   private:
     // Default constructor
