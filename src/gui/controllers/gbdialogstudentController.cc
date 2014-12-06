@@ -152,8 +152,6 @@ void GBDialogStudentController::AddStudentButtonWasClicked(wxCommandEvent& event
 		StudentId->SetValue("");
 		FirstName->SetValue("");
 		LastName->SetValue("");
-
-        m_pDialogView->Close();
   }
 }
 
@@ -224,6 +222,8 @@ void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEven
 
   SaveChanges();
   LoadStudents();
+
+	m_pDialogView->EndModal(0);
 }
 
 /**

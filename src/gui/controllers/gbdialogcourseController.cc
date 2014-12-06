@@ -48,42 +48,31 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
     return;
   }
 
-
-
   if (m_pSql->SelectCourses(&m_courses) == -1) {
     return;
   }
 
-
   for (int i = 0; i < m_courses.size(); ++i) {
-
     if (m_courses[i]->Title().IsSameAs(m_pDialogView->m_pCourseNameTextCtrl->GetValue())) {
-
         m_pCurrentCourse = m_courses[i];
     }
   }
 
   for(int i = 0; i < StudentSelectionListBox->GetCount(); ++i ){
-
     if(StudentSelectionListBox->IsChecked(i)){
+			for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
+				importStudent = *it;
+				StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
 
-        for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){
-          importStudent = *it;
-          StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
-
-          if(StudentSelectionListBox->GetString(i).IsSameAs(StudentName)){
-
-            importStudent->SetStudentId(  wxString::Format("%d", rand() % 1000000) );
-            cout << i << " Insert Result: " << m_pSql->InsertStudentIntoCourse(*importStudent , *m_pCurrentCourse) << endl;
-
-          }
-      }
-    }
+				if(StudentSelectionListBox->GetString(i).IsSameAs(StudentName)) {
+					importStudent->SetStudentId(  wxString::Format("%d", rand() % 1000000) );
+					cout << i << " Insert Result: " << m_pSql->InsertStudentIntoCourse(*importStudent , *m_pCurrentCourse) << endl;
+				}
+			}
+		}
   }
 
-  name->Clear();
-  StudentSelectionListBox->Clear();
-  StudentSelection.clear();
+	m_pDialogView->EndModal(0);
 }
 
 /**
