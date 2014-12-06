@@ -17,7 +17,6 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 
 	wxMenu *menuStudent = new wxMenu();
 	menuStudent->Append(ID_AddStudentMenuSelect, "&Add Student \tCtrl-S", "Add an individual to your GradeBook");
-	menuStudent->AppendSeparator();
 	menuStudent->Append(ID_ModifyStudentMenuSelect, "&Modify Student(s)", "Modify student information in your GradeBook");
 
 	// Create Course Menu
