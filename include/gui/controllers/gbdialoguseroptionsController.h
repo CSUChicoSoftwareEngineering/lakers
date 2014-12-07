@@ -8,6 +8,7 @@
 #include <wx/filepicker.h>
 #include <wx/panel.h>
 #include <wx/listctrl.h>
+#include <wx/radiobox.h>
 #include <wx/checklst.h>
 #include "sql/gbsql.h"
 
@@ -19,8 +20,9 @@ class GBDialogUserOptionsController
 {
   public:
 	GBDialogUserOptionsController();
-	GBDialogUserOptionsController(GBDialogUserOptionsView *view);
+	GBDialogUserOptionsController(GBDialogUserOptionsView *view, int style);
 	// Events
+	void StudentFormatHasChanged(wxCommandEvent& event);
     void SaveFileLocationButtonWasClicked(wxCommandEvent& event);
     void CloseButtonWasClicked(wxCommandEvent& event);
     void FileHasBeenSelected(wxFileDirPickerEvent& event);

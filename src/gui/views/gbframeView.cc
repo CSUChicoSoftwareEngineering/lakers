@@ -29,7 +29,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	menuAssessment->Append(ID_ModifyAssessmentMenuSelect, "&Modify Assessments ", "Modify Assessment(s) to your GradBook");
 	// Create Options Menu
 	wxMenu *menuOptions = new wxMenu;
-	menuOptions->Append(ID_OptionsMenuSelect, "&Change Database Location ");
+	menuOptions->Append(ID_OptionsMenuSelect, "&User Options");
 
     // Create Help Menu
 	wxMenu *menuHelp = new wxMenu;
@@ -72,8 +72,8 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	m_pGridView->SetTable(m_pGradeTable);
 
 	// Apply Sizer to CourseDropDownList and GridView
-	m_pCourseDropDownListSizer->Add(m_pCourseComboBox, 1, wxEXPAND |  wxTOP, 10);
-	m_pGBFrameSizer->Add(m_pCourseDropDownListSizer, 0 , wxSHAPED | wxALL , 2);
+	m_pCourseDropDownListSizer->Add(m_pCourseComboBox, 1, wxSHAPED |  wxTOP, 10);
+	m_pGBFrameSizer->Add(m_pCourseDropDownListSizer, 0 , wxEXPAND | wxALL , 2);
 	m_pGBFrameSizer->Add(m_pGridView, 1, wxEXPAND | wxALL, 2);
 
 	// Set GBFrameSizer as primary sizer

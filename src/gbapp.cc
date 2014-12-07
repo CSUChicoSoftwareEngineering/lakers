@@ -26,6 +26,7 @@ bool GBApp::OnInit() {
     ExecutablePath.Replace("gbapp.exe","");
     DatabasePath = ExecutablePath + "gb.db";
     config->Write( wxT("/gbDataBasePath"),  DatabasePath );
+    config->Write( wxT("/StudentNameDisplayFormat"), 0 );
     config->Flush();
     delete config;
   }

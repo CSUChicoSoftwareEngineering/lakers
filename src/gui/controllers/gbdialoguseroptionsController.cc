@@ -10,21 +10,37 @@ using namespace std;
 GBDialogUserOptionsController::GBDialogUserOptionsController(){}
 
 
-GBDialogUserOptionsController::GBDialogUserOptionsController(GBDialogUserOptionsView *view)
+GBDialogUserOptionsController::GBDialogUserOptionsController(GBDialogUserOptionsView *view, int style)
   : m_pSql(GBSql::Instance()),
     m_pDialogView(view) {
 
 
-  wxTextCtrl *currentDbPathTextCtrl = m_pDialogView->m_pCurrentDbFilePathTextCtrl;
   wxString ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
   wxString ExecutablePath = wxStandardPaths::Get().GetExecutablePath();
   wxString DatabasePath ;
   wxFileConfig *config;
 
+  if(style == 0){
+
+    wxTextCtrl *currentDbPathTextCtrl = m_pDialogView->m_pCurrentDbFilePathTextCtrl;
     config = new wxFileConfig( "", "", ini_filename);
     DatabasePath = config->Read(wxT("gbDataBasePath"), DatabasePath) ;
     delete config;
-    currentDbPathTextCtrl->SetValue(DatabasePath);
+    currentDbPathTextCtrl->SetValue( DatabasePath );
+  }
+  else if (style == 1){
+
+    wxRadioBox  *Radio = m_pDialogView->m_pStudentNameFormatOptions;
+    long SavedStudentNameFormat;
+    config = new wxFileConfig( "", "", ini_filename);
+    DatabasePath = config->Read(wxT("gbDataBasePath"), DatabasePath) ;
+    SavedStudentNameFormat = config->Read(wxT("StudentNameDisplayFormat"), SavedStudentNameFormat) ;
+    delete config;
+    Radio->SetSelection(  SavedStudentNameFormat );
+
+  }
+
+
 }
 
 /**
@@ -40,8 +56,8 @@ void GBDialogUserOptionsController::SaveFileLocationButtonWasClicked(wxCommandEv
   wxFileConfig *config;
 
   if(!dbPathTextCtrl->IsEmpty()){
-    config = new wxFileConfig( "","", ini_filename);
 
+    config = new wxFileConfig( "","", ini_filename);
     config->Write( wxT("/gbDataBasePath"),  dbPathTextCtrl->GetValue() );
     config->Flush();
     delete config;
@@ -65,9 +81,7 @@ void GBDialogUserOptionsController::FileHasBeenSelected(wxFileDirPickerEvent& ev
 	// Handle Event
 
     wxTextCtrl *dbPathTextCtrl = m_pDialogView->m_pDbFilePathTextCtrl;
-
     dbPathTextCtrl->SetValue(event.GetPath());
-
 }
 
 
@@ -79,6 +93,22 @@ void GBDialogUserOptionsController::FileHasBeenSelected(wxFileDirPickerEvent& ev
 void GBDialogUserOptionsController::CloseButtonWasClicked(wxCommandEvent& event){
 
   m_pDialogView->Close();
+}
+
+
+void GBDialogUserOptionsController::StudentFormatHasChanged(wxCommandEvent& event){
+
+  wxRadioBox  *Radio = m_pDialogView->m_pStudentNameFormatOptions;
+  cout << "Radio" << endl;
+  cout << Radio->GetSelection() << endl;
+
+  wxString ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
+  wxFileConfig *config = new wxFileConfig( "","", ini_filename);
+
+    config->Write( wxT("/StudentNameDisplayFormat"),  Radio->GetSelection() );
+    config->Flush();
+    delete config;
+
 }
 
 /**
