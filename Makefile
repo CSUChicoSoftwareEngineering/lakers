@@ -19,6 +19,8 @@ SRCS := src\data\grade.cc \
 				src\gui\controllers\gbdialogstudentController.cc \
 				src\gui\views\gbdialoguseroptionsView.cc \
 				src\gui\controllers\gbdialoguseroptionsController.cc \
+        src\gui\views\gbdialoggraphView.cc \
+        src\gui\controllers\gbdialoggraphController.cc
 
 TEST_SRCS := 	tests\gbsqltest.cc \
 							tests\gbtest.cc \
@@ -58,16 +60,18 @@ CPPFLAGS := -Iinclude \
 						-I$(WX_DIR)\lib\gcc_lib\mswud \
 						-I$(WX_SQL_DIR)\include \
 						-I$(GTEST_DIR)\include \
+            -Ilib\wxmathplot-0.1.2
 						-DBUILD=$(BUILD)
 
 LDFLAGS := 	-L$(SQL_DIR)\lib \
 						-L$(WX_SQL_DIR)\lib\gcc_lib	\
 						-L$(WX_DIR)\lib\gcc_lib \
-						-L$(GTEST_DIR)\make
+						-L$(GTEST_DIR)\make \
+            -Llib\wxmathplot-0.1.2\build
 
 LDLIBS :=	-lwxcode_msw30ud_wxsqlite3 -lsqlite3 -lwxmsw30ud_adv -lwxmsw30ud_core \
 			-lwxbase30ud -luuid -lole32 -loleaut32 -lwxregexud -lcomctl32 \
-			-lgdi32 -lwxpngd -lwxzlibd -lcomdlg32 -lwinspool 
+			-lgdi32 -lwxpngd -lwxzlibd -lcomdlg32 -lwinspool -lmathplot 
 
 build: setup gbapp
 
@@ -89,7 +93,7 @@ test: $(OBJS) $(TEST_OBJS)
 gbapp: $(OBJS)
 	$(CXX) -o $(BUILD_DIR)\$@ $(LDFLAGS) $? $(LDLIBS)
 
-setup: wxwidgets wxsqlite3 gtest
+setup: wxwidgets wxsqlite3 gtest wxmathplot
 
 dummy:
 	$(SQL_TOOL) $(BUILD_DIR)\gb.db < tests\data\gb.sql
@@ -112,4 +116,10 @@ ifeq (,$(wildcard $(GTEST_DIR)))
 	$(ARCH_TOOL) x -olib lib\$(GTEST_ARCH)
 	$(MAKE) -C $(GTEST_DIR)\make gtest.a
 	copy $(GTEST_DIR)\make\gtest.a $(GTEST_DIR)\make\libgtest.a
+endif
+
+wxmathplot:
+ifeq (,$(wildcard lib\wxmathplot-0.1.2))
+  $(ARCH_TOOL) x -olib lib\wxmathplot-0.1.2
+  $(MAKE) -C lib\wxmathplot-0.1.2 
 endif

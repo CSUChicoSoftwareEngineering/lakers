@@ -1,6 +1,9 @@
 #include "gui/controllers/gbframeController.h"
 #include "sql/gbsql.h"
 #include "gui/views/gbframeView.h"
+#include "gui/views/gbdialoggraphView.h"
+
+#include <wx/msgdlg.h>
 
 #include <iostream>
 
@@ -214,6 +217,7 @@ void GBFrameController::OnGradeCellChanged(wxGridEvent &event) {
 	}
 }
 
+
 /**
   * @brief  If a Course was updated in another view then update the Course on the Main Frame as well.
   * @param  SubscriberUpdateType type: type can be one of the following; SQL_INSERT, SQL_UPDATE, SQL_DELETE
@@ -346,6 +350,32 @@ void GBFrameController::UserOptions(wxCommandEvent &event){
   GBDialogUserOptionsView dlg(m_pMainFrameView);
 
   dlg.ShowModal();
+}
+
+/**
+  * @brief  Will display a view with graph of students grades.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
+void GBFrameController::OnGraphClicked(wxCommandEvent &event) {
+	wxGrid *grid = m_pMainFrameView->m_pGridView;
+	GradeTable *table = m_pMainFrameView->m_pGradeTable;
+
+	wxArrayInt cols = grid->GetSelectedCols();
+
+	if (cols.GetCount() > 1) {
+		wxMessageDialog msg(m_pMainFrameView, wxT("Select one column please."));
+
+		msg.ShowModal();
+
+		return;
+	}
+
+	Assessment a = table->GetAssessment(cols.Item(0));
+
+	GBDialogGraphView dlg(m_pMainFrameView, a);
+
+	dlg.ShowModal();
 }
 
 /**

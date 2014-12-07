@@ -66,6 +66,8 @@ class GBSql : public Observer {
 		int DeleteAssessmentsForCourse(const Course &c);
     // Populates student with all grades
     int SelectGradesForStudentInCourse(Student &s, const Course &c);
+		// Selects all grades for an assessment
+		int SelectGradesForAssessment(Assessment &a);
 		// Test is a grade exists
 		int GradeExistsForStudent(const Grade &g);
     // Inserts grade for student into database

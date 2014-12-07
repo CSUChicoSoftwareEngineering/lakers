@@ -13,6 +13,8 @@ SRCS :=	src/data/assessment.cc \
 				src/gui/controllers/gbdialogcourseController.cc \
 				src/gui/controllers/gbdialogstudentController.cc \
 				src/gui/controllers/gbframeController.cc \
+				src/gui/controllers/gbdialoggraphController.cc \
+				src/gui/views/gbdialoggraphView.cc \
 				src/gui/views/gbdialogassessmentView.cc \
 				src/gui/views/gbdialogcourseView.cc \
 				src/gui/views/gbdialogstudentView.cc \
@@ -36,12 +38,15 @@ CPPFLAGS := -g -Iinclude \
 						-Ilib/wxwidgets-3.0.1/include \
 						-Ilib/wxwidgets-3.0.1/lib/wx/include/gtk2-unicode-static-3.0 \
 						-Ilib/wxsqlite3-3.1.1/include \
-						-Ilib/gtest-1.7.0/include
+						-Ilib/gtest-1.7.0/include \
+						-Ilib/wxmathplot-0.1.2 
 
-LDFLAGS := -Llib/wxsqlite3-3.1.1/lib
+LDFLAGS :=	-Llib/wxsqlite3-3.1.1/lib \
+						-Llib/wxmathplot-0.1.2/build
 
 LDLIBS := -lwxcode_gtk2ud_wxsqlite3-3.0 -lsqlite3 \
 					$(shell lib/wxwidgets-3.0.1/wx-config --static --libs) \
+					-lmathplot
 
 TEST_DEFINES :=
 

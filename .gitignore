@@ -8,3 +8,4 @@ build/
 lib/wxwidgets*/
 lib/wxsqlite*/
 lib/gtest*/
+lib/wxmathplot*/

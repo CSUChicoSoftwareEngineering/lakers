@@ -96,6 +96,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_COMBOBOX, &GBFrameController::NewCourseSelected, m_pCon, ID_CourseDropDownList);
 	Bind(wxEVT_MENU, &GBFrameController::OnRemoveCourse, m_pCon, ID_RemoveCourseMenuSelect);
 	Bind(wxEVT_GRID_CELL_CHANGED, &GBFrameController::OnGradeCellChanged, m_pCon, ID_GridView);
+	Bind(wxEVT_MENU, &GBFrameController::OnGraphClicked, m_pCon, ID_LabelGraph);
 }
 
 void GBFrameView::OnLabelRightClick(wxGridEvent &event) {

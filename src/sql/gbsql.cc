@@ -404,6 +404,26 @@ int GBSql::SelectGradesForStudentInCourse(Student &s, const Course &c) {
   return s.GradeCount();
 }
 
+int GBSql::SelectGradesForAssessment(Assessment &a) {
+	wxString sql = wxString::Format("SELECT * FROM grades \
+		INNER JOIN students \
+		ON grades.sid=students.sid \
+		WHERE grades.aid='%s'", a.Id());
+
+	Grade *g;
+	wxSQLite3ResultSet *r = Query(sql);
+
+	while (r->NextRow()) {
+		g = new Grade(r->GetString(0));
+		
+		g->SetValue(r->GetString(4));
+
+		a.AddGrade(g);	
+	}
+
+	return a.GradeCount();
+}
+
 int GBSql::GradeExistsForStudent(const Grade &g) {
 	wxString sql = wxString::Format("SELECT COUNT(*) FROM grades \
 		WHERE id='%s'", g.Id());
