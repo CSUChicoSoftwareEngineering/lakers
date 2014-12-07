@@ -120,6 +120,6 @@ endif
 
 wxmathplot:
 ifeq (,$(wildcard lib\wxmathplot-0.1.2))
-  $(ARCH_TOOL) x -olib lib\wxmathplot-0.1.2
-  $(MAKE) -C lib\wxmathplot-0.1.2 
+	$(ARCH_TOOL) x -olib lib\wxmathplot-0.1.2.7z
+	$(MAKE) -C lib\wxmathplot-0.1.2 
 endif
