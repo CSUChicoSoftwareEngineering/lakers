@@ -2,6 +2,7 @@
 #define _GBDIALOGCOURSE
 
 #include <wx/dialog.h>
+#include <wx/radiobox.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/filepicker.h>
@@ -24,6 +25,7 @@ class  GBDialogCourseView : public wxDialog {
     wxButton					*m_pImportButton;
     wxButton					*m_pCloseButton;
     wxButton                    *m_pClearButton;
+    wxRadioBox                  *m_pcsvFormatOptionsRadioBox;
 
 	private:
     // Member Variables
@@ -32,9 +34,11 @@ class  GBDialogCourseView : public wxDialog {
     wxStaticBoxSizer            *m_pCourseNameStaticBoxSizer;
     wxStaticBoxSizer            *m_pStudenSelectToImportBoxSizer;
     wxStaticBoxSizer            *m_pImportStudentCSVBoxSizer;
-    wxBoxSizer                  *m_pGridSizer;
     wxBoxSizer                  *m_pButtonSizer;
     wxBoxSizer                  *m_pDialogSizer;
+    wxBoxSizer                  *m_pRadioSizer;
+    wxArrayString               FormatOptions;
+    const int                   NumberOfStudentNameFormatOptions = 2;
 
 };
 
@@ -42,6 +46,7 @@ enum{
 	ID_AddButton = 1,
 	ID_FileSelect = 2,
 	ID_StudentSelection = 3,
+	ID_csvFormatOptions,
 
 };
 

@@ -37,10 +37,7 @@ GBDialogUserOptionsController::GBDialogUserOptionsController(GBDialogUserOptions
     SavedStudentNameFormat = config->Read(wxT("StudentNameDisplayFormat"), SavedStudentNameFormat) ;
     delete config;
     Radio->SetSelection(  SavedStudentNameFormat );
-
   }
-
-
 }
 
 /**
@@ -62,7 +59,7 @@ void GBDialogUserOptionsController::SaveFileLocationButtonWasClicked(wxCommandEv
     config->Flush();
     delete config;
     m_pDialogView->Close();
-    wxMessageBox( "Please restart program for Database change to take place.", "Warning", wxOK | wxICON_INFORMATION );
+    GBSql::Instance()->Initialize( dbPathTextCtrl->GetValue());
   }
   else
   {
@@ -106,8 +103,7 @@ void GBDialogUserOptionsController::StudentFormatHasChanged(wxCommandEvent& even
     config->Flush();
     delete config;
     wxMessageBox( "Saved.", "Success", wxOK | wxICON_INFORMATION );
-
-
+    m_pDialogView->Close();
 }
 
 /**

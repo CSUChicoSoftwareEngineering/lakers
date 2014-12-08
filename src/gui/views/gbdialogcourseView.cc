@@ -14,10 +14,13 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
 	wxStaticBox         *ImportStudentCSVStaticBox;
 	wxStaticBox         *SelectStudentsToImportStaticBox;
 
+    FormatOptions.Add("Moodle *.csv format");
+    FormatOptions.Add("BlackBoard *.csv format");
+
     // Create Sizers
     m_pButtonSizer = new  wxBoxSizer(wxHORIZONTAL);
-	m_pGridSizer = new wxBoxSizer(wxHORIZONTAL);
 	m_pDialogSizer = new wxBoxSizer(wxVERTICAL);
+	m_pRadioSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	// Create Dialog
 	SetClientSize(GB_COURSE_DIALOGSIZE);
@@ -28,6 +31,19 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
 	CourseNameStaticBox = new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Course Name", wxDefaultPosition, wxDefaultSize, 0,"Course Name");
 	m_pCourseNameStaticBoxSizer = new wxStaticBoxSizer(CourseNameStaticBox, wxHORIZONTAL);
     m_pCourseNameTextCtrl = new wxTextCtrl(m_pGBDialogPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CAPITALIZE, wxDefaultValidator);
+
+    m_pcsvFormatOptionsRadioBox = new wxRadioBox(m_pGBDialogPanel,
+                                                 ID_csvFormatOptions,
+                                                 "Select *.csv Format",
+                                                 wxDefaultPosition,
+                                                 wxDefaultSize,
+                                                 FormatOptions,
+                                                 NumberOfStudentNameFormatOptions,
+                                                 wxRA_SPECIFY_ROWS,
+                                                 wxDefaultValidator);
+
+    m_pRadioSizer->Add(m_pcsvFormatOptionsRadioBox, 1,  wxEXPAND | wxTOP | wxBOTTOM, 10);
+
 
 	ImportStudentCSVStaticBox =  new wxStaticBox(m_pGBDialogPanel, wxID_ANY, "Import Students (File: *.csv)", wxDefaultPosition, wxDefaultSize, 0,"Import Students");
     m_pImportStudentCSVBoxSizer = new wxStaticBoxSizer(ImportStudentCSVStaticBox, wxVERTICAL);
@@ -53,6 +69,7 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
 
 	// Apply Sizers to Dialog
     m_pDialogSizer->Add(m_pCourseNameStaticBoxSizer, 0, wxEXPAND | wxALL, 2);
+    m_pDialogSizer->Add(m_pRadioSizer, 0, wxEXPAND | wxALL, 2);
     m_pDialogSizer->Add(m_pImportStudentCSVBoxSizer, 0, wxEXPAND | wxALL, 2);
     m_pDialogSizer->Add(m_pStudenSelectToImportBoxSizer, 1, wxEXPAND | wxALL, 2);
     m_pDialogSizer->Add(m_pButtonSizer, 0, wxEXPAND | wxBOTTOM | wxALIGN_BOTTOM , 2);

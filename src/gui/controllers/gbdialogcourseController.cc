@@ -31,7 +31,6 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
   Student *importStudent;
   wxString StudentName;
 
-
   if (name->GetValue().IsEmpty()) {
 
      wxMessageBox( ErrorMessage, "Error", wxOK | wxICON_INFORMATION );
@@ -65,7 +64,7 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 				StudentName = wxString::Format("%s, %s", importStudent->Last() , importStudent->First());
 
 				if(StudentSelectionListBox->GetString(i).IsSameAs(StudentName)) {
-					importStudent->SetStudentId(  wxString::Format("%d", rand() % 1000000) );
+
 					cout << i << " Insert Result: " << m_pSql->InsertStudentIntoCourse(*importStudent , *m_pCurrentCourse) << endl;
 				}
 			}
@@ -83,12 +82,13 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 void GBDialogCourseController::FileHasBeenSelected(wxFileDirPickerEvent& event){
 	// Handle Event
   wxCheckListBox *StudentSelectionListBox = m_pDialogView->m_pcsvFileViewListBox;
+  wxRadioBox  *csvFormatRadioBox =  m_pDialogView->m_pcsvFormatOptionsRadioBox;
   BBImporter cur_Importer;
   wxString Path = event.GetPath();
   wxString  StudentName ;
   Student *importStudent;
 
-  csv_Ptr = cur_Importer.GetCourse(Path.mb_str());
+  csv_Ptr = cur_Importer.GetCourse(Path.mb_str(), csvFormatRadioBox->GetSelection());
 
   StudentSelectionListBox->Enable();
   for (std::vector<Student*>::iterator it = csv_Ptr->begin(); it != csv_Ptr->end(); ++it){

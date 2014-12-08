@@ -9,16 +9,17 @@
 class BBImporter {
     public:
 
-        
+
         BBImporter();
         ~BBImporter();
 
-        std::vector<Student*> *GetCourse(const char *);
-		void csvline_populate(std::vector<Student*> *Course, const std::string &Line, char Delimiter);
+        std::vector<Student*> *GetCourse(const char *, int csvFormat);
+		void csvline_populate(std::vector<Student*> *Course, const std::string &Line, char Delimiter, int csvFormat);
         int getLineCounter;
 		int setFirstCounter = 0;
 		int courseEmpty;
     private:
+       int csvFormat;
 
 };
 

@@ -26,7 +26,7 @@ BBImporter::~BBImporter() {
 }
 
 // might rename this Get Course     add integer for failure code
-std::vector<Student*> *BBImporter::GetCourse(const char *Path) {
+std::vector<Student*> *BBImporter::GetCourse(const char *Path, int csvFormat) {
 
 	std::cout << "GetCourse Called \n";
 
@@ -50,7 +50,7 @@ std::vector<Student*> *BBImporter::GetCourse(const char *Path) {
 		// a student object and push the student
 		// object onto a course vector
 
-        BBImporter::csvline_populate(Course, Line, ',');
+        BBImporter::csvline_populate(Course, Line, ',', csvFormat);
     }
 
 	InFile.close();
@@ -59,7 +59,7 @@ std::vector<Student*> *BBImporter::GetCourse(const char *Path) {
     return Course;
 }
 
-void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, char Delimiter){
+void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, char Delimiter, int csvFormat){
 
 	int LinePos = 0;
     char Character;
@@ -69,12 +69,15 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 	Student *CurStudent = new Student();
 	BBImporter::setFirstCounter = 0;
 
+  //csvFormat = 0 : Moodle
+  //csvFormat = 1 : BBL
+  if(csvFormat == 0){
+
 	for (int Column = 0; Column < MAX_COLUMNS; Column++)
 	{
 		while(LinePos <= (LineMax))
 		{
 			Character = Line[LinePos];
-
 			// Start checking characters
 			// end of field; if line is incomplete,
 			// student object will still be pushed
@@ -82,13 +85,6 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 			{
 				// convert field to wxString
 			    wxString wxCurField(CurString);
-
-
-				//if curfield.is_empty
-
-
-
-				//wstring check_string = wxString::ToStdWstring(wxCurField);
 				wstring check_string = wstring(wxCurField);
 
 				// set field to the corresponding student member
@@ -96,8 +92,7 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 				{
 					case 0:
 					{
-						//Sending username to student id
-						//CurStudent->SetStudentId(   );
+						CurStudent->SetStudentId(wxCurField);
 						break;
 					}
 					case 2:
@@ -138,6 +133,71 @@ void BBImporter::csvline_populate(vector<Student*> *Course, const string &Line, 
 		}
 	    LinePos = 0;
 	}
+   }
+   else if(csvFormat == 1){
+
+    for (int Column = 0; Column < MAX_COLUMNS; Column++)
+	  {
+		while(LinePos <= (LineMax))
+		{
+			Character = Line[LinePos];
+			// Start checking characters
+			// end of field; if line is incomplete,
+			// student object will still be pushed
+			if (Character == Delimiter || Character == '\0')
+			{
+				// convert field to wxString
+			    wxString wxCurField(CurString);
+				wstring check_string = wstring(wxCurField);
+
+				// set field to the corresponding student member
+				switch (Column)
+				{
+					case 0:
+					{
+						CurStudent->SetLast(wxCurField);
+						break;
+					}
+					case 1:
+					{
+						CurStudent->SetFirst(wxCurField);
+						break;
+					}
+					case 2:
+					{
+						CurStudent->SetStudentId(wxCurField);
+						break;
+					}
+					default:
+					    break;
+				}
+
+				// end of line
+				if (Character == '\0')
+				{
+
+					Course->push_back(CurStudent);
+
+					return;
+				}
+
+				CurString = "";
+				Column++;
+			}
+
+			// just a character
+			else
+			{
+				CurString.push_back(Character);
+			    //cout << CurString << "/n";
+				BBImporter::setFirstCounter++;
+			}
+			LinePos++;
+		}
+	    LinePos = 0;
+	}
+
+   }
 
     return;
 }
