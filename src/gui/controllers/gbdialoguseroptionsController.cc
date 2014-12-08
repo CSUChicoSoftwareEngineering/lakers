@@ -99,15 +99,14 @@ void GBDialogUserOptionsController::CloseButtonWasClicked(wxCommandEvent& event)
 void GBDialogUserOptionsController::StudentFormatHasChanged(wxCommandEvent& event){
 
   wxRadioBox  *Radio = m_pDialogView->m_pStudentNameFormatOptions;
-  cout << "Radio" << endl;
-  cout << Radio->GetSelection() << endl;
-
   wxString ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
   wxFileConfig *config = new wxFileConfig( "","", ini_filename);
 
     config->Write( wxT("/StudentNameDisplayFormat"),  Radio->GetSelection() );
     config->Flush();
     delete config;
+    wxMessageBox( "Saved.", "Success", wxOK | wxICON_INFORMATION );
+
 
 }
 

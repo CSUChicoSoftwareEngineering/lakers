@@ -56,7 +56,6 @@ class GBFrameController : public Subscriber {
     const int ModifyStudentStyleView = 1;
     const int AddAssessmentStyleView = 0;
     const int ModifyAssessmentStyleView = 1;
-
     GBSql           *m_pSql;
     GBFrameView 	*m_pMainFrameView;
     vector<Course*> m_courses;

@@ -3,6 +3,9 @@
 #endif
 
 #include "gui/controllers/gbframeController.h"
+#include <wx/fileconf.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 
 #define GBAPPSIZE wxSize(800,600)
 #define GBDIALOGSIZE wxSize(350,450)
@@ -34,6 +37,9 @@ class GradeTable : public wxGridTableBase {
 		vector<Student> m_rows;
 		vector<Assessment> m_cols;
 		vector<vector<Grade> > m_grades;
+        wxString ini_filename;
+        wxFileConfig *config;
+        long SavedStudentNameFormat;
 };
 
 class GBFrameView : public wxFrame {
@@ -49,6 +55,7 @@ class GBFrameView : public wxFrame {
 		GradeTable				*m_pGradeTable;
 		wxMenu 						*m_pColumnMenu;
 		wxMenu						*m_pRowMenu;
+
 
 	protected:
     GBFrameController			*m_pCon;

@@ -350,6 +350,7 @@ void GBFrameController::UserOptions(wxCommandEvent &event){
   GBDialogUserOptionsView dlg(m_pMainFrameView);
 
   dlg.ShowModal();
+  UpdateGridView();
 }
 
 /**
@@ -395,6 +396,9 @@ void GBFrameController::OnExit(wxCommandEvent& event) {
   */
 void GBFrameController::OnAbout(wxCommandEvent& event) {
 	// Handle Event
-    wxMessageBox( "GradeBook Application version 1.0.0",
-                  "About", wxOK | wxICON_INFORMATION );
+	wxString msg = "GradeBook Application version 1.0.0 \n\nAuthors:" ;
+             msg.Append("\nJason Boutte, \nAlejandro Velazquez, \nDarren Reitan\n");
+             msg.Append("\nFrom: California State University, Chico");
+             msg.Append("\nTo: Open Source Community");
+    wxMessageBox( msg, "About", wxOK | wxICON_INFORMATION );
 }

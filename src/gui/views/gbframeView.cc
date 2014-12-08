@@ -21,11 +21,11 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 
 	// Create Course Menu
 	wxMenu *menuCourse = new wxMenu;
-	menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course \tCtrl-C", "Add a course to your GradeBook");
+	menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course ", "Add a course to your GradeBook");
 	menuCourse->Append(ID_RemoveCourseMenuSelect, "&Remove Course", "Removes a course from your GradeBook");
 	// Create Assessment Menu
 	wxMenu *menuAssessment = new wxMenu;
-	menuAssessment->Append(ID_AddAssessmentMenuSelect, "&Add an Assessment \tCtrl-A", "Add an individual Assessment to your GradBook");
+	menuAssessment->Append(ID_AddAssessmentMenuSelect, "&Add an Assessment ", "Add an individual Assessment to your GradBook");
 	menuAssessment->Append(ID_ModifyAssessmentMenuSelect, "&Modify Assessments ", "Modify Assessment(s) to your GradBook");
 	// Create Options Menu
 	wxMenu *menuOptions = new wxMenu;
@@ -117,7 +117,6 @@ void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
 
 GradeTable::GradeTable()
 	:	wxGridTableBase() {
-
 }
 
 int GradeTable::GetNumberRows() {
@@ -175,7 +174,24 @@ void GradeTable::Clear() {
 }
 
 wxString GradeTable::GetRowLabelValue(int row) {
+
+  ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
+  config = new wxFileConfig( "", "", ini_filename);
+  SavedStudentNameFormat = config->Read(wxT("StudentNameDisplayFormat"), SavedStudentNameFormat) ;
+  delete config;
+
+  if(SavedStudentNameFormat == 0){
+
 	return wxString::Format("%s, %s", m_rows[row].Last(), m_rows[row].First());
+  }
+  else if(SavedStudentNameFormat == 1){
+
+    return wxString::Format("%s, %s", m_rows[row].First(), m_rows[row].Last());
+  }
+  else if(SavedStudentNameFormat == 2){
+
+    return wxString::Format("%s", m_rows[row].StudentId());
+  }
 }
 
 wxString GradeTable::GetColLabelValue(int col) {
