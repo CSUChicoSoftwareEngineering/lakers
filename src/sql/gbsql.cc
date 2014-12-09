@@ -432,7 +432,7 @@ int GBSql::GradeExistsForStudent(const Grade &g) {
 	return Scalar(sql);
 }
 
-int GBSql::InsertGradeForStudent(const Grade &g, const Student &s, const Course &c, const Assessment &a) {
+int GBSql::InsertGradeForStudent(Grade &g, const Student &s, const Course &c, const Assessment &a) {
   wxString sql = wxString::Format("INSERT INTO grades \
       VALUES (NULL, '%s', '%s', '%s', '%s')", \
       s.StudentId(), c.Id(), a.Id(), g.Value());
@@ -442,8 +442,12 @@ int GBSql::InsertGradeForStudent(const Grade &g, const Student &s, const Course 
   // Notifies subscribers
   NotifyGradeUpdate(SQL_INSERT);
 
-  return r;
+	wxSQLite3ResultSet *rs = Query(wxString::Format("SELECT id FROM grades \
+		WHERE sid='%s' AND cid='%s' AND aid='%s'", s.StudentId(), c.Id(), a.Id()));
+	
+	g.SetId(rs->GetString("id"));
 
+  return r;
 }
 
 int GBSql::UpdateGrade(const Grade &g) {

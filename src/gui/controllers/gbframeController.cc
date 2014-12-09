@@ -212,6 +212,8 @@ void GBFrameController::OnGradeCellChanged(wxGridEvent &event) {
 
 	if (m_pSql->GradeExistsForStudent(g) == 0) {
 		m_pSql->InsertGradeForStudent(g, s, *course, a);
+
+		table->AddGrade(event.GetRow(), event.GetCol(), g);
 	} else {
 		m_pSql->UpdateGrade(g);
 	}

@@ -17,6 +17,7 @@ class Grade {
     void SetValue(const wxString &value) { m_value = value; }
     void SetAssessmentId(const wxString &aid) { m_assessmentId = aid; }
 		void SetStudentId(const wxString &sid) { m_studentId = sid; }
+		void SetId(const wxString &id) { m_id = id; }
 
   private:
     wxString m_id;

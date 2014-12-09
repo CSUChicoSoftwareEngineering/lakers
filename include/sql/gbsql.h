@@ -71,7 +71,7 @@ class GBSql : public Observer {
 		// Test is a grade exists
 		int GradeExistsForStudent(const Grade &g);
     // Inserts grade for student into database
-    int InsertGradeForStudent(const Grade &g, const Student &s, const Course &c, const Assessment &a);
+    int InsertGradeForStudent(Grade &g, const Student &s, const Course &c, const Assessment &a);
     // Updates grade in database
     int UpdateGrade(const Grade &g);
     // Deletes grade from database
