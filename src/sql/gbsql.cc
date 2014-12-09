@@ -76,7 +76,8 @@ int GBSql::Initialize(const wxString &file) {
       sid text not null, \
       cid text not null, \
       aid text not null, \
-      value text not null)",
+      value text not null, \
+			adj_value text)",
     "CREATE TABLE IF NOT EXISTS course_student (\
       id integer primary key, \
       sid text not null, \
@@ -397,6 +398,7 @@ int GBSql::SelectGradesForStudentInCourse(Student &s, const Course &c) {
     g = new Grade(r->GetAsString("id"));
 
     g->SetValue(r->GetAsString("value"));
+		g->SetAdjValue(r->GetAsString("adj_value"));
     g->SetAssessmentId(r->GetAsString("aid"));
 
     s.AddGrade(g);
@@ -417,7 +419,8 @@ int GBSql::SelectGradesForAssessment(Assessment &a) {
 	while (r->NextRow()) {
 		g = new Grade(r->GetString(0));
 		
-		g->SetValue(r->GetString(4));
+		g->SetValue(r->GetString("value"));
+		g->SetAdjValue(r->GetString("adj_value"));
 
 		a.AddGrade(g);	
 	}
@@ -434,8 +437,8 @@ int GBSql::GradeExistsForStudent(const Grade &g) {
 
 int GBSql::InsertGradeForStudent(Grade &g, const Student &s, const Course &c, const Assessment &a) {
   wxString sql = wxString::Format("INSERT INTO grades \
-      VALUES (NULL, '%s', '%s', '%s', '%s')", \
-      s.StudentId(), c.Id(), a.Id(), g.Value());
+      VALUES (NULL, '%s', '%s', '%s', '%s', '%s')", \
+      s.StudentId(), c.Id(), a.Id(), g.Value(), g.AdjValue());
 
   int r = Update(sql);
 
@@ -452,7 +455,7 @@ int GBSql::InsertGradeForStudent(Grade &g, const Student &s, const Course &c, co
 
 int GBSql::UpdateGrade(const Grade &g) {
   wxString sql = wxString::Format("UPDATE grades SET \
-    value='%s' WHERE id='%s'", g.Value(), g.Id());
+    value='%s', adj_value='%d' WHERE id='%s'", g.Value(), g.AdjValue(), g.Id());
 
   int r = Update(sql);
 
@@ -542,7 +545,7 @@ void GBSql::PopulateDummy() {
 			for (z = 0; z < rand_assessment; ++z) {
 				int rand_grade = random(100, 0);
 
-				Query(wxString::Format("INSERT INTO grades VALUES (NULL, '%d', '%d', '%d', '%d')", student_id, x, last_assessment+z, rand_grade)); 
+				Query(wxString::Format("INSERT INTO grades VALUES (NULL, '%d', '%d', '%d', '%d', '')", student_id, x, last_assessment+z, rand_grade)); 
 			}	
 		}
 
