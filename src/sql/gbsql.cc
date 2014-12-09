@@ -1,5 +1,6 @@
 #include "sql/gbsql.h"
 
+#include <stdlib.h>
 #include <iostream>
 #include <wx/string.h>
 
@@ -499,3 +500,65 @@ int GBSql::DeleteGradesForCourse(const Course &c) {
 
 	return r;
 }
+
+#define random(max, min) rand() % ((max-min)+1)+min
+
+void GBSql::PopulateDummy() {
+	Query("DELETE FROM courses");
+	Query("DELETE FROM students");
+	Query("DELETE FROM assessments");
+	Query("DELETE FROM grades");
+	Query("DELETE FROM course_student");
+
+	srand(time(0));
+
+	int x, y, z;
+	int last_student = 0;
+	int last_assessment = 0;
+	int rand_class = random(4, 1);
+
+	for (x = 0; x < rand_class; ++x) {
+		Query(wxString::Format("INSERT INTO courses VALUES ('%d', 'Course%d')", x, x+1));
+
+		int rand_assessment = random(10, 5);
+
+		for (y = 0; y < rand_assessment; ++y) {
+			Query(wxString::Format("INSERT INTO assessments VALUES ('%d', 'Assessment%d', '%d')", last_assessment+y, y+1, x));
+		}
+
+		int rand_student = random(10, 2);
+
+		for (y = 0; y < rand_student; ++y) {
+			int student_id = rand();
+
+			Query(wxString::Format("INSERT INTO students VALUES ('%d', '%d', 'First%d', 'Last%d')", last_student+y, student_id, y+1, y+1));
+
+			Query(wxString::Format("INSERT INTO course_student VALUES (NULL, '%d', '%d')", student_id, x));
+			
+			for (z = 0; z < rand_assessment; ++z) {
+				int rand_grade = random(100, 0);
+
+				Query(wxString::Format("INSERT INTO grades VALUES (NULL, '%d', '%d', '%d', '%d')", student_id, x, last_assessment+z, rand_grade)); 
+			}	
+		}
+
+		last_assessment += rand_assessment;
+
+		last_student += rand_student;
+	} 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -40,6 +40,10 @@ bool GBApp::OnInit() {
 
   GBSql::Instance()->Initialize(DatabasePath);
 
+	if (!wxApp::OnInit()) {
+		return false;
+	}
+
   GBFrameView *pGBBase = new GBFrameView("Grade Book", wxPoint(0,0), GBAPPSIZE);
 
   pGBBase->Show();
@@ -53,4 +57,20 @@ int GBApp::OnExit() {
   GBSql::Instance()->Close();
 
   return 0;
+}
+
+void GBApp::OnInitCmdLine(wxCmdLineParser &parser) {
+	parser.AddOption("d", "dummy");
+}
+
+bool GBApp::OnCmdLineParsed(wxCmdLineParser &parser) {
+	wxString database;
+
+	if (parser.Found("d", &database)) {
+		GBSql::Instance()->Close();
+		GBSql::Instance()->Initialize(database);
+		GBSql::Instance()->PopulateDummy();
+	}	
+
+	return true;
 }

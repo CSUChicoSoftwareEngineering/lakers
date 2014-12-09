@@ -51,7 +51,7 @@ LDLIBS := -lwxcode_gtk2ud_wxsqlite3-3.0 -lsqlite3 \
 TEST_DEFINES :=
 
 run: gbapp
-	$(BUILD_DIR)/gbapp	
+	$(BUILD_DIR)/gbapp -d	../gb.db
 
 test: $(OBJS) $(TEST_OBJS)
 	$(CXX) -o $(BUILD_DIR)/$@ $^ $(LDFLAGS) $(LDLIBS) -Llib/gtest-1.7.0/lib -lgtest

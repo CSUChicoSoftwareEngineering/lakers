@@ -82,6 +82,8 @@ class GBSql : public Observer {
 		int DeleteGradesForStudentInCourse(const Student &s, const Course &c);
 		// Deletes all grades for a course
 		int DeleteGradesForCourse(const Course &c);
+		// Populates current database with dummy data
+		void PopulateDummy();
 
   private:
     // Default constructor
