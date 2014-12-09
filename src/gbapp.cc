@@ -44,7 +44,7 @@ bool GBApp::OnInit() {
 		return false;
 	}
 
-  GBFrameView *pGBBase = new GBFrameView("Grade Book", wxPoint(0,0), GBAPPSIZE);
+  GBFrameView *pGBBase = new GBFrameView("Gradebook", wxPoint(0,0), GBAPPSIZE);
 
   pGBBase->Show();
 
@@ -70,7 +70,7 @@ bool GBApp::OnCmdLineParsed(wxCmdLineParser &parser) {
 		GBSql::Instance()->Close();
 		GBSql::Instance()->Initialize(database);
 		GBSql::Instance()->PopulateDummy();
-	}	
+	}
 
 	return true;
 }

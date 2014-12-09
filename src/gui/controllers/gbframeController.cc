@@ -312,10 +312,22 @@ void GBFrameController::ModifyAssessment(wxCommandEvent& event){
   * @retval none.
   */
 void GBFrameController::AddCourse(wxCommandEvent& event){
-  GBDialogCourseView dlg(m_pMainFrameView);
+  GBDialogCourseView dlg(m_pMainFrameView, AddCourseStyleView);
 
   dlg.ShowModal();
 }
+
+/**
+  * @brief  Will display a view to modify Course(s) in the Database.
+  * @param  wxCommandEvent wxEVT_MENU: An event from a menu.
+  * @retval none.
+  */
+void GBFrameController::ModifyCourse(wxCommandEvent& event){
+  GBDialogCourseView dlg(m_pMainFrameView, ModifyCourseStyleView);
+
+  dlg.ShowModal();
+}
+
 
 /**
   * @brief  Will display a view to add Student(s) in the Database.
@@ -398,7 +410,7 @@ void GBFrameController::OnExit(wxCommandEvent& event) {
   */
 void GBFrameController::OnAbout(wxCommandEvent& event) {
 	// Handle Event
-	wxString msg = "GradeBook Application version 1.0.0 \n\nAuthors:" ;
+	wxString msg = "Gradebook Application version 1.0.0 \n\nAuthors:" ;
              msg.Append("\nJason Boutte, \nAlejandro Velazquez, \nDarren Reitan\n");
              msg.Append("\nFrom: California State University, Chico");
              msg.Append("\nTo: Open Source Community");

@@ -7,9 +7,11 @@
   * @param  wxWindow *parent: The parent of the dialog.
   * @retval none.
   */
-GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
+GBDialogCourseView::GBDialogCourseView(wxWindow *parent, int style)
   : wxDialog(parent, wxID_ANY, wxT("Add Course"), wxDefaultPosition, GB_COURSE_DIALOGSIZE) {
 
+
+  if(style == 0){
     wxStaticBox         *CourseNameStaticBox;
 	wxStaticBox         *ImportStudentCSVStaticBox;
 	wxStaticBox         *SelectStudentsToImportStaticBox;
@@ -78,17 +80,59 @@ GBDialogCourseView::GBDialogCourseView(wxWindow *parent)
 	m_pGBDialogPanel->SetSizer(m_pDialogSizer);
 
 	// Connect Controller
-	m_pController = new GBDialogCourseController(this);
+	m_pCon = new GBDialogCourseController(this, style);
 	// Connect Events Handler(s) to Controller
-    Bind(wxEVT_CLOSE_WINDOW, &GBDialogCourseController::DialogIsBeingClosed, m_pController);
-    m_pCloseButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::CloseButtonWasClicked, m_pController);
-	m_pSelectFileLocationCtrl->Bind(wxEVT_FILEPICKER_CHANGED, &GBDialogCourseController::FileHasBeenSelected, m_pController);
-	m_pImportButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::AddButtonWasClicked, m_pController);
-    m_pClearButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::ClearButtonWasClicked, m_pController);
+    Bind(wxEVT_CLOSE_WINDOW, &GBDialogCourseController::DialogIsBeingClosed, m_pCon);
+    m_pCloseButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::CloseButtonWasClicked, m_pCon);
+	m_pSelectFileLocationCtrl->Bind(wxEVT_FILEPICKER_CHANGED, &GBDialogCourseController::FileHasBeenSelected, m_pCon);
+	m_pImportButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::AddButtonWasClicked, m_pCon);
+    m_pClearButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::ClearButtonWasClicked, m_pCon);
+  }
+  else if( style == 1){
+ // Create Dialog Sizers
+	  m_pGridSizer = new wxBoxSizer(wxVERTICAL);
+	  m_pDialogSizer = new wxBoxSizer(wxVERTICAL);
+      m_pButtonSizer = new  wxBoxSizer(wxHORIZONTAL);
+
+      SetClientSize(GB_COURSE_DIALOGSIZE);
+
+	  // Create Panel
+	  m_pGBDialogPanel = new wxPanel(this);
+
+      // Create Grid
+      m_pModifyCourseGrid = new wxGrid(m_pGBDialogPanel, ID_ModifyCourseGrid, wxDefaultPosition, wxDefaultSize, 0, " " );
+
+	  // Create Buttons
+	  m_pSaveCourseChangesButton = new wxButton(m_pGBDialogPanel, ID_SaveCourseChangesButton, "Save", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator);
+      m_pCloseButton = new wxButton(m_pGBDialogPanel, ID_CloseCourseButton, "Close", wxDefaultPosition, wxDefaultSize, 0,wxDefaultValidator, "CloseButton");
+
+      // Apply Sizers to Buttons
+      m_pButtonSizer->Add(m_pSaveCourseChangesButton, 1, wxSHAPED | wxLEFT | wxALIGN_LEFT , 2);
+      m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 2);
+
+	  // Apply Sizer to GridView
+	  m_pGridSizer->Add(m_pModifyCourseGrid, 1,  wxEXPAND , 2);
+
+      // Apply Sizer to Dialog
+      m_pDialogSizer->Add(m_pGridSizer, 2 , wxEXPAND ,  2);
+      m_pDialogSizer->Add(m_pButtonSizer, 0, wxEXPAND | wxALL | wxALIGN_BOTTOM , 2);
+
+	  // Set m_pDialogSizer as primary sizer
+	  m_pGBDialogPanel->SetSizer(m_pDialogSizer);
+
+	  // Connect Controller
+	  m_pCon = new GBDialogCourseController(this, style);
+	  // Connect Event Handler to Controller
+	  Bind(wxEVT_CLOSE_WINDOW, &GBDialogCourseController::DialogIsBeingClosed, m_pCon);
+      m_pModifyCourseGrid->Bind(wxEVT_GRID_CELL_CHANGED, &GBDialogCourseController::GridCellChanged, m_pCon);
+      m_pSaveCourseChangesButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::SaveCourseChangesButtonWasClicked, m_pCon);
+      m_pCloseButton->Bind(wxEVT_BUTTON, &GBDialogCourseController::CloseButtonWasClicked, m_pCon);
+
+  }
 
 }
 
 GBDialogCourseView::~GBDialogCourseView(){
-	delete m_pController, m_pGBDialogPanel, m_pCourseNameTextCtrl,
+	delete m_pCon, m_pGBDialogPanel, m_pCourseNameTextCtrl,
 			m_pSelectFileLocationCtrl, m_pImportButton;
 }

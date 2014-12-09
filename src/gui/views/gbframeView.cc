@@ -22,6 +22,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	// Create Course Menu
 	wxMenu *menuCourse = new wxMenu;
 	menuCourse->Append(ID_AddCourseMenuSelect, "&Add Course ", "Add a course to your GradeBook");
+	menuCourse->Append(ID_ModifyCourseMenuSelect, "&Modify Course ", "Modify courses in your GradeBook");
 	menuCourse->Append(ID_RemoveCourseMenuSelect, "&Remove Course", "Removes a course from your GradeBook");
 	// Create Assessment Menu
 	wxMenu *menuAssessment = new wxMenu;
@@ -90,6 +91,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::AddStudent, m_pCon, ID_AddStudentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::ModifyStudent, m_pCon, ID_ModifyStudentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::AddCourse, m_pCon, ID_AddCourseMenuSelect);
+	Bind(wxEVT_MENU, &GBFrameController::ModifyCourse, m_pCon, ID_ModifyCourseMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::ModifyAssessment, m_pCon, ID_ModifyAssessmentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::AddAssessment, m_pCon, ID_AddAssessmentMenuSelect);
 	Bind(wxEVT_MENU, &GBFrameController::UserOptions, m_pCon, ID_OptionsMenuSelect);

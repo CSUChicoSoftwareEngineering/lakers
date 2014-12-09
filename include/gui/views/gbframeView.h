@@ -48,14 +48,13 @@ class GBFrameView : public wxFrame {
     wxBoxSizer 				*m_pCourseDropDownListSizer;
     wxBoxSizer 				*m_pGBFrameSizer;
   	wxComboBox 				*m_pCourseComboBox;
-    wxPanel						*m_pGBFramePanel;
-    wxGrid						*m_pGridView;
-    wxDialog					*m_pGBDialog;
-    wxPanel						*m_pGBDialogPanel;
-		GradeTable				*m_pGradeTable;
-		wxMenu 						*m_pColumnMenu;
-		wxMenu						*m_pRowMenu;
-
+    wxPanel					*m_pGBFramePanel;
+    wxGrid					*m_pGridView;
+    wxDialog				*m_pGBDialog;
+    wxPanel					*m_pGBDialogPanel;
+	GradeTable				*m_pGradeTable;
+	wxMenu 					*m_pColumnMenu;
+	wxMenu					*m_pRowMenu;
 
 	protected:
     GBFrameController			*m_pCon;
@@ -79,4 +78,5 @@ enum {
 	ID_LabelGraph,
 	ID_RemoveCourseMenuSelect,
 	ID_OptionsMenuSelect,
+	ID_ModifyCourseMenuSelect,
 };

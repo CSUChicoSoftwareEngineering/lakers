@@ -9,11 +9,22 @@
 
 using namespace std;
 
-GBDialogCourseController::GBDialogCourseController(GBDialogCourseView *view)
+GBDialogCourseController::GBDialogCourseController(GBDialogCourseView *view, int style)
   : m_pSql(GBSql::Instance()),
     m_pDialogView(view) {
 
- (m_pDialogView->m_pcsvFileViewListBox)->Disable();
+
+  wxGrid *grid = m_pDialogView->m_pModifyCourseGrid;
+  wxButton *SaveAssessmentChangesButton = m_pDialogView->m_pSaveCourseChangesButton;
+  if( style == 0){
+
+   (m_pDialogView->m_pcsvFileViewListBox)->Disable();
+  }
+  else if(style == 1){
+    grid->CreateGrid(0, 1);
+    grid->SetColLabelValue(0, "Course Name");
+    LoadCourses();
+  }
 
 }
 
@@ -75,6 +86,54 @@ void GBDialogCourseController::AddButtonWasClicked(wxCommandEvent& event){
 }
 
 /**
+  * @brief  Loads the Assessment from the currently selected course into the grid view for editing.
+  * @param  none.
+  * @retval none.
+  */
+void GBDialogCourseController::LoadCourses(){
+
+  wxGrid *grid = m_pDialogView->m_pModifyCourseGrid;
+
+  //m_pCurrentCourse->ClearAssessments();
+  m_courses.clear();
+
+  if( m_pSql->SelectCourses(&m_courses) == -1 ) return;
+
+  if(grid->GetNumberRows() == 0){
+
+    grid->AppendRows(m_courses.size());
+  }
+  else{
+
+    grid->ClearGrid();
+  }
+
+  // Populate Courses
+  for (int i = 0; i < m_courses.size(); ++i) {
+
+    Course *c = m_courses[i];
+
+    // Populate Assessment Names
+    for (int x = 0; x < grid->GetNumberCols(); ++x) {
+
+      if(grid->GetColLabelValue(x).IsSameAs("Course Name")){
+        grid->SetCellValue(i, x, c->Title());
+      }
+    }
+
+    // Populate row labels
+    grid->SetRowLabelValue(i, wxString::Format("%s", c->Title()));
+  }
+
+  // Refresh grid
+  grid->SetRowLabelSize(wxGRID_AUTOSIZE);
+  grid->AutoSize();
+  grid->Refresh();
+
+}
+
+
+/**
   * @brief  The "Browse" Button was clicked and a file was selected.
   * @param  wxFileDirPickerEvent wxEVT_FILEPICKER_CHANGED: An event from a FileLocationCtrl.
   * @retval none.
@@ -128,6 +187,85 @@ void GBDialogCourseController::ClearButtonWasClicked(wxCommandEvent& event){
 void GBDialogCourseController::CloseButtonWasClicked(wxCommandEvent& event){
 
   m_pDialogView->Close();
+}
+
+
+/**
+  * @brief  The "Save" Button was clicked so we will save any rows that need to be Updated.
+  * @param  wxEVT_BUTTON
+  * @retval none.
+  */
+void GBDialogCourseController::SaveCourseChangesButtonWasClicked(wxCommandEvent& event){
+
+  SaveChanges();
+  LoadCourses();
+}
+
+/**
+  * @brief  This function will use the rows stored in m_RowsNeedToBeUpdated to
+  *         commit an Update transaction for each row to the DataBase.
+  * @param  none.
+  * @retval none.
+  */
+void GBDialogCourseController::SaveChanges(){
+
+  wxGrid *grid = m_pDialogView->m_pModifyCourseGrid;
+
+  //if(m_pCurrentCourse != NULL){
+
+    for(int i = 0; i < m_RowsNeedToBeUpdated.size(); ++i){
+
+      Course *c = m_courses[m_RowsNeedToBeUpdated[i]];
+
+      for (int x = 0; x < grid->GetNumberCols(); ++x) {
+
+        if(grid->GetColLabelValue(x).IsSameAs("Course Name")){
+
+          c->SetTitle(grid->GetCellValue(m_RowsNeedToBeUpdated[i], x));
+        }
+
+      }
+      m_pSql->UpdateCourse(*c);
+    }
+
+    m_RowsNeedToBeUpdated.clear();
+  //}
+
+}
+
+
+/**
+  * @brief  A cell in the grid view has changed and the row will be stored
+  *         so an Update transaction to the DataBase can be committed.
+  * @param  wxEVT_GRID_CELL_CHANGED
+  * @retval none.
+  */
+void GBDialogCourseController::GridCellChanged(wxGridEvent& event){
+
+  wxGrid *grid = m_pDialogView->m_pModifyCourseGrid;
+
+  if(!RowAlreadyNeedsToBeUpdated(event.GetRow())){
+
+    m_RowsNeedToBeUpdated.push_back(event.GetRow());
+    grid->AutoSize();
+    grid->Refresh();
+  }
+
+}
+
+/**
+  * @brief  If a row already needs to be Updated then return true, otherwise false.
+  * @param  int: row
+  * @retval bool: True, if row already needs to be Updated; False, otherwise.
+  */
+bool GBDialogCourseController::RowAlreadyNeedsToBeUpdated(int row){
+
+  for(int i = 0; i < m_RowsNeedToBeUpdated.size(); ++i){
+
+    if(row == m_RowsNeedToBeUpdated[i]) return true;
+  }
+
+  return false;
 }
 
 /**

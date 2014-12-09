@@ -63,7 +63,7 @@ GBDialogAssessmentView::GBDialogAssessmentView(wxWindow *parent, wxString Course
 	else if(style == 1){
 
       // Create Dialog Sizers
-	  m_pGridSizer = new wxBoxSizer(wxHORIZONTAL);
+	  m_pGridSizer = new wxBoxSizer(wxVERTICAL);
 	  m_pDialogSizer = new wxBoxSizer(wxVERTICAL);
       m_pButtonSizer = new  wxBoxSizer(wxHORIZONTAL);
 
@@ -84,7 +84,7 @@ GBDialogAssessmentView::GBDialogAssessmentView(wxWindow *parent, wxString Course
       m_pButtonSizer->Add(m_pCloseButton, 1, wxSHAPED | wxALIGN_RIGHT | wxRIGHT, 2);
 
 	  // Apply Sizer to GridView
-	  m_pGridSizer->Add(m_pModifyAssessmentGrid, 1, wxSHAPED , 2);
+	  m_pGridSizer->Add(m_pModifyAssessmentGrid, 1, wxEXPAND , 2);
 
       // Apply Sizer to Dialog
       m_pDialogSizer->Add(m_pGridSizer, 1 , wxEXPAND ,  2);

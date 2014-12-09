@@ -30,6 +30,7 @@ class GBFrameController : public Subscriber {
 
     // Events
     void AddCourse(wxCommandEvent& event);
+    void ModifyCourse(wxCommandEvent& event);
     void AddStudent(wxCommandEvent& event);
     void ModifyStudent(wxCommandEvent& event);
     void AddAssessment(wxCommandEvent& event);
@@ -39,10 +40,10 @@ class GBFrameController : public Subscriber {
     void OnAbout(wxCommandEvent& event);
     void NewCourseSelected(wxCommandEvent& event);
     void OnLabelDelete(wxCommandEvent &event);
-		void OnRemoveCourse(wxCommandEvent &event);
-		void UserOptions(wxCommandEvent &event);
-		void OnGradeCellChanged(wxGridEvent &event);
-		void OnGraphClicked(wxCommandEvent &event);
+	void OnRemoveCourse(wxCommandEvent &event);
+	void UserOptions(wxCommandEvent &event);
+	void OnGradeCellChanged(wxGridEvent &event);
+	void OnGraphClicked(wxCommandEvent &event);
 
     virtual void OnCourseUpdate(SubscriberUpdateType type);
     virtual void OnAssessmentUpdate(SubscriberUpdateType type);
@@ -56,6 +57,8 @@ class GBFrameController : public Subscriber {
     const int ModifyStudentStyleView = 1;
     const int AddAssessmentStyleView = 0;
     const int ModifyAssessmentStyleView = 1;
+    const int AddCourseStyleView = 0;
+    const int ModifyCourseStyleView = 1;
     GBSql           *m_pSql;
     GBFrameView 	*m_pMainFrameView;
     vector<Course*> m_courses;
