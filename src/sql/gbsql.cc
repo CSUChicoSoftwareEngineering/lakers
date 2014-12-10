@@ -455,7 +455,7 @@ int GBSql::InsertGradeForStudent(Grade &g, const Student &s, const Course &c, co
 
 int GBSql::UpdateGrade(const Grade &g) {
   wxString sql = wxString::Format("UPDATE grades SET \
-    value='%s', adj_value='%d' WHERE id='%s'", g.Value(), g.AdjValue(), g.Id());
+    value='%s', adj_value='%s' WHERE id='%s'", g.Value(), g.AdjValue(), g.Id());
 
   int r = Update(sql);
 

@@ -20,7 +20,7 @@ class GBSqlTest : public ::testing::Test {
 		const wxString kInsertStudent = "INSERT INTO students VALUES (NULL, '%s', '%s', '%s')";
 		const wxString kCourseStudent = "INSERT INTO course_student VALUES (NULL, '%s', '%s')";
 		const wxString kInsertAssessment = "INSERT INTO assessments VALUES (NULL, '%s', '%s')";
-		const wxString kInsertGrade = "INSERT INTO grades VALUES (NULL, '%s', '%s', '%s', '%s')";
+		const wxString kInsertGrade = "INSERT INTO grades VALUES (NULL, '%s', '%s', '%s', '%s', '')";
 
 		void DefaultCourse() {
 			sql->Update(wxString::Format(kInsertCourse, kTitle));
