@@ -10,9 +10,18 @@
 #define GBAPPSIZE wxSize(800,600)
 #define GBDIALOGSIZE wxSize(350,450)
 
+enum GradeView {
+	ORIGINAL,
+	ADJUSTED,
+	BOTH
+};
+
 class GradeTable : public wxGridTableBase {
 	public:
 		GradeTable();
+
+		void UpdateView(GradeView view);
+		void ForceRefresh();
 
 		virtual int GetNumberRows();
 		virtual int GetNumberCols();
@@ -34,6 +43,7 @@ class GradeTable : public wxGridTableBase {
 		Grade &GetGrade(int row, int col);
 
 	private:
+		GradeView m_gradeView;
 		vector<Student> m_rows;
 		vector<Assessment> m_cols;
 		vector<vector<Grade> > m_grades;
@@ -61,7 +71,11 @@ class GBFrameView : public wxFrame {
 
 	private:
 		void OnLabelRightClick(wxGridEvent &event);
+		void OnOriginalViewClicked(wxCommandEvent &event);
+		void OnAdjustedViewClicked(wxCommandEvent &event);
+		void OnBothViewClicked(wxCommandEvent &event);
 };
+
 
 enum {
 	ID_AddCourseMenuSelect = 1,
@@ -79,4 +93,8 @@ enum {
 	ID_RemoveCourseMenuSelect,
 	ID_OptionsMenuSelect,
 	ID_ModifyCourseMenuSelect,
+	ID_ShiftMenuSelect,
+	ID_OriginalView,
+	ID_AdjustedView,
+	ID_BothView,
 };

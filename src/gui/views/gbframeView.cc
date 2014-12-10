@@ -32,12 +32,20 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	wxMenu *menuOptions = new wxMenu;
 	menuOptions->Append(ID_OptionsMenuSelect, "&User Options");
 
+	wxMenu *menuView = new wxMenu();
+	wxMenu *subMenuGradeView = new wxMenu();
+	subMenuGradeView->AppendRadioItem(ID_OriginalView, "&Original");
+	subMenuGradeView->AppendRadioItem(ID_AdjustedView, "&Adjusted");
+	subMenuGradeView->AppendRadioItem(ID_BothView, "&Both");
+	menuView->AppendSubMenu(subMenuGradeView, "&Grade Display");
+
     // Create Help Menu
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
 	// Adds Menus to MenuBar
 	wxMenuBar *menuBar = new wxMenuBar;
 	menuBar->Append( menuFile, "&File" );
+	menuBar->Append( menuView, "&View");
 	menuBar->Append( menuCourse, "&Course" );
 	menuBar->Append( menuStudent, "&Student");
 	menuBar->Append( menuAssessment, "&Assessments" );
@@ -46,6 +54,10 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 
 	m_pColumnMenu = new wxMenu();
 	m_pColumnMenu->Append(ID_LabelGraph, "Graph");
+	wxMenu *menuCurves = new wxMenu();
+	menuCurves->Append(ID_ShiftMenuSelect, "&Shift Grades");	
+	m_pColumnMenu->AppendSubMenu(menuCurves, "&Curves");
+	m_pColumnMenu->AppendSeparator();
 	m_pColumnMenu->Append(ID_LabelDelete, "Delete");
 
 	m_pRowMenu = new wxMenu();
@@ -99,6 +111,10 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	Bind(wxEVT_MENU, &GBFrameController::OnRemoveCourse, m_pCon, ID_RemoveCourseMenuSelect);
 	Bind(wxEVT_GRID_CELL_CHANGED, &GBFrameController::OnGradeCellChanged, m_pCon, ID_GridView);
 	Bind(wxEVT_MENU, &GBFrameController::OnGraphClicked, m_pCon, ID_LabelGraph);
+	Bind(wxEVT_MENU, &GBFrameController::OnShiftGradesClicked, m_pCon, ID_ShiftMenuSelect);
+	Bind(wxEVT_MENU, &GBFrameView::OnOriginalViewClicked, this, ID_OriginalView);
+	Bind(wxEVT_MENU, &GBFrameView::OnAdjustedViewClicked, this, ID_AdjustedView);
+	Bind(wxEVT_MENU, &GBFrameView::OnBothViewClicked, this, ID_BothView);
 }
 
 void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
@@ -117,8 +133,39 @@ void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
 	}
 }
 
+void GBFrameView::OnOriginalViewClicked(wxCommandEvent &event) {
+	m_pGradeTable->UpdateView(ORIGINAL);	
+}
+
+void GBFrameView::OnAdjustedViewClicked(wxCommandEvent &event) {
+	m_pGradeTable->UpdateView(ADJUSTED);
+}
+
+void GBFrameView::OnBothViewClicked(wxCommandEvent &event) {
+	m_pGradeTable->UpdateView(BOTH);
+}
+
 GradeTable::GradeTable()
 	:	wxGridTableBase() {
+	m_gradeView = ORIGINAL;
+}
+
+void GradeTable::UpdateView(GradeView view) {
+	m_gradeView = view;
+
+	if (GetView()) {
+		wxGridTableMessage msg(this, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES);
+
+		GetView()->ProcessTableMessage(msg);	
+	}	
+}
+
+void GradeTable::ForceRefresh() {
+	if (GetView()) {
+		wxGridTableMessage msg(this, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES);
+
+		GetView()->ProcessTableMessage(msg);	
+	}	
 }
 
 int GradeTable::GetNumberRows() {
@@ -130,7 +177,13 @@ int GradeTable::GetNumberCols() {
 }
 
 wxString GradeTable::GetValue(int row, int col) {
-	return m_grades[row][col].Value();
+	if (m_gradeView == ORIGINAL) {
+		return m_grades[row][col].Value();
+	} else if (m_gradeView == ADJUSTED) {
+		return m_grades[row][col].AdjValue();
+	} else {
+		return wxString::Format("%s - %s", m_grades[row][col].Value(), m_grades[row][col].AdjValue());
+	}
 }
 
 void GradeTable::SetValue(int row, int col, const wxString &value) {

@@ -393,6 +393,53 @@ void GBFrameController::OnGraphClicked(wxCommandEvent &event) {
 	dlg.ShowModal();
 }
 
+void GBFrameController::OnShiftGradesClicked(wxCommandEvent &event) {
+	wxGrid *grid = m_pMainFrameView->m_pGridView;
+	GradeTable *table = m_pMainFrameView->m_pGradeTable;
+
+	wxArrayInt cols = grid->GetSelectedCols();
+
+	if (cols.GetCount() > 1) {
+		wxMessageDialog msg(m_pMainFrameView, wxT("Select one column please."));
+
+		msg.ShowModal();
+
+		return;
+	}
+
+	Assessment a = table->GetAssessment(cols.Item(0));
+
+	m_pSql->SelectGradesForAssessment(a);
+
+	int high = 0;
+
+	for (int x = 0; x < a.GradeCount(); ++x) {
+		Grade *g = a.GradeAt(x);
+
+		if (wxAtoi(g->Value()) > high) {
+			high = wxAtoi(g->Value());
+		}
+	}
+
+	int diff = 100 - high;
+
+	for (int x = 0; x < a.GradeCount(); ++x) {
+		Grade *g = a.GradeAt(x);
+
+		int adjusted = wxAtoi(g->Value());
+
+		adjusted += diff;
+
+		g->SetAdjValue(wxString::Format("%d", adjusted));
+
+		m_pSql->UpdateGrade(*g);
+
+		table->AddGrade(x, cols.Item(0), *g);	
+	}
+
+	table->ForceRefresh();
+}
+
 /**
   * @brief  Will close the Main Frame.
   * @param  wxCommandEvent wxEVT_MENU: An event from a menu.

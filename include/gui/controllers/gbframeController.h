@@ -44,6 +44,7 @@ class GBFrameController : public Subscriber {
 	void UserOptions(wxCommandEvent &event);
 	void OnGradeCellChanged(wxGridEvent &event);
 	void OnGraphClicked(wxCommandEvent &event);
+	void OnShiftGradesClicked(wxCommandEvent &event);
 
     virtual void OnCourseUpdate(SubscriberUpdateType type);
     virtual void OnAssessmentUpdate(SubscriberUpdateType type);
