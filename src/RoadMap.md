@@ -1,8 +1,8 @@
-/include/data
+##/include/data
   Provides the impementation files (*.cc) for the model.
 
-/include/gui
+##/include/gui
   Provides the impementation files (*.cc) for the views and controllers.
   
-/include/sql
+##/include/sql
   Provides the impementation files (*.cc) for the database.
