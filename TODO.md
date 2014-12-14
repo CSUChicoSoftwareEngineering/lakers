@@ -7,7 +7,9 @@
   3. Allow teacher to print the entire gradebook to a *.pdf file.
 
 ##CONTACT:
+
   For more detailed information on this project contact the following developer(s).
-  Name: Alejandro Velazquez
-  Email: Alejandro.Velazquez91@gmail.com
   
+  Name: Alejandro Velazquez
+  
+  Email: Alejandro.Velazquez91@gmail.com
