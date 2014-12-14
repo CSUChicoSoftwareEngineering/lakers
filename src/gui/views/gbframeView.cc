@@ -55,7 +55,7 @@ GBFrameView::GBFrameView(const wxString& title, const wxPoint& pos, const wxSize
 	m_pColumnMenu = new wxMenu();
 	m_pColumnMenu->Append(ID_LabelGraph, "Graph");
 	wxMenu *menuCurves = new wxMenu();
-	menuCurves->Append(ID_ShiftMenuSelect, "&Shift Grades");	
+	menuCurves->Append(ID_ShiftMenuSelect, "&Shift Grades");
 	m_pColumnMenu->AppendSubMenu(menuCurves, "&Curves");
 	m_pColumnMenu->AppendSeparator();
 	m_pColumnMenu->Append(ID_LabelDelete, "Delete");
@@ -134,7 +134,7 @@ void GBFrameView::OnLabelRightClick(wxGridEvent &event) {
 }
 
 void GBFrameView::OnOriginalViewClicked(wxCommandEvent &event) {
-	m_pGradeTable->UpdateView(ORIGINAL);	
+	m_pGradeTable->UpdateView(ORIGINAL);
 }
 
 void GBFrameView::OnAdjustedViewClicked(wxCommandEvent &event) {
@@ -156,16 +156,16 @@ void GradeTable::UpdateView(GradeView view) {
 	if (GetView()) {
 		wxGridTableMessage msg(this, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES);
 
-		GetView()->ProcessTableMessage(msg);	
-	}	
+		GetView()->ProcessTableMessage(msg);
+	}
 }
 
 void GradeTable::ForceRefresh() {
 	if (GetView()) {
 		wxGridTableMessage msg(this, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES);
 
-		GetView()->ProcessTableMessage(msg);	
-	}	
+		GetView()->ProcessTableMessage(msg);
+	}
 }
 
 int GradeTable::GetNumberRows() {
@@ -230,10 +230,7 @@ void GradeTable::Clear() {
 
 wxString GradeTable::GetRowLabelValue(int row) {
 
-  ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
-  config = new wxFileConfig( "", "", ini_filename);
-  SavedStudentNameFormat = config->Read(wxT("StudentNameDisplayFormat"), SavedStudentNameFormat) ;
-  delete config;
+  long SavedStudentNameFormat = Config::Instance()->GetStudentFormat(wxT("StudentNameDisplayFormat"), SavedStudentNameFormat);
 
   if(SavedStudentNameFormat == 0){
 
@@ -247,6 +244,7 @@ wxString GradeTable::GetRowLabelValue(int row) {
 
     return wxString::Format("%s", m_rows[row].StudentId());
   }
+
 }
 
 wxString GradeTable::GetColLabelValue(int col) {

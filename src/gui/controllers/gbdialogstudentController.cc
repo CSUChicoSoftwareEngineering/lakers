@@ -223,7 +223,7 @@ void GBDialogStudentController::SaveStudentChangesButtonWasClicked(wxCommandEven
   SaveChanges();
   LoadStudents();
 
-	m_pDialogView->EndModal(0);
+  m_pDialogView->EndModal(0);
 }
 
 /**

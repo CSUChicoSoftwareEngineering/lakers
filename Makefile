@@ -7,6 +7,7 @@ SRCS := src\data\grade.cc \
 				src\data\subscriber.cc \
 				src\data\observer.cc \
 				src\data\bbimporter.cc \
+				src\data\config.cc \
 				src\sql\gbsql.cc \
 				src\gbapp.cc \
 				src\gui\views\gbframeView.cc \
@@ -20,7 +21,8 @@ SRCS := src\data\grade.cc \
 				src\gui\views\gbdialoguseroptionsView.cc \
 				src\gui\controllers\gbdialoguseroptionsController.cc \
         src\gui\views\gbdialoggraphView.cc \
-        src\gui\controllers\gbdialoggraphController.cc
+        src\gui\controllers\gbdialoggraphController.cc \
+        
 
 TEST_SRCS := 	tests\gbsqltest.cc \
 							tests\gbtest.cc \

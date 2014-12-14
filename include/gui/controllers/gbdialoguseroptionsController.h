@@ -10,6 +10,7 @@
 #include <wx/listctrl.h>
 #include <wx/radiobox.h>
 #include <wx/checklst.h>
+#include "data/config.h"
 #include "sql/gbsql.h"
 
 //#define GB_COURSE_DIALOGSIZE wxSize(350,500)

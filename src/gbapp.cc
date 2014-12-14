@@ -1,10 +1,10 @@
 #include "gbapp.h"
 #include "gui/views/gbframeView.h"
+#include "data/config.h"
 #include "sql/gbsql.h"
-#include <wx/fileconf.h>
-#include <wx/stdpaths.h>
-#include <wx/filename.h>
+#include <wx/string.h>
 #include <iostream>
+using namespace std;
 
 using namespace std;
 #ifdef __GUI__
@@ -13,30 +13,10 @@ IMPLEMENT_APP(GBApp)
 
 bool GBApp::OnInit() {
 
-  wxString ini_filename = wxStandardPaths::Get().GetUserConfigDir() + wxFileName::GetPathSeparator() + "GbUserOptions.INI";
-  wxString ExecutablePath = wxStandardPaths::Get().GetExecutablePath();
-  wxString DatabasePath;
-  wxFileConfig *config;
+  wxString DatabasePath ;//= Config::Instance()->GetDataBasePath(wxT("gbDataBasePath"), DatabasePath);
+  DatabasePath = Config::Instance()->GetDataBasePath(wxT("gbDataBasePath"), DatabasePath);
 
-  ifstream InFile(ini_filename.c_str());
-
-  if(!InFile){
-
-    config = new wxFileConfig( "", "", ini_filename);
-    ExecutablePath.Replace("gbapp.exe","");
-    DatabasePath = ExecutablePath + "gb.db";
-    config->Write( wxT("/gbDataBasePath"),  DatabasePath );
-    config->Write( wxT("/StudentNameDisplayFormat"), 0 );
-    config->Flush();
-    delete config;
-  }
-  else{
-
-    config = new wxFileConfig( "", "", ini_filename);
-    DatabasePath = config->Read(wxT("gbDataBasePath"), DatabasePath) ;
-    delete config;
-    InFile.close();
-  }
+  std::cout << DatabasePath << std::endl;
 
   GBSql::Instance()->Initialize(DatabasePath);
 

@@ -4,6 +4,7 @@ BUILD_DIR = build
 
 SRCS :=	src/data/assessment.cc \
 				src/data/bbimporter.cc \
+				src/data/config.cc \
 				src/data/course.cc \
 				src/data/grade.cc \
 				src/data/observer.cc \

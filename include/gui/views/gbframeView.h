@@ -3,12 +3,11 @@
 #endif
 
 #include "gui/controllers/gbframeController.h"
-#include <wx/fileconf.h>
-#include <wx/stdpaths.h>
-#include <wx/filename.h>
-
+#include "data/config.h"
+#include <wx/string.h>
 #define GBAPPSIZE wxSize(800,600)
 #define GBDIALOGSIZE wxSize(350,450)
+
 
 enum GradeView {
 	ORIGINAL,

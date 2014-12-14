@@ -280,7 +280,6 @@ void GBFrameController::PopulateCourseDropDownList(){
   if (course->GetCount() > 0) {
     course->SetValue(m_courses[0]->Title());
   }
-
 }
 
 /**
@@ -360,10 +359,12 @@ void GBFrameController::ModifyStudent(wxCommandEvent& event){
   */
 void GBFrameController::UserOptions(wxCommandEvent &event){
 
-
+  GradeTable *table = m_pMainFrameView->m_pGradeTable;
   GBDialogUserOptionsView dlg(m_pMainFrameView);
 
   dlg.ShowModal();
+  table->Clear();
+  PopulateCourseDropDownList();
   UpdateGridView();
 }
 
@@ -434,7 +435,7 @@ void GBFrameController::OnShiftGradesClicked(wxCommandEvent &event) {
 
 		m_pSql->UpdateGrade(*g);
 
-		table->AddGrade(x, cols.Item(0), *g);	
+		table->AddGrade(x, cols.Item(0), *g);
 	}
 
 	table->ForceRefresh();
